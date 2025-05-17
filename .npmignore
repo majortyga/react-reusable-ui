@@ -1,0 +1,14 @@
+.next
+pages
+public
+out
+*.config.ts
+*.config.js
+*.test.ts
+apps
+app
+docs
+README.md
+docs
+tsconfig.json
+lib
