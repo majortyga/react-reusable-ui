@@ -2,6 +2,21 @@ import React, { useState, useEffect, useRef } from "react";
 import { IconType } from "react-icons";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 
+type MaskType =
+  | "phone"
+  | "date"
+  | "credit-card"
+  | "ssn"
+  | "zip"
+  | "currency"
+  | "custom";
+
+interface MaskOptions {
+  type: MaskType;
+  pattern?: string; // For custom masks
+  placeholder?: string; // For custom masks
+}
+
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   leftIcon?: IconType;
@@ -14,6 +29,7 @@ export interface InputProps
   showCharacterCount?: boolean;
   type?: string;
   theme?: "light" | "dark";
+  mask?: MaskOptions;
   validation?: {
     pattern?: RegExp;
     message?: string;
@@ -40,7 +56,8 @@ const Input: React.FC<InputProps> = ({
   maxLength,
   showCharacterCount = false,
   type = "text",
-  theme = "light",
+  theme,
+  mask,
   validation,
   wrapperClassName = "",
   labelClassName = "",
@@ -52,24 +69,120 @@ const Input: React.FC<InputProps> = ({
   optionsContainerClassName = "",
   optionClassName = "",
   characterCountClassName = "",
+  value,
+  defaultValue,
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
-  const [filteredOptions, setFilteredOptions] = useState<string[]>(options);
+  const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
   const [showPassword, setShowPassword] = useState(false);
   const [validationError, setValidationError] = useState<string>("");
+  const [inputValue, setInputValue] = useState(value || defaultValue || "");
   const inputRef = useRef<HTMLInputElement>(null);
   const optionsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (searchable && props.value) {
-      const filtered = options.filter((option) =>
-        option.toLowerCase().includes(String(props.value).toLowerCase())
-      );
-      setFilteredOptions(filtered);
+  // Mask patterns
+  const maskPatterns = {
+    phone: {
+      pattern: "(###) ###-####",
+      placeholder: "_",
+    },
+    date: {
+      pattern: "##/##/####",
+      placeholder: "_",
+    },
+    "credit-card": {
+      pattern: "#### #### #### ####",
+      placeholder: "_",
+    },
+    ssn: {
+      pattern: "###-##-####",
+      placeholder: "_",
+    },
+    zip: {
+      pattern: "#####-####",
+      placeholder: "_",
+    },
+    currency: {
+      pattern: "$#,##0.00",
+      placeholder: "_",
+    },
+  };
+
+  const unapplyMask = (maskedValue: string, maskType: MaskType) => {
+    if (!maskType) return maskedValue;
+
+    if (maskType === "currency") {
+      // Remove currency symbol, commas, and convert to cents
+      return maskedValue.replace(/[$,]/g, "");
     }
-  }, [props.value, options, searchable]);
+
+    return maskedValue.replace(/\D/g, "");
+  };
+
+  const applyMask = (
+    value: string,
+    maskType: MaskType,
+    customPattern?: string
+  ) => {
+    if (!maskType) return value;
+
+    const maskConfig =
+      maskType === "custom"
+        ? {
+            pattern: customPattern || "",
+            placeholder: mask?.placeholder || "_",
+          }
+        : maskPatterns[maskType];
+
+    if (!maskConfig?.pattern) return value;
+
+    if (maskType === "currency") {
+      // Handle currency formatting
+      const numericValue = value.replace(/[$,]/g, "");
+      if (!numericValue) return "";
+
+      // Convert to number and format with 2 decimal places
+      const amount = parseFloat(numericValue) / 100;
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(amount);
+    }
+
+    let result = "";
+    let valueIndex = 0;
+
+    // Remove any non-digit characters from the input value
+    const digitsOnly = value.replace(/\D/g, "");
+
+    for (let i = 0; i < maskConfig.pattern.length; i++) {
+      if (valueIndex >= digitsOnly.length) {
+        if (maskConfig.pattern[i] === "#") {
+          result += maskConfig.placeholder;
+        } else {
+          result += maskConfig.pattern[i];
+        }
+      } else if (maskConfig.pattern[i] === "#") {
+        result += digitsOnly[valueIndex];
+        valueIndex++;
+      } else {
+        result += maskConfig.pattern[i];
+      }
+    }
+
+    return result;
+  };
+
+  // Reset filtered options when options prop changes
+  useEffect(() => {
+    if (searchable) {
+      setFilteredOptions(options);
+    }
+  }, [options, searchable]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -87,36 +200,118 @@ const Input: React.FC<InputProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (value !== undefined) {
+      setInputValue(value);
+    }
+  }, [value]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let newValue = e.target.value;
+
+    if (mask) {
+      // Check if this is a backspace event
+      const isBackspace =
+        e.nativeEvent instanceof InputEvent &&
+        e.nativeEvent.inputType === "deleteContentBackward";
+
+      if (isBackspace) {
+        // Remove the last character from the unmasked value
+        const unmaskedValue = unapplyMask(String(inputValue), mask.type);
+        newValue = applyMask(
+          unmaskedValue.slice(0, -1),
+          mask.type,
+          mask.pattern
+        );
+      } else {
+        // Normal input - apply mask to the new value
+        const unmaskedValue = unapplyMask(newValue, mask.type);
+        newValue = applyMask(unmaskedValue, mask.type, mask.pattern);
+      }
+    }
+
+    // Update internal state
+    setInputValue(newValue);
+
+    // Update filtered options for searchable input
+    if (searchable) {
+      const filtered = options.filter((option) =>
+        option.toLowerCase().includes(newValue.toLowerCase())
+      );
+      setFilteredOptions(filtered);
+      setShowOptions(true);
+    }
+
+    if (validation?.pattern && !validation.pattern.test(newValue)) {
+      setValidationError(validation.message || "Invalid input");
+    } else {
+      setValidationError("");
+    }
+
+    // Call onChange with the original event
+    if (props.onChange) {
+      const event = {
+        ...e,
+        target: {
+          ...e.target,
+          value: newValue,
+        },
+      } as React.ChangeEvent<HTMLInputElement>;
+      props.onChange(event);
+    }
+  };
+
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     setIsFocused(true);
     if (searchable) {
       setShowOptions(true);
+      setFilteredOptions(options);
     }
     props.onFocus?.(e);
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     setIsFocused(false);
-    setTimeout(() => setShowOptions(false), 200);
+    // Delay hiding options to allow for click
+    setTimeout(() => {
+      setShowOptions(false);
+    }, 200);
     props.onBlur?.(e);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (validation?.pattern && !validation.pattern.test(e.target.value)) {
-      setValidationError(validation.message || "Invalid input");
-    } else {
-      setValidationError("");
-    }
-    props.onChange?.(e);
-  };
-
   const handleOptionClick = (option: string) => {
-    if (props.onChange) {
-      const event = {
-        target: { value: option },
-      } as React.ChangeEvent<HTMLInputElement>;
-      props.onChange(event);
+    let newValue = option;
+
+    // Apply mask if needed
+    if (mask) {
+      newValue = applyMask(option, mask.type, mask.pattern);
     }
+
+    // Update the input value
+    setInputValue(newValue);
+
+    // Create a synthetic event
+    const syntheticEvent = {
+      target: {
+        value: newValue,
+        name: props.name,
+        type: "text",
+      },
+      currentTarget: {
+        value: newValue,
+        name: props.name,
+        type: "text",
+      },
+      preventDefault: () => {},
+      stopPropagation: () => {},
+    } as unknown as React.ChangeEvent<HTMLInputElement>;
+
+    // Call onChange with the synthetic event
+    if (props.onChange) {
+      props.onChange(syntheticEvent);
+    }
+
+    // Hide options after selection
     setShowOptions(false);
   };
 
@@ -126,18 +321,34 @@ const Input: React.FC<InputProps> = ({
 
   const displayError = error || validationError;
   const isPassword = type === "password";
-  const currentLength = String(props.value || "").length;
+  const currentLength = String(inputValue).length;
 
   const getThemeClasses = () => {
+    if (theme) {
+      return {
+        label: theme === "dark" ? "text-white" : "text-gray-900",
+        input: theme === "dark" ? "text-white" : "text-gray-900",
+        border: theme === "dark" ? "border-gray-600" : "border-gray-300",
+        icon: theme === "dark" ? "text-gray-400" : "text-gray-500",
+        options:
+          theme === "dark"
+            ? "bg-gray-800 text-white"
+            : "bg-white text-gray-900",
+        optionHover:
+          theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100",
+        characterCount: theme === "dark" ? "text-gray-400" : "text-gray-500",
+      };
+    }
+
+    // Default to Tailwind's dark mode classes when theme is not set
     return {
-      label: theme === "dark" ? "text-white" : "text-gray-900",
-      input: theme === "dark" ? "text-white" : "text-gray-900",
-      border: theme === "dark" ? "border-gray-600" : "border-gray-300",
-      icon: theme === "dark" ? "text-gray-400" : "text-gray-500",
-      options:
-        theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-gray-900",
-      optionHover: theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100",
-      characterCount: theme === "dark" ? "text-gray-400" : "text-gray-500",
+      label: "text-gray-900 dark:text-white",
+      input: "text-gray-900 dark:text-white",
+      border: "border-gray-300 dark:border-gray-600",
+      icon: "text-gray-500 dark:text-gray-400",
+      options: "bg-white dark:bg-gray-800 text-gray-900 dark:text-white",
+      optionHover: "hover:bg-gray-100 dark:hover:bg-gray-700",
+      characterCount: "text-gray-500 dark:text-gray-400",
     };
   };
 
@@ -175,6 +386,10 @@ const Input: React.FC<InputProps> = ({
           onBlur={handleBlur}
           onChange={handleChange}
           maxLength={maxLength}
+          value={inputValue}
+          placeholder={
+            mask ? applyMask("", mask.type, mask.pattern) : props.placeholder
+          }
         />
         {isPassword && (
           <button
@@ -214,13 +429,16 @@ const Input: React.FC<InputProps> = ({
       {searchable && showOptions && filteredOptions.length > 0 && (
         <div
           ref={optionsRef}
-          className={`absolute z-50 w-full mt-1 ${themeClasses.options} border rounded-md shadow-lg max-h-60 overflow-y-auto ${optionsContainerClassName}`}
+          className={`absolute z-50 w-full mt-1 top-full ${themeClasses.options} border rounded-md shadow-lg max-h-60 overflow-y-auto ${optionsContainerClassName}`}
         >
           {filteredOptions.map((option, index) => (
             <div
               key={index}
               className={`px-3 py-2 cursor-pointer ${themeClasses.optionHover} ${optionClassName}`}
-              onClick={() => handleOptionClick(option)}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                handleOptionClick(option);
+              }}
             >
               {option}
             </div>

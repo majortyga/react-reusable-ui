@@ -423,7 +423,7 @@ function Table<T extends { id?: string | number }>({
   );
 
   return (
-    <div className={`overflow-x-auto ${className}`}>
+    <div className={`max-w-[90vw] md:max-w-full overflow-x-auto ${className}`}>
       <div
         className="relative"
         style={{
@@ -432,7 +432,7 @@ function Table<T extends { id?: string | number }>({
         }}
       >
         <table
-          className={`w-full ${
+          className={`min-w-max w-full ${
             bordered ? "border border-gray-200 dark:border-gray-700" : ""
           }`}
         >

@@ -36,7 +36,7 @@ function getDaysInMonth(year: number, month: number) {
   return new Date(year, month + 1, 0).getDate();
 }
 
-const getYears = (center: number, range = 50) => {
+const getYears = (center: number, range = 20) => {
   const years = [];
   for (let i = center - range; i <= center + range; i++) years.push(i);
   return years;
@@ -122,10 +122,13 @@ const Calendar: React.FC<CalendarProps> = ({
   // --- Render ---
   return (
     <div
-      className={`inline-block p-4 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 ${className}`}
+      className={`w-full max-w-[320px] sm:max-w-sm p-2 sm:p-4 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 ${className}`}
     >
-      <div className="flex items-center justify-between mb-2 gap-2">
-        <button onClick={() => setCurrent(new Date(year, month - 1, 1))}>
+      <div className="flex items-center justify-between w-full mb-2 gap-1 sm:gap-2">
+        <button
+          onClick={() => setCurrent(new Date(year, month - 1, 1))}
+          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full flex items-center justify-center min-w-[32px] min-h-[32px]"
+        >
           &lt;
         </button>
         <Select
@@ -135,28 +138,31 @@ const Calendar: React.FC<CalendarProps> = ({
             value: y.toString(),
             label: y.toString(),
           }))}
-          className="w-24"
+          className="w-20 sm:w-24"
         />
-        <span className="font-semibold">
+        <span className="font-semibold text-sm sm:text-base flex-1 text-center">
           {current.toLocaleString("default", { month: "long" })}
         </span>
-        <button onClick={() => setCurrent(new Date(year, month + 1, 1))}>
+        <button
+          onClick={() => setCurrent(new Date(year, month + 1, 1))}
+          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full flex items-center justify-center min-w-[32px] min-h-[32px]"
+        >
           &gt;
         </button>
       </div>
-      <div className="grid grid-cols-7 gap-1 text-xs mb-1">
+      <div className="grid grid-cols-7 gap-0.5 sm:gap-1 text-xs mb-1">
         {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => (
           <div
             key={d}
-            className="text-center font-medium text-gray-500 dark:text-gray-400"
+            className="text-center font-medium text-gray-500 dark:text-gray-400 py-1"
           >
             {d}
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-0.5 sm:gap-1">
         {Array.from({ length: firstDay }).map((_, i) => (
-          <div key={i} />
+          <div key={`empty-${i}`} />
         ))}
         {Array.from({ length: days }, (_, i) => {
           const day = i + 1;
@@ -173,11 +179,13 @@ const Calendar: React.FC<CalendarProps> = ({
           );
           const disabled = isDateDisabled(date);
           return renderDay ? (
-            renderDay(date, isSelected, isToday, disabled)
+            <div key={`day-${day}`}>
+              {renderDay(date, isSelected, isToday, disabled)}
+            </div>
           ) : (
             <button
-              key={day}
-              className={`w-8 h-8 rounded-full text-center transition-colors
+              key={`day-${day}`}
+              className={`min-w-[36px] min-h-[36px] sm:min-w-[40px] sm:min-h-[40px] rounded-full text-center transition-colors text-sm sm:text-base flex items-center justify-center
                 ${
                   isSelected
                     ? "bg-blue-600 text-white"
@@ -197,7 +205,7 @@ const Calendar: React.FC<CalendarProps> = ({
       {/* Time Picker */}
       {showTimePicker && (timePickerInline || showTime) && (
         <div className="mt-4 flex flex-col gap-2 items-center">
-          <div className="flex gap-2 items-center">
+          <div className="flex flex-wrap justify-center gap-1 sm:gap-2 items-center w-full">
             {/* Hour */}
             <Select
               popupPosition="top"
@@ -218,9 +226,10 @@ const Calendar: React.FC<CalendarProps> = ({
                 value: (hour12 ? i + 1 : i).toString(),
                 label: (hour12 ? i + 1 : i).toString().padStart(2, "0"),
               }))}
-              className="w-20"
+              className="w-16 sm:w-20"
             />
-            :{/* Minute */}
+            <span className="text-gray-500 font-medium">:</span>
+            {/* Minute */}
             <Select
               popupPosition="top"
               value={selectedMinute.toString()}
@@ -234,11 +243,11 @@ const Calendar: React.FC<CalendarProps> = ({
                 value: m.toString(),
                 label: m.toString().padStart(2, "0"),
               }))}
-              className="w-20"
+              className="w-16 sm:w-20"
             />
             {showSeconds && (
               <>
-                :
+                <span className="text-gray-500 font-medium">:</span>
                 <Select
                   popupPosition="top"
                   value={selectedSecond.toString()}
@@ -257,7 +266,7 @@ const Calendar: React.FC<CalendarProps> = ({
                     value: s.toString(),
                     label: s.toString().padStart(2, "0"),
                   }))}
-                  className="w-20"
+                  className="w-16 sm:w-20"
                 />
               </>
             )}
@@ -277,7 +286,7 @@ const Calendar: React.FC<CalendarProps> = ({
                   { value: "AM", label: "AM" },
                   { value: "PM", label: "PM" },
                 ]}
-                className="w-20"
+                className="w-16 sm:w-20"
               />
             )}
           </div>
@@ -285,7 +294,7 @@ const Calendar: React.FC<CalendarProps> = ({
       )}
       {showTimePicker && !timePickerInline && (
         <button
-          className="mt-2 text-blue-600 dark:text-blue-400 underline"
+          className="mt-2 text-sm sm:text-base text-blue-600 dark:text-blue-400 underline w-full py-2"
           onClick={() => setShowTime((v) => !v)}
         >
           {showTime ? "Hide Time Picker" : "Show Time Picker"}

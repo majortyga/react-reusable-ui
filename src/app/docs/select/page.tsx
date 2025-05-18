@@ -4,6 +4,7 @@ import Select from "@/components/Select/Select";
 import Card from "@/components/Card/Card";
 import CodeBlock from "@/components/CodeBlock/CodeBlock";
 import Table from "@/components/Table/Table";
+import { FiSearch } from "react-icons/fi";
 
 type ApiRow = {
   id: number;
@@ -167,11 +168,35 @@ const options = [
 ];
 
 export default function SelectDocs() {
-  const [value, setValue] = React.useState<string>("");
+  const [value, setValue] = React.useState<string>("option1");
+  const [multipleValue, setMultipleValue] = React.useState<string[]>([
+    "option1",
+    "option2",
+  ]);
+  const [groupedValue, setGroupedValue] = React.useState<string>("fruit1");
+  const [customValue, setCustomValue] = React.useState<string>("option1");
 
   const handleChange = (newValue: string | string[]) => {
     if (typeof newValue === "string") {
       setValue(newValue);
+    }
+  };
+
+  const handleMultipleChange = (newValue: string | string[]) => {
+    if (Array.isArray(newValue)) {
+      setMultipleValue(newValue);
+    }
+  };
+
+  const handleGroupedChange = (newValue: string | string[]) => {
+    if (typeof newValue === "string") {
+      setGroupedValue(newValue);
+    }
+  };
+
+  const handleCustomChange = (newValue: string | string[]) => {
+    if (typeof newValue === "string") {
+      setCustomValue(newValue);
     }
   };
 
@@ -204,13 +229,7 @@ export default function SelectDocs() {
           </div>
         </Card>
         <CodeBlock
-          code={`const options = [
-  { value: "option1", label: "Option 1" },
-  { value: "option2", label: "Option 2" },
-  { value: "option3", label: "Option 3" },
-];
-
-const [value, setValue] = useState("");
+          code={`const [value, setValue] = useState("option1");
 
 const handleChange = (newValue: string | string[]) => {
   if (typeof newValue === "string") {
@@ -228,6 +247,242 @@ const handleChange = (newValue: string | string[]) => {
         />
       </section>
 
+      {/* Multiple Selection */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          Multiple Selection
+        </h2>
+        <Card>
+          <div className="space-y-4">
+            <Select
+              options={options}
+              value={multipleValue}
+              onChange={handleMultipleChange}
+              placeholder="Select multiple options"
+              multiple
+              maxDisplayedItems={2}
+            />
+          </div>
+        </Card>
+        <CodeBlock
+          code={`const [multipleValue, setMultipleValue] = useState<string[]>(["option1", "option2"]);
+
+const handleMultipleChange = (newValue: string | string[]) => {
+  if (Array.isArray(newValue)) {
+    setMultipleValue(newValue);
+  }
+};
+
+<Select
+  options={options}
+  value={multipleValue}
+  onChange={handleMultipleChange}
+  placeholder="Select multiple options"
+  multiple
+  maxDisplayedItems={2}
+/>`}
+          language="tsx"
+        />
+      </section>
+
+      {/* Searchable */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          Searchable
+        </h2>
+        <Card>
+          <div className="space-y-4">
+            <Select
+              options={options}
+              value={value}
+              onChange={handleChange}
+              placeholder="Search options..."
+              searchable
+            />
+          </div>
+        </Card>
+        <CodeBlock
+          code={`const [value, setValue] = useState("option1");
+
+const handleChange = (newValue: string | string[]) => {
+  if (typeof newValue === "string") {
+    setValue(newValue);
+  }
+};
+
+<Select
+  options={options}
+  value={value}
+  onChange={handleChange}
+  placeholder="Search options..."
+  searchable
+/>`}
+          language="tsx"
+        />
+      </section>
+
+      {/* With Icons */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          With Icons
+        </h2>
+        <Card>
+          <div className="space-y-4">
+            <Select
+              options={options}
+              value={value}
+              onChange={handleChange}
+              placeholder="Select with icons"
+              leftIcon={FiSearch}
+            />
+          </div>
+        </Card>
+        <CodeBlock
+          code={`import { FiSearch } from "react-icons/fi";
+
+const [value, setValue] = useState("option1");
+
+const handleChange = (newValue: string | string[]) => {
+  if (typeof newValue === "string") {
+    setValue(newValue);
+  }
+};
+
+<Select
+  options={options}
+  value={value}
+  onChange={handleChange}
+  placeholder="Select with icons"
+  leftIcon={FiSearch}
+/>`}
+          language="tsx"
+        />
+      </section>
+
+      {/* Grouped Options */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          Grouped Options
+        </h2>
+        <Card>
+          <div className="space-y-4">
+            <Select
+              options={[
+                { value: "fruit1", label: "Apple", group: "Fruits" },
+                { value: "fruit2", label: "Banana", group: "Fruits" },
+                { value: "veg1", label: "Carrot", group: "Vegetables" },
+                { value: "veg2", label: "Broccoli", group: "Vegetables" },
+              ]}
+              value={groupedValue}
+              onChange={handleGroupedChange}
+              placeholder="Select from groups"
+              groupBy="group"
+            />
+          </div>
+        </Card>
+        <CodeBlock
+          code={`const [groupedValue, setGroupedValue] = useState("fruit1");
+
+const handleGroupedChange = (newValue: string | string[]) => {
+  if (typeof newValue === "string") {
+    setGroupedValue(newValue);
+  }
+};
+
+const options = [
+  { value: "fruit1", label: "Apple", group: "Fruits" },
+  { value: "fruit2", label: "Banana", group: "Fruits" },
+  { value: "veg1", label: "Carrot", group: "Vegetables" },
+  { value: "veg2", label: "Broccoli", group: "Vegetables" },
+];
+
+<Select
+  options={options}
+  value={groupedValue}
+  onChange={handleGroupedChange}
+  placeholder="Select from groups"
+  groupBy="group"
+/>`}
+          language="tsx"
+        />
+      </section>
+
+      {/* Custom Option Rendering */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          Custom Option Rendering
+        </h2>
+        <Card>
+          <div className="space-y-4">
+            <Select
+              options={[
+                {
+                  value: "option1",
+                  label: "Option 1",
+                  description: "Description 1",
+                },
+                {
+                  value: "option2",
+                  label: "Option 2",
+                  description: "Description 2",
+                },
+                {
+                  value: "option3",
+                  label: "Option 3",
+                  description: "Description 3",
+                },
+              ]}
+              value={customValue}
+              onChange={handleCustomChange}
+              placeholder="Select with custom rendering"
+              customOptionRenderer={(option) => (
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-blue-500" />
+                  <div>
+                    <div className="font-medium">{option.label}</div>
+                    <div className="text-sm text-gray-500">
+                      {option.description}
+                    </div>
+                  </div>
+                </div>
+              )}
+            />
+          </div>
+        </Card>
+        <CodeBlock
+          code={`const [customValue, setCustomValue] = useState("option1");
+
+const handleCustomChange = (newValue: string | string[]) => {
+  if (typeof newValue === "string") {
+    setCustomValue(newValue);
+  }
+};
+
+const options = [
+  { value: "option1", label: "Option 1", description: "Description 1" },
+  { value: "option2", label: "Option 2", description: "Description 2" },
+  { value: "option3", label: "Option 3", description: "Description 3" },
+];
+
+<Select
+  options={options}
+  value={customValue}
+  onChange={handleCustomChange}
+  placeholder="Select with custom rendering"
+  customOptionRenderer={(option) => (
+    <div className="flex items-center gap-2">
+      <div className="w-2 h-2 rounded-full bg-blue-500" />
+      <div>
+        <div className="font-medium">{option.label}</div>
+        <div className="text-sm text-gray-500">{option.description}</div>
+      </div>
+    </div>
+  )}
+/>`}
+          language="tsx"
+        />
+      </section>
+
       {/* States */}
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
@@ -237,24 +492,31 @@ const handleChange = (newValue: string | string[]) => {
           <div className="space-y-4">
             <Select
               options={options}
-              value=""
+              value="option1"
               onChange={() => {}}
               placeholder="Disabled Select"
               disabled
             />
             <Select
               options={options}
-              value=""
+              value="option1"
               onChange={() => {}}
               placeholder="Error Select"
               error="This field is required"
+            />
+            <Select
+              options={options}
+              value="option1"
+              onChange={() => {}}
+              placeholder="Clearable Select"
+              clearable
             />
           </div>
         </Card>
         <CodeBlock
           code={`<Select
   options={options}
-  value=""
+  value="option1"
   onChange={() => {}}
   placeholder="Disabled Select"
   disabled
@@ -262,10 +524,18 @@ const handleChange = (newValue: string | string[]) => {
 
 <Select
   options={options}
-  value=""
+  value="option1"
   onChange={() => {}}
   placeholder="Error Select"
   error="This field is required"
+/>
+
+<Select
+  options={options}
+  value="option1"
+  onChange={() => {}}
+  placeholder="Clearable Select"
+  clearable
 />`}
           language="tsx"
         />
@@ -280,15 +550,15 @@ const handleChange = (newValue: string | string[]) => {
           <div className="space-y-4">
             <Select
               options={options}
-              value=""
-              onChange={() => {}}
+              value={value}
+              onChange={handleChange}
               placeholder="Popup Below"
               popupPosition="bottom"
             />
             <Select
               options={options}
-              value=""
-              onChange={() => {}}
+              value={value}
+              onChange={handleChange}
               placeholder="Popup Above"
               popupPosition="top"
             />
@@ -297,16 +567,16 @@ const handleChange = (newValue: string | string[]) => {
         <CodeBlock
           code={`<Select
   options={options}
-  value=""
-  onChange={() => {}}
+  value={value}
+  onChange={handleChange}
   placeholder="Popup Below"
   popupPosition="bottom"
 />
 
 <Select
   options={options}
-  value=""
-  onChange={() => {}}
+  value={value}
+  onChange={handleChange}
   placeholder="Popup Above"
   popupPosition="top"
 />`}
@@ -319,7 +589,7 @@ const handleChange = (newValue: string | string[]) => {
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
           API Reference
         </h2>
-        <Card>
+        <Card className="overflow-auto max-w-[80vh] md:max-w-full">
           <div className="space-y-4">
             <h3 className="text-lg font-medium text-gray-900 dark:text-white">
               Props

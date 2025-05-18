@@ -25,8 +25,6 @@ const navigation = [
       { name: "Card", href: "/docs/card" },
       { name: "Carousel", href: "/docs/carousel" },
       { name: "Collapse", href: "/docs/collapse" },
-      { name: "CodeBlock", href: "/docs/codeblock" },
-      { name: "CodeEditor", href: "/docs/codeeditor" },
       { name: "Input", href: "/docs/input" },
       { name: "List", href: "/docs/list" },
       { name: "Modal", href: "/docs/modal" },
@@ -44,6 +42,7 @@ const navigation = [
       { name: "Tabs", href: "/docs/tabs" },
       { name: "TagInput", href: "/docs/taginput" },
       { name: "Timeline", href: "/docs/timeline" },
+      { name: "Typography", href: "/docs/utilities/typography" },
       { name: "Toast", href: "/docs/toast" },
       { name: "Tooltip", href: "/docs/tooltip" },
       { name: "Upload", href: "/docs/upload" },
@@ -55,15 +54,6 @@ const navigation = [
       { name: "useToast", href: "/docs/hooks/use-toast" },
       { name: "useTheme", href: "/docs/hooks/use-theme" },
       { name: "useMediaQuery", href: "/docs/hooks/use-media-query" },
-    ],
-  },
-  {
-    name: "Utilities",
-    items: [
-      { name: "Colors", href: "/docs/utilities/colors" },
-      { name: "Typography", href: "/docs/utilities/typography" },
-      { name: "Spacing", href: "/docs/utilities/spacing" },
-      { name: "Breakpoints", href: "/docs/utilities/breakpoints" },
     ],
   },
 ];
@@ -134,7 +124,7 @@ export default function DocsLayout({
         {/* Main content */}
         <div className="flex-1 flex flex-col">
           {/* Header */}
-          <header className="sticky top-0 z-20 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+          <header className="sticky top-0 z-[1000000] bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
             <div className="h-16 flex items-center justify-between px-4 lg:px-8">
               <div className="flex items-center space-x-4">
                 <button
@@ -172,7 +162,7 @@ export default function DocsLayout({
               </div>
               <div className="flex items-center space-x-4">
                 <a
-                  href="https://github.com/yourusername/reusable"
+                  href="https://github.com/majortyga/react-reusable-ui"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
@@ -193,9 +183,7 @@ export default function DocsLayout({
             </div>
           </header>
 
-          <main className="flex-1 p-4 lg:p-8 max-w-4xl mx-auto">
-            {children}
-          </main>
+          <main className=" p-4 lg:p-8 max-w-4xl mx-auto">{children}</main>
 
           {/* Footer */}
           <footer className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">

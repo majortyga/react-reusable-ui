@@ -42,7 +42,10 @@ export default function ColorsDocs() {
                   {shades.map((shade) => (
                     <div key={shade}>
                       <div
-                        className={`h-20 rounded-lg bg-${color}-${shade} mb-2 border border-gray-200 dark:border-gray-700`}
+                        className={[
+                          "h-20 rounded-lg mb-2 border border-gray-200 dark:border-gray-700",
+                          `bg-${color}-${shade}`,
+                        ].join(" ")}
                       />
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         {color}-{shade}

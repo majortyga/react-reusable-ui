@@ -77,12 +77,12 @@ export default function CodeBlock({
 
   return (
     <div
-      className={`relative rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900 ${className}`}
+      className={`relative rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900  ${className}`}
     >
-      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex items-center justify-between px-2 sm:px-4 py-2 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center space-x-2">
           {showLanguage && (
-            <span className="text-sm text-gray-600 dark:text-gray-400">
+            <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
               {language}
             </span>
           )}
@@ -117,9 +117,7 @@ export default function CodeBlock({
         </div>
       </div>
       <div
-        className={`overflow-x-auto ${
-          !isExpanded && maxHeight !== "none" ? "overflow-y-auto" : ""
-        }`}
+        className="max-w-[90vw] overflow-x-auto"
         style={{ maxHeight: isExpanded ? "none" : maxHeight }}
       >
         <SyntaxHighlighter
@@ -127,15 +125,20 @@ export default function CodeBlock({
           style={customStyle}
           showLineNumbers={showLineNumbers}
           wrapLines={wrapLines}
-          wrapLongLines={wrapLines}
+          wrapLongLines={false}
           startingLineNumber={startingLineNumber}
           lineProps={lineStyle}
           customStyle={{
             margin: 0,
-            padding: "1rem",
-            fontSize: "0.875rem",
+            padding: 0,
+            maxWidth: "100%",
+            width: "fit-content",
+            boxSizing: "border-box",
+            fontSize: "0.85rem",
             lineHeight: "1.5",
+            display: "block",
           }}
+          className="text-xs sm:text-sm p-2 sm:p-4"
         >
           {code}
         </SyntaxHighlighter>

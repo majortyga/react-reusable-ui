@@ -87,7 +87,8 @@ const Select: React.FC<SelectProps> = ({
 
   const groupedOptions = groupBy
     ? filteredOptions.reduce((acc, option) => {
-        const group = option.group || "Other";
+        const group =
+          (option[groupBy as keyof SelectOption] as string) || "Other";
         if (!acc[group]) {
           acc[group] = [];
         }
@@ -209,7 +210,7 @@ const Select: React.FC<SelectProps> = ({
         className={`relative flex items-center border rounded-md ${
           isOpen ? "ring-2 ring-blue-500 border-blue-500" : "border-gray-300"
         } ${error ? "border-red-500" : ""} ${
-          disabled ? "bg-gray-100" : ""
+          disabled ? "bg-gray-100 dark:bg-gray-800" : ""
         } ${selectContainerClassName}`}
       >
         {LeftIcon && (

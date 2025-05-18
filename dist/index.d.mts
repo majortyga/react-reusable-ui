@@ -1,6 +1,12 @@
 import React from 'react';
 import { IconType } from 'react-icons';
 
+type MaskType = "phone" | "date" | "credit-card" | "ssn" | "zip" | "currency" | "custom";
+interface MaskOptions {
+    type: MaskType;
+    pattern?: string;
+    placeholder?: string;
+}
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     leftIcon?: IconType;
     rightIcon?: IconType;
@@ -12,6 +18,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     showCharacterCount?: boolean;
     type?: string;
     theme?: "light" | "dark";
+    mask?: MaskOptions;
     validation?: {
         pattern?: RegExp;
         message?: string;
@@ -879,6 +886,8 @@ interface RatingProps {
     onChange?: (value: number) => void;
     readOnly?: boolean;
     className?: string;
+    showInfo?: boolean;
+    infoPosition?: "top" | "bottom";
 }
 declare const Rating: React.FC<RatingProps>;
 

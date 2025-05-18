@@ -348,22 +348,66 @@ export const Carousel: React.FC<CarouselProps> = ({
     );
   };
 
+  // Helper to extract the first <img> from a slide
+  const extractImageFromSlide = (slide: React.ReactNode): React.ReactNode => {
+    if (React.isValidElement(slide)) {
+      if (slide.type === "img") {
+        // Only pass allowed props to <img>
+        const imgProps =
+          slide.props as React.ImgHTMLAttributes<HTMLImageElement>;
+        return React.cloneElement(slide, {
+          width: "100%",
+          height: "100%",
+          style: { ...(imgProps.style || {}), objectFit: "cover" },
+          className: "w-full h-full object-cover",
+        } as React.ImgHTMLAttributes<HTMLImageElement>);
+      }
+      // If slide has children, search recursively
+      const props = slide.props as { children?: React.ReactNode };
+      const children = props.children;
+      if (children) {
+        if (Array.isArray(children)) {
+          for (const child of children) {
+            const found = extractImageFromSlide(child);
+            if (found) return found;
+          }
+        } else {
+          const found = extractImageFromSlide(children);
+          if (found) return found;
+        }
+      }
+    }
+    return null;
+  };
+
   const renderThumbnails = () => {
     if (!showThumbnails) return null;
 
     return (
       <div className={getThumbnailClasses()}>
-        {slides.map((slide, index) => (
-          <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-20 h-20 rounded overflow-hidden ${
-              index === currentIndex ? "ring-2 ring-blue-500" : ""
-            }`}
-          >
-            {slide}
-          </button>
-        ))}
+        {slides.map((slide, index) => {
+          const image = extractImageFromSlide(slide);
+          return (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`w-20 h-20 rounded overflow-hidden flex-shrink-0 ${
+                index === currentIndex
+                  ? "ring-2 ring-blue-500"
+                  : "opacity-70 hover:opacity-100"
+              } transition-all duration-200`}
+              aria-label={`Go to slide ${index + 1}`}
+            >
+              <div className="w-full h-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                {image ? (
+                  image
+                ) : (
+                  <span className="text-gray-400 text-xs">No Image</span>
+                )}
+              </div>
+            </button>
+          );
+        })}
       </div>
     );
   };
