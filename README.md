@@ -1,15 +1,32 @@
 # GCI Reusable UI Components for React
 
-A modern, accessible, and customizable React component library built with Next.js and Tailwind CSS.
+A modern, accessible, and customizable React component library built with React and Tailwind CSS.
 
-## Installation
+# Installation
+
+Ensure you have TailwindCSS installed on your computer, check [Tailwind Website](https://tailwindcss.com/) for latest installation guide
+
+if you're using nextjs, Tailwind CSS is pre-installed with it.
+
+Then copy and paste the below command to your cli
 
 ```bash
 npm install @majordev/react-reusable-ui
-# or
-yarn add @majordev/react-reusable-ui
-# or
-pnpm add @majordev/react-reusable-ui
+```
+
+Edit or create your tailwind.config.js file and add the following configuration:
+
+```bash
+module.exports = {
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@majordev/react-reusable-ui/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
 ```
 
 ## Quick Start

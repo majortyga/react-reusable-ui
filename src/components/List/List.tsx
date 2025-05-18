@@ -1,6 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { IconType } from "react-icons";
-import Image from "next/image";
 
 export interface ListItem {
   id: string | number;
@@ -66,7 +66,7 @@ const List: React.FC<ListProps> = ({
               onClick={item.disabled ? undefined : item.onClick}
             >
               {item.avatar ? (
-                <Image
+                <img
                   src={item.avatar}
                   alt={item.title}
                   width={40}
