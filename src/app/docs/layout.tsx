@@ -28,6 +28,7 @@ const navigation = [
       { name: "Input", href: "/docs/input" },
       { name: "List", href: "/docs/list" },
       { name: "Modal", href: "/docs/modal" },
+      { name: "Navigation", href: "/docs/navigation" },
       { name: "Pagination", href: "/docs/pagination" },
       { name: "Popover", href: "/docs/popover" },
       { name: "Progress", href: "/docs/progress" },

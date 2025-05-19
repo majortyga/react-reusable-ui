@@ -206,7 +206,7 @@ export default function ButtonDocs() {
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
           API Reference
         </h2>
-        <Card>
+        <Card className="overflow-auto max-w-[90vw]">
           <div className="space-y-4">
             <h3 className="text-lg font-medium text-gray-900 dark:text-white">
               Props

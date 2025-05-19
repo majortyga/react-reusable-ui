@@ -2,49 +2,126 @@ import React, { useState, useEffect, useRef, KeyboardEvent } from "react";
 import { IconType } from "react-icons";
 import { IoIosArrowDown } from "react-icons/io";
 
+/**
+ * Interface for select options
+ * @interface SelectOption
+ */
 export interface SelectOption {
+  /** The value of the option */
   value: string;
+  /** The display label for the option */
   label: string;
+  /** Optional icon component for the option */
   icon?: IconType;
+  /** Whether the option is disabled */
   disabled?: boolean;
+  /** Optional description text for the option */
   description?: string;
+  /** Optional group name for grouping options */
   group?: string;
 }
 
+/**
+ * Props for the Select component
+ * @interface SelectProps
+ */
 export interface SelectProps {
+  /** Array of options to display in the select */
   options: SelectOption[];
+  /** Currently selected value(s) */
   value?: string | string[];
+  /** Callback fired when selection changes */
   onChange?: (value: string | string[]) => void;
+  /** Placeholder text when no option is selected */
   placeholder?: string;
+  /** Label text for the select */
   label?: string;
+  /** Error message to display */
   error?: string;
+  /** Whether multiple selections are allowed */
   multiple?: boolean;
+  /** Whether the select is searchable */
   searchable?: boolean;
+  /** Icon to display on the left side */
   leftIcon?: IconType;
+  /** Icon to display on the right side */
   rightIcon?: IconType;
+  /** Additional CSS classes for the select container */
   className?: string;
+  /** Whether the select is disabled */
   disabled?: boolean;
+  /** Whether the select can be cleared */
   clearable?: boolean;
+  /** Maximum number of items to display in multiple select */
   maxDisplayedItems?: number;
+  /** Property name to group options by */
   groupBy?: string;
+  /** Position of the options popup */
   popupPosition?: "top" | "bottom";
+  /** Custom render function for options */
   customOptionRenderer?: (option: SelectOption) => React.ReactNode;
+  /** Additional CSS classes for the wrapper div */
   wrapperClassName?: string;
+  /** Additional CSS classes for the label */
   labelClassName?: string;
+  /** Additional CSS classes for the select container */
   selectContainerClassName?: string;
+  /** Additional CSS classes for the select element */
   selectClassName?: string;
+  /** Additional CSS classes for the icon container */
   iconContainerClassName?: string;
+  /** Additional CSS classes for the icon */
   iconClassName?: string;
+  /** Additional CSS classes for the error message */
   errorClassName?: string;
+  /** Additional CSS classes for the options container */
   optionsContainerClassName?: string;
+  /** Additional CSS classes for the search input */
   searchInputClassName?: string;
+  /** Additional CSS classes for the options list */
   optionsListClassName?: string;
+  /** Additional CSS classes for individual options */
   optionClassName?: string;
+  /** Additional CSS classes for the checkmark */
   checkmarkClassName?: string;
+  /** Additional CSS classes for group headers */
   groupHeaderClassName?: string;
+  /** Additional CSS classes for the no options message */
   noOptionsClassName?: string;
 }
 
+/**
+ * A customizable select component with support for single/multiple selection,
+ * search, grouping, and custom styling.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <Select
+ *   options={[
+ *     { value: "1", label: "Option 1" },
+ *     { value: "2", label: "Option 2" }
+ *   ]}
+ *   value={selectedValue}
+ *   onChange={setSelectedValue}
+ *   placeholder="Select an option"
+ *   searchable
+ *   multiple
+ * />
+ * ```
+ *
+ * @example With custom styling
+ * ```tsx
+ * <Select
+ *   options={options}
+ *   value={value}
+ *   onChange={onChange}
+ *   className="custom-select"
+ *   optionClassName="custom-option"
+ *   wrapperClassName="custom-wrapper"
+ * />
+ * ```
+ */
 const Select: React.FC<SelectProps> = ({
   options,
   value,
@@ -200,15 +277,15 @@ const Select: React.FC<SelectProps> = ({
       tabIndex={0}
     >
       {label && (
-        <label
-          className={`text-sm font-medium text-black dark:text-white ${labelClassName}`}
-        >
+        <label className={`text-sm font-medium  ${labelClassName}`}>
           {label}
         </label>
       )}
       <div
         className={`relative flex items-center border rounded-md ${
-          isOpen ? "ring-2 ring-blue-500 border-blue-500" : "border-gray-300"
+          isOpen
+            ? "ring-2 ring-blue-500 border-blue-500"
+            : "border-gray-300 dark:border-gray-600"
         } ${error ? "border-red-500" : ""} ${
           disabled ? "bg-gray-100 dark:bg-gray-800" : ""
         } ${selectContainerClassName}`}
@@ -221,7 +298,7 @@ const Select: React.FC<SelectProps> = ({
           </div>
         )}
         <div
-          className={`flex-1 px-3 py-2 cursor-pointer text-black dark:text-white ${
+          className={`flex-1 px-3 py-2 cursor-pointer ${
             disabled ? "cursor-not-allowed" : ""
           } ${selectClassName}`}
           onClick={() => !disabled && setIsOpen(!isOpen)}
@@ -238,9 +315,7 @@ const Select: React.FC<SelectProps> = ({
               ×
             </button>
           )}
-          <div
-            className={`flex items-center px-3 text-gray-500 dark:text-gray-400 ${iconContainerClassName}`}
-          >
+          <div className={`flex items-center px-3  ${iconContainerClassName}`}>
             <IoIosArrowDown
               className={`w-5 h-5 cursor-pointer transition-transform ${
                 isOpen ? "transform rotate-180" : ""
@@ -259,7 +334,7 @@ const Select: React.FC<SelectProps> = ({
         <div
           className={`absolute z-[10000] left-0 right-0 max-w-[100vw] overflow-x-auto ${
             popupPosition === "top" ? "bottom-full mb-1" : "top-full mt-1"
-          } bg-white dark:bg-gray-800 border rounded-md shadow-lg max-h-60 overflow-y-auto ${optionsContainerClassName}`}
+          } rounded-md shadow-lg max-h-60 overflow-y-auto ${optionsContainerClassName}`}
         >
           {searchable && (
             <input
@@ -275,7 +350,7 @@ const Select: React.FC<SelectProps> = ({
             <div key={group} className={optionsListClassName}>
               {group && (
                 <div
-                  className={`px-3 py-1 text-sm font-medium text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 ${groupHeaderClassName}`}
+                  className={`px-3 py-1 text-sm font-medium  ${groupHeaderClassName}`}
                 >
                   {group}
                 </div>
@@ -283,12 +358,14 @@ const Select: React.FC<SelectProps> = ({
               {groupOptions.map((option, index) => (
                 <div
                   key={option.value}
-                  className={`px-3 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 text-black dark:text-white ${
+                  className={`px-3 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-violet-700 flex items-center gap-2 ${
                     isSelected(option.value)
-                      ? "bg-blue-50 dark:bg-blue-900"
+                      ? "bg-blue-50 dark:bg-violet-900"
                       : ""
                   } ${
-                    focusedIndex === index ? "bg-gray-100 dark:bg-gray-700" : ""
+                    focusedIndex === index
+                      ? "bg-gray-100 dark:bg-violet-700"
+                      : ""
                   } ${
                     option.disabled ? "opacity-50 cursor-not-allowed" : ""
                   } ${optionClassName}`}
@@ -316,9 +393,7 @@ const Select: React.FC<SelectProps> = ({
             </div>
           ))}
           {filteredOptions.length === 0 && (
-            <div
-              className={`px-3 py-2 text-gray-500 dark:text-gray-400 text-center ${noOptionsClassName}`}
-            >
+            <div className={`px-3 py-2 text-center ${noOptionsClassName}`}>
               No options found
             </div>
           )}

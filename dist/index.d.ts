@@ -36,47 +36,124 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 declare const Input: React.FC<InputProps>;
 
+/**
+ * Interface for select options
+ * @interface SelectOption
+ */
 interface SelectOption {
+    /** The value of the option */
     value: string;
+    /** The display label for the option */
     label: string;
+    /** Optional icon component for the option */
     icon?: IconType;
+    /** Whether the option is disabled */
     disabled?: boolean;
+    /** Optional description text for the option */
     description?: string;
+    /** Optional group name for grouping options */
     group?: string;
 }
+/**
+ * Props for the Select component
+ * @interface SelectProps
+ */
 interface SelectProps {
+    /** Array of options to display in the select */
     options: SelectOption[];
+    /** Currently selected value(s) */
     value?: string | string[];
+    /** Callback fired when selection changes */
     onChange?: (value: string | string[]) => void;
+    /** Placeholder text when no option is selected */
     placeholder?: string;
+    /** Label text for the select */
     label?: string;
+    /** Error message to display */
     error?: string;
+    /** Whether multiple selections are allowed */
     multiple?: boolean;
+    /** Whether the select is searchable */
     searchable?: boolean;
+    /** Icon to display on the left side */
     leftIcon?: IconType;
+    /** Icon to display on the right side */
     rightIcon?: IconType;
+    /** Additional CSS classes for the select container */
     className?: string;
+    /** Whether the select is disabled */
     disabled?: boolean;
+    /** Whether the select can be cleared */
     clearable?: boolean;
+    /** Maximum number of items to display in multiple select */
     maxDisplayedItems?: number;
+    /** Property name to group options by */
     groupBy?: string;
+    /** Position of the options popup */
     popupPosition?: "top" | "bottom";
+    /** Custom render function for options */
     customOptionRenderer?: (option: SelectOption) => React.ReactNode;
+    /** Additional CSS classes for the wrapper div */
     wrapperClassName?: string;
+    /** Additional CSS classes for the label */
     labelClassName?: string;
+    /** Additional CSS classes for the select container */
     selectContainerClassName?: string;
+    /** Additional CSS classes for the select element */
     selectClassName?: string;
+    /** Additional CSS classes for the icon container */
     iconContainerClassName?: string;
+    /** Additional CSS classes for the icon */
     iconClassName?: string;
+    /** Additional CSS classes for the error message */
     errorClassName?: string;
+    /** Additional CSS classes for the options container */
     optionsContainerClassName?: string;
+    /** Additional CSS classes for the search input */
     searchInputClassName?: string;
+    /** Additional CSS classes for the options list */
     optionsListClassName?: string;
+    /** Additional CSS classes for individual options */
     optionClassName?: string;
+    /** Additional CSS classes for the checkmark */
     checkmarkClassName?: string;
+    /** Additional CSS classes for group headers */
     groupHeaderClassName?: string;
+    /** Additional CSS classes for the no options message */
     noOptionsClassName?: string;
 }
+/**
+ * A customizable select component with support for single/multiple selection,
+ * search, grouping, and custom styling.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <Select
+ *   options={[
+ *     { value: "1", label: "Option 1" },
+ *     { value: "2", label: "Option 2" }
+ *   ]}
+ *   value={selectedValue}
+ *   onChange={setSelectedValue}
+ *   placeholder="Select an option"
+ *   searchable
+ *   multiple
+ * />
+ * ```
+ *
+ * @example With custom styling
+ * ```tsx
+ * <Select
+ *   options={options}
+ *   value={value}
+ *   onChange={onChange}
+ *   className="custom-select"
+ *   optionClassName="custom-option"
+ *   wrapperClassName="custom-wrapper"
+ * />
+ * ```
+ */
 declare const Select: React.FC<SelectProps>;
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -411,38 +488,44 @@ interface SkeletonProps {
 declare const Skeleton: React.FC<SkeletonProps>;
 
 /**
- * Props for the Card component.
+ * Card Component
  *
- * @property {React.ReactNode} [title] - The card title.
- * @property {React.ReactNode} [subtitle] - The card subtitle.
- * @property {IconType} [icon] - Optional icon component.
- * @property {React.ReactNode} [children] - Card content.
- * @property {React.ReactNode} [footer] - Card footer content.
- * @property {"default" | "bordered" | "elevated" | "news"} [variant] - Card style variant.
- * @property {string} [className] - Additional class for the card container.
- * @property {string} [headerClassName] - Additional class for the card header.
- * @property {string} [bodyClassName] - Additional class for the card body.
- * @property {string} [footerClassName] - Additional class for the card footer.
- * @property {() => void} [onClick] - Click handler for the card.
- * @property {object} [image] - Image settings for the card.
- * @property {"scale" | "lift" | "glow" | "none"} [hoverEffect] - Hover effect style.
- * @property {boolean} [loading] - Show loading state.
- * @property {boolean} [skeleton] - Show skeleton placeholder.
- * @property {object} [metadata] - News card metadata (time, category, author, comments, views).
- * @property {string} [link] - Optional link for the card (news variant).
+ * A versatile card component that supports various styles, layouts, and interactive features.
+ *
+ * @example
+ * ```tsx
+ * <Card
+ *   title="Card Title"
+ *   subtitle="Card Subtitle"
+ *   icon={HiUser}
+ *   variant="bordered"
+ *   hoverEffect="lift"
+ * >
+ *   <p>Card content goes here</p>
+ * </Card>
+ * ```
+ */
+/**
+ * Props for the Card component.
  */
 interface CardProps {
-    /** The card title. */
+    /** The card title. Can be any valid React node. */
     title?: React.ReactNode;
-    /** The card subtitle. */
+    /** The card subtitle. Can be any valid React node. */
     subtitle?: React.ReactNode;
-    /** Optional icon component. */
+    /** Optional icon component from react-icons. */
     icon?: IconType;
-    /** Card content. */
+    /** Card content. Can be any valid React node. */
     children?: React.ReactNode;
-    /** Card footer content. */
+    /** Card footer content. Can be any valid React node. */
     footer?: React.ReactNode;
-    /** Card style variant. */
+    /**
+     * Card style variant.
+     * - "default": Basic card with white background
+     * - "bordered": Card with border
+     * - "elevated": Card with shadow and hover effect
+     * - "news": Special layout for news articles with metadata
+     */
     variant?: "default" | "bordered" | "elevated" | "news";
     /** Additional class for the card container. */
     className?: string;
@@ -456,11 +539,12 @@ interface CardProps {
     onClick?: () => void;
     /**
      * Image settings for the card.
-     * @property {string} src - Image source URL.
-     * @property {string} [alt] - Image alt text.
-     * @property {"top" | "bottom" | "left" | "right"} [position] - Image position.
-     * @property {"square" | "video" | "auto"} [aspectRatio] - Image aspect ratio.
-     * @property {boolean} [overlay] - Show overlay on image.
+     * @property {string} src - Image source URL
+     * @property {string} [alt] - Image alt text
+     * @property {"top" | "bottom" | "left" | "right"} [position] - Image position
+     * @property {"square" | "video" | "auto"} [aspectRatio] - Image aspect ratio
+     * @property {boolean} [overlay] - Show overlay on image
+     * @property {string} [overlayColor] - Color of the overlay
      */
     image?: {
         src: string;
@@ -468,20 +552,27 @@ interface CardProps {
         position?: "top" | "bottom" | "left" | "right";
         aspectRatio?: "square" | "video" | "auto";
         overlay?: boolean;
+        overlayColor?: string;
     };
-    /** Hover effect style. */
+    /**
+     * Hover effect style.
+     * - "scale": Card scales up on hover
+     * - "lift": Card lifts up with shadow on hover
+     * - "glow": Card glows with custom color on hover
+     * - "none": No hover effect
+     */
     hoverEffect?: "scale" | "lift" | "glow" | "none";
-    /** Show loading state. */
+    /** Show loading state with skeleton animation. */
     loading?: boolean;
-    /** Show skeleton placeholder. */
+    /** Show skeleton placeholder instead of content. */
     skeleton?: boolean;
     /**
      * News card metadata.
-     * @property {string} [time] - Time or date string.
-     * @property {string} [category] - News category.
-     * @property {string} [author] - Author name.
-     * @property {number} [comments] - Number of comments.
-     * @property {number} [views] - Number of views.
+     * @property {string} [time] - Time or date string
+     * @property {string} [category] - News category
+     * @property {string} [author] - Author name
+     * @property {number} [comments] - Number of comments
+     * @property {number} [views] - Number of views
      */
     metadata?: {
         time?: string;
@@ -490,8 +581,37 @@ interface CardProps {
         comments?: number;
         views?: number;
     };
-    /** Optional link for the card (news variant). */
+    /** Optional link for the card (news variant). Makes the entire card clickable. */
     link?: string;
+    /**
+     * Custom colors for the card.
+     * @property {string} [bg] - Background color class
+     * @property {string} [text] - Text color class
+     * @property {string} [border] - Border color class
+     * @property {string} [headerBg] - Header background color class
+     * @property {string} [headerText] - Header text color class
+     * @property {string} [headerBorder] - Header border color class
+     * @property {string} [footerBg] - Footer background color class
+     * @property {string} [footerText] - Footer text color class
+     * @property {string} [footerBorder] - Footer border color class
+     * @property {string} [overlay] - Image overlay color (rgba)
+     * @property {string} [hover] - Hover effect color (rgba)
+     * @property {string} [skeleton] - Skeleton loading color class
+     */
+    colors?: {
+        bg?: string;
+        text?: string;
+        border?: string;
+        headerBg?: string;
+        headerText?: string;
+        headerBorder?: string;
+        footerBg?: string;
+        footerText?: string;
+        footerBorder?: string;
+        overlay?: string;
+        hover?: string;
+        skeleton?: string;
+    };
 }
 declare const Card: React.FC<CardProps>;
 
@@ -631,7 +751,7 @@ interface BadgeProps {
     className?: string;
     animation?: "pulse" | "bounce" | "none";
     dot?: boolean;
-    count?: number;
+    count?: number | string;
     maxCount?: number;
     showZero?: boolean;
     offset?: [number, number];
@@ -651,6 +771,9 @@ interface AlertProps {
     description?: string;
     closable?: boolean;
     onClose?: () => void;
+    bgColor?: string;
+    textColor?: string;
+    borderColor?: string;
 }
 declare const Alert: React.FC<AlertProps>;
 
@@ -676,23 +799,48 @@ interface BreadcrumbsProps {
 }
 declare const Breadcrumbs: React.FC<BreadcrumbsProps>;
 
+/**
+ * Props for the Calendar component
+ * @interface CalendarProps
+ */
 interface CalendarProps {
+    /** The currently selected date */
     value?: Date;
+    /** Callback fired when a date is selected */
     onChange?: (date: Date) => void;
+    /** Additional CSS classes for the calendar container */
     className?: string;
+    /** Additional CSS classes for calendar buttons and interactive elements */
+    calendarButtonClassName?: string;
+    /** Text color class to be applied to calendar elements */
+    textColor?: string;
+    /** Whether to show the time picker */
     showTimePicker?: boolean;
+    /** Whether to show seconds in the time picker */
     showSeconds?: boolean;
+    /** Whether to use 12-hour format (AM/PM) */
     hour12?: boolean;
+    /** Interval in minutes for the minute picker (e.g., 5 for 5-minute intervals) */
     timeInterval?: number;
+    /** Interval in seconds for the second picker (e.g., 5 for 5-second intervals) */
     secondInterval?: number;
+    /** Minimum selectable date */
     minDate?: Date;
+    /** Maximum selectable date */
     maxDate?: Date;
+    /** Function to disable specific dates */
     disableDate?: (date: Date) => boolean;
+    /** Function to disable specific times */
     disableTime?: (date: Date, h: number, m: number, s: number) => boolean;
+    /** Whether to show time picker inline with the calendar */
     timePickerInline?: boolean;
+    /** Callback fired when the calendar opens */
     onOpen?: () => void;
+    /** Callback fired when the calendar closes */
     onClose?: () => void;
+    /** Custom render function for day cells */
     renderDay?: (date: Date, isSelected: boolean, isToday: boolean, disabled: boolean) => React.ReactNode;
+    /** Custom render function for time picker cells */
     renderTimeCell?: (h: number, m: number, s: number, selected: boolean, disabled: boolean) => React.ReactNode;
 }
 declare const Calendar: React.FC<CalendarProps>;
@@ -843,11 +991,61 @@ interface ListProps {
 declare const List: React.FC<ListProps>;
 
 interface PaginationProps {
+    /** Current page number */
     current: number;
+    /** Total number of items */
     total: number;
+    /** Number of items per page */
     pageSize: number;
+    /** Callback when page changes */
     onChange: (page: number) => void;
+    /** Additional class for the container */
     className?: string;
+    /** Show quick jump to first/last page */
+    showFirstLast?: boolean;
+    /** Show page size selector */
+    showSizeChanger?: boolean;
+    /** Available page sizes */
+    pageSizeOptions?: number[];
+    /** Callback when page size changes */
+    onPageSizeChange?: (size: number) => void;
+    /** Number of pages to show before and after current page */
+    siblingCount?: number;
+    /** Custom colors for the pagination */
+    colors?: {
+        bg?: string;
+        text?: string;
+        border?: string;
+        activeBg?: string;
+        activeText?: string;
+        activeBorder?: string;
+        hoverBg?: string;
+        hoverText?: string;
+        hoverBorder?: string;
+        disabledBg?: string;
+        disabledText?: string;
+        disabledBorder?: string;
+    };
+    /** Custom icons */
+    icons?: {
+        prev?: React.ReactNode;
+        next?: React.ReactNode;
+        first?: React.ReactNode;
+        last?: React.ReactNode;
+        ellipsis?: React.ReactNode;
+    };
+    /** Show total items count */
+    showTotal?: boolean;
+    /** Custom total items text */
+    totalText?: (total: number, range: [number, number]) => string;
+    /** Show current page info */
+    showCurrent?: boolean;
+    /** Custom current page text */
+    currentText?: (current: number, total: number) => string;
+    /** Disable pagination */
+    disabled?: boolean;
+    /** Size of the pagination */
+    size?: "small" | "middle" | "large";
 }
 declare const Pagination: React.FC<PaginationProps>;
 
@@ -911,28 +1109,99 @@ interface SpinnerProps {
 declare const Spinner: React.FC<SpinnerProps>;
 
 interface StatCardProps {
+    /** The title of the stat card */
     title: string;
+    /** The main value to display */
     value: string | number;
+    /** Optional icon component */
     icon?: IconType;
+    /** Trend information */
     trend?: {
         value: number;
         isPositive: boolean;
+        label?: string;
+        showArrow?: boolean;
     };
+    /** Additional description text */
     description?: string;
+    /** Additional class for the card container */
     className?: string;
+    /** Additional class for the icon container */
     iconClassName?: string;
+    /** Additional class for the trend indicator */
     trendClassName?: string;
+    /** Card style variant */
+    variant?: "default" | "bordered" | "elevated" | "gradient";
+    /** Loading state */
+    loading?: boolean;
+    /** Skeleton loading state */
+    skeleton?: boolean;
+    /** Click handler for the card */
+    onClick?: () => void;
+    /** Custom colors for the card */
+    colors?: {
+        bg?: string;
+        text?: string;
+        border?: string;
+        iconBg?: string;
+        iconColor?: string;
+        trendPositive?: string;
+        trendNegative?: string;
+        gradient?: {
+            from: string;
+            to: string;
+        };
+    };
+    /** Alert state */
+    alert?: {
+        message: string;
+        type: "info" | "warning" | "error" | "success";
+    };
+    /** Prefix for the value */
+    prefix?: string;
+    /** Suffix for the value */
+    suffix?: string;
+    /** Format the value (e.g., currency, percentage) */
+    format?: "number" | "currency" | "percentage" | "custom";
+    /** Custom formatter function */
+    formatter?: (value: string | number) => string;
+    /** Animation duration for value changes */
+    animationDuration?: number;
 }
 declare const StatCard: React.FC<StatCardProps>;
 
 interface Step {
     label: string;
     description?: string;
+    icon?: React.ReactNode;
+    component?: React.ReactNode;
 }
 interface StepperProps {
     steps: Step[];
     current: number;
     className?: string;
+    stepClassName?: string;
+    stepContentClassName?: string;
+    circleClassName?: string;
+    activeCircleClassName?: string;
+    completedCircleClassName?: string;
+    inactiveCircleClassName?: string;
+    labelClassName?: string;
+    activeLabelClassName?: string;
+    completedLabelClassName?: string;
+    inactiveLabelClassName?: string;
+    descriptionClassName?: string;
+    activeDescriptionClassName?: string;
+    completedDescriptionClassName?: string;
+    inactiveDescriptionClassName?: string;
+    lineClassName?: string;
+    activeLineClassName?: string;
+    completedLineClassName?: string;
+    inactiveLineClassName?: string;
+    showDescriptionOnMobile?: boolean;
+    verticalOnMobile?: boolean;
+    renderStep?: (step: Step, index: number, isActive: boolean, isCompleted: boolean) => React.ReactNode;
+    renderCircle?: (step: Step, index: number, isActive: boolean, isCompleted: boolean) => React.ReactNode;
 }
 declare const Stepper: React.FC<StepperProps>;
 

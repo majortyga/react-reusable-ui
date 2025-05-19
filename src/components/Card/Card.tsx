@@ -3,56 +3,75 @@ import React from "react";
 import { IconType } from "react-icons";
 
 /**
- * Props for the Card component.
+ * Card Component
  *
- * @property {React.ReactNode} [title] - The card title.
- * @property {React.ReactNode} [subtitle] - The card subtitle.
- * @property {IconType} [icon] - Optional icon component.
- * @property {React.ReactNode} [children] - Card content.
- * @property {React.ReactNode} [footer] - Card footer content.
- * @property {"default" | "bordered" | "elevated" | "news"} [variant] - Card style variant.
- * @property {string} [className] - Additional class for the card container.
- * @property {string} [headerClassName] - Additional class for the card header.
- * @property {string} [bodyClassName] - Additional class for the card body.
- * @property {string} [footerClassName] - Additional class for the card footer.
- * @property {() => void} [onClick] - Click handler for the card.
- * @property {object} [image] - Image settings for the card.
- * @property {"scale" | "lift" | "glow" | "none"} [hoverEffect] - Hover effect style.
- * @property {boolean} [loading] - Show loading state.
- * @property {boolean} [skeleton] - Show skeleton placeholder.
- * @property {object} [metadata] - News card metadata (time, category, author, comments, views).
- * @property {string} [link] - Optional link for the card (news variant).
+ * A versatile card component that supports various styles, layouts, and interactive features.
+ *
+ * @example
+ * ```tsx
+ * <Card
+ *   title="Card Title"
+ *   subtitle="Card Subtitle"
+ *   icon={HiUser}
+ *   variant="bordered"
+ *   hoverEffect="lift"
+ * >
+ *   <p>Card content goes here</p>
+ * </Card>
+ * ```
+ */
+
+/**
+ * Props for the Card component.
  */
 export interface CardProps {
-  /** The card title. */
+  /** The card title. Can be any valid React node. */
   title?: React.ReactNode;
-  /** The card subtitle. */
+
+  /** The card subtitle. Can be any valid React node. */
   subtitle?: React.ReactNode;
-  /** Optional icon component. */
+
+  /** Optional icon component from react-icons. */
   icon?: IconType;
-  /** Card content. */
+
+  /** Card content. Can be any valid React node. */
   children?: React.ReactNode;
-  /** Card footer content. */
+
+  /** Card footer content. Can be any valid React node. */
   footer?: React.ReactNode;
-  /** Card style variant. */
+
+  /**
+   * Card style variant.
+   * - "default": Basic card with white background
+   * - "bordered": Card with border
+   * - "elevated": Card with shadow and hover effect
+   * - "news": Special layout for news articles with metadata
+   */
   variant?: "default" | "bordered" | "elevated" | "news";
+
   /** Additional class for the card container. */
   className?: string;
+
   /** Additional class for the card header. */
   headerClassName?: string;
+
   /** Additional class for the card body. */
   bodyClassName?: string;
+
   /** Additional class for the card footer. */
   footerClassName?: string;
+
   /** Click handler for the card. */
   onClick?: () => void;
+
   /**
    * Image settings for the card.
-   * @property {string} src - Image source URL.
-   * @property {string} [alt] - Image alt text.
-   * @property {"top" | "bottom" | "left" | "right"} [position] - Image position.
-   * @property {"square" | "video" | "auto"} [aspectRatio] - Image aspect ratio.
-   * @property {boolean} [overlay] - Show overlay on image.
+   * @property {string} src - Image source URL
+   * @property {string} [alt] - Image alt text
+   * @property {"top" | "bottom" | "left" | "right"} [position] - Image position
+   * @property {"square" | "video" | "auto"} [aspectRatio] - Image aspect ratio
+   * @property {boolean} [overlay] - Show overlay on image
+   * @property {string} [overlayColor] - Color of the overlay
    */
   image?: {
     src: string;
@@ -60,20 +79,31 @@ export interface CardProps {
     position?: "top" | "bottom" | "left" | "right";
     aspectRatio?: "square" | "video" | "auto";
     overlay?: boolean;
+    overlayColor?: string;
   };
-  /** Hover effect style. */
+
+  /**
+   * Hover effect style.
+   * - "scale": Card scales up on hover
+   * - "lift": Card lifts up with shadow on hover
+   * - "glow": Card glows with custom color on hover
+   * - "none": No hover effect
+   */
   hoverEffect?: "scale" | "lift" | "glow" | "none";
-  /** Show loading state. */
+
+  /** Show loading state with skeleton animation. */
   loading?: boolean;
-  /** Show skeleton placeholder. */
+
+  /** Show skeleton placeholder instead of content. */
   skeleton?: boolean;
+
   /**
    * News card metadata.
-   * @property {string} [time] - Time or date string.
-   * @property {string} [category] - News category.
-   * @property {string} [author] - Author name.
-   * @property {number} [comments] - Number of comments.
-   * @property {number} [views] - Number of views.
+   * @property {string} [time] - Time or date string
+   * @property {string} [category] - News category
+   * @property {string} [author] - Author name
+   * @property {number} [comments] - Number of comments
+   * @property {number} [views] - Number of views
    */
   metadata?: {
     time?: string;
@@ -82,8 +112,39 @@ export interface CardProps {
     comments?: number;
     views?: number;
   };
-  /** Optional link for the card (news variant). */
+
+  /** Optional link for the card (news variant). Makes the entire card clickable. */
   link?: string;
+
+  /**
+   * Custom colors for the card.
+   * @property {string} [bg] - Background color class
+   * @property {string} [text] - Text color class
+   * @property {string} [border] - Border color class
+   * @property {string} [headerBg] - Header background color class
+   * @property {string} [headerText] - Header text color class
+   * @property {string} [headerBorder] - Header border color class
+   * @property {string} [footerBg] - Footer background color class
+   * @property {string} [footerText] - Footer text color class
+   * @property {string} [footerBorder] - Footer border color class
+   * @property {string} [overlay] - Image overlay color (rgba)
+   * @property {string} [hover] - Hover effect color (rgba)
+   * @property {string} [skeleton] - Skeleton loading color class
+   */
+  colors?: {
+    bg?: string;
+    text?: string;
+    border?: string;
+    headerBg?: string;
+    headerText?: string;
+    headerBorder?: string;
+    footerBg?: string;
+    footerText?: string;
+    footerBorder?: string;
+    overlay?: string;
+    hover?: string;
+    skeleton?: string;
+  };
 }
 
 const Card: React.FC<CardProps> = ({
@@ -104,28 +165,37 @@ const Card: React.FC<CardProps> = ({
   skeleton = false,
   metadata,
   link,
+  colors = {},
 }) => {
   const getVariantClasses = () => {
+    const baseClasses = {
+      bg: colors.bg || "bg-white dark:bg-gray-800",
+      border: colors.border || "border-gray-200 dark:border-gray-700",
+      text: colors.text || "text-gray-900 dark:text-white",
+    };
+
     switch (variant) {
       case "bordered":
-        return "border border-gray-200 dark:border-gray-700";
+        return `border ${baseClasses.border}`;
       case "elevated":
-        return "shadow-lg hover:shadow-xl transition-shadow duration-200";
+        return `${baseClasses.bg} shadow-lg hover:shadow-xl transition-shadow duration-200`;
       case "news":
-        return "bg-white dark:bg-gray-800 overflow-hidden relative";
+        return `${baseClasses.bg} overflow-hidden relative`;
       default:
-        return "bg-white dark:bg-gray-800";
+        return baseClasses.bg;
     }
   };
 
   const getHoverEffectClasses = () => {
+    const hoverColor = colors.hover || "rgba(0,0,0,0.1)";
+
     switch (hoverEffect) {
       case "scale":
         return "transition-transform duration-200 hover:scale-105";
       case "lift":
         return "transition-all duration-200 hover:-translate-y-1 hover:shadow-lg";
       case "glow":
-        return "transition-all duration-200 hover:shadow-[0_0_15px_rgba(0,0,0,0.1)]";
+        return `transition-all duration-200 hover:shadow-[0_0_15px_${hoverColor}]`;
       default:
         return "";
     }
@@ -157,6 +227,9 @@ const Card: React.FC<CardProps> = ({
   const renderImage = () => {
     if (!image) return null;
 
+    const overlayColor =
+      image.overlayColor || colors.overlay || "rgba(0,0,0,0.4)";
+
     return (
       <div className={getImageClasses()}>
         <img
@@ -164,34 +237,47 @@ const Card: React.FC<CardProps> = ({
           alt={image.alt || ""}
           className={`
             w-full h-full object-cover
-            ${image.overlay ? "absolute inset-0" : ""}
+            ${image.overlay ? "absolute inset-0 z-50" : ""}
           `}
           loading="lazy"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%239ca3af'%3EImage not found%3C/text%3E%3C/svg%3E`;
+          }}
         />
         {image.overlay && (
-          <div className="absolute inset-0 bg-black bg-opacity-40" />
+          <div
+            className="absolute inset-0"
+            style={{ backgroundColor: overlayColor }}
+          />
         )}
       </div>
     );
   };
 
-  const renderSkeleton = () => (
-    <div className="animate-pulse">
-      {image && (
-        <div className={`${getImageClasses()} bg-gray-200 dark:bg-gray-700`} />
-      )}
-      <div className="p-4">
-        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2" />
-        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+  const renderSkeleton = () => {
+    const skeletonColor = colors.skeleton || "bg-gray-200 dark:bg-gray-700";
+
+    return (
+      <div className="animate-pulse">
+        {image && <div className={`${getImageClasses()} ${skeletonColor}`} />}
+        <div className="p-4">
+          <div className={`h-4 ${skeletonColor} rounded w-3/4 mb-2`} />
+          <div className={`h-3 ${skeletonColor} rounded w-1/2`} />
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderNewsMetadata = () => {
     if (!metadata) return null;
 
+    const textColor = colors.text || "text-gray-500 dark:text-gray-400";
+
     return (
-      <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mt-2">
+      <div
+        className={`flex flex-wrap items-center gap-3 text-sm ${textColor} mt-2`}
+      >
         {metadata.category && (
           <span className="px-2 py-1 bg-red-600 text-white text-xs font-semibold rounded">
             {metadata.category}
@@ -310,71 +396,86 @@ const Card: React.FC<CardProps> = ({
     </div>
   );
 
-  const renderCard = () => (
-    <div
-      className={`
-        rounded-lg 
-        ${getVariantClasses()}
-        ${getHoverEffectClasses()}
-        ${onClick ? "cursor-pointer" : ""}
-        ${isHorizontal ? "flex flex-col md:flex-row" : ""}
-        ${className}
-      `}
-      onClick={onClick}
-    >
-      {isNewsCard ? (
-        renderNewsCard()
-      ) : (
-        <>
-          {image?.position === "top" && renderImage()}
-          {image?.position === "left" && renderImage()}
-          <div className="flex-1">
-            {(title || subtitle || Icon) && (
-              <div
-                className={`
-                  p-4 border-b border-gray-200 dark:border-gray-700
-                  ${headerClassName}
-                `}
-              >
-                <div className="flex items-center gap-3">
-                  {Icon && (
-                    <div className="flex-shrink-0">
-                      <Icon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+  const renderCard = () => {
+    const headerBg = colors.headerBg || "bg-white dark:bg-gray-800";
+    const headerText = colors.headerText || "text-gray-900 dark:text-white";
+    const headerBorder =
+      colors.headerBorder || "border-gray-200 dark:border-gray-700";
+    const footerBg = colors.footerBg || "bg-white dark:bg-gray-800";
+    const footerText = colors.footerText || "text-gray-900 dark:text-white";
+    const footerBorder =
+      colors.footerBorder || "border-gray-200 dark:border-gray-700";
+
+    return (
+      <div
+        className={`
+          rounded-lg 
+          ${getVariantClasses()}
+          ${getHoverEffectClasses()}
+          ${onClick ? "cursor-pointer" : ""}
+          ${isHorizontal ? "flex flex-col md:flex-row" : ""}
+          ${className}
+        `}
+        onClick={onClick}
+      >
+        {isNewsCard ? (
+          renderNewsCard()
+        ) : (
+          <>
+            {image?.position === "top" && renderImage()}
+            {image?.position === "left" && renderImage()}
+            <div className="flex-1">
+              {(title || subtitle || Icon) && (
+                <div
+                  className={`
+                    p-4 border-b ${headerBorder} ${headerBg}
+                    ${headerClassName}
+                  `}
+                >
+                  <div className="flex items-center gap-3">
+                    {Icon && (
+                      <div className="flex-shrink-0">
+                        <Icon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      {title && (
+                        <h3 className={`text-lg font-medium ${headerText}`}>
+                          {title}
+                        </h3>
+                      )}
+                      {subtitle && (
+                        <p
+                          className={`mt-1 text-sm ${
+                            colors.text || "text-gray-500 dark:text-gray-400"
+                          }`}
+                        >
+                          {subtitle}
+                        </p>
+                      )}
                     </div>
-                  )}
-                  <div className="flex-1">
-                    {title && (
-                      <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                        {title}
-                      </h3>
-                    )}
-                    {subtitle && (
-                      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                        {subtitle}
-                      </p>
-                    )}
                   </div>
                 </div>
-              </div>
-            )}
-            <div className={`p-4 ${bodyClassName}`}>{children}</div>
-            {footer && (
-              <div
-                className={`
-                  p-4 border-t border-gray-200 dark:border-gray-700
-                  ${footerClassName}
-                `}
-              >
-                {footer}
-              </div>
-            )}
-          </div>
-          {image?.position === "right" && renderImage()}
-          {image?.position === "bottom" && renderImage()}
-        </>
-      )}
-    </div>
-  );
+              )}
+              <div className={`p-4 ${bodyClassName}`}>{children}</div>
+              {footer && (
+                <div
+                  className={`
+                    p-4 border-t ${footerBorder} ${footerBg}
+                    ${footerClassName}
+                  `}
+                >
+                  {footer}
+                </div>
+              )}
+            </div>
+            {image?.position === "right" && renderImage()}
+            {image?.position === "bottom" && renderImage()}
+          </>
+        )}
+      </div>
+    );
+  };
 
   if (loading || skeleton) {
     return renderSkeleton();

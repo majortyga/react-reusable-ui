@@ -226,7 +226,7 @@ export default function BadgeDocs() {
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
           API Reference
         </h2>
-        <Card>
+        <Card className="overflow-auto max-w-[90vw]">
           <Table
             columns={[
               { key: "prop", title: "Prop", dataIndex: "prop" },

@@ -8,6 +8,9 @@ import {
   HiCurrencyDollar,
   HiShoppingCart,
   HiChartBar,
+  HiArrowTrendingUp,
+  HiExclamationCircle,
+  HiClock,
 } from "react-icons/hi2";
 
 interface TableData {
@@ -67,9 +70,10 @@ export default function StatCardPage() {
     {
       id: 4,
       prop: "trend",
-      type: "{ value: number; isPositive: boolean }",
+      type: "object",
       default: "-",
-      description: "Trend information to display",
+      description:
+        "Trend information with value, isPositive, label, and showArrow properties",
     },
     {
       id: 5,
@@ -80,24 +84,67 @@ export default function StatCardPage() {
     },
     {
       id: 6,
-      prop: "className",
-      type: "string",
-      default: '""',
-      description: "Additional CSS classes to apply to the card",
+      prop: "variant",
+      type: '"default" | "bordered" | "elevated" | "gradient"',
+      default: '"default"',
+      description: "Card style variant",
     },
     {
       id: 7,
-      prop: "iconClassName",
-      type: "string",
-      default: '""',
-      description: "Additional CSS classes to apply to the icon",
+      prop: "loading",
+      type: "boolean",
+      default: "false",
+      description: "Show loading state with skeleton animation",
     },
     {
       id: 8,
-      prop: "trendClassName",
+      prop: "skeleton",
+      type: "boolean",
+      default: "false",
+      description: "Show skeleton placeholder",
+    },
+    {
+      id: 9,
+      prop: "colors",
+      type: "object",
+      default: "-",
+      description:
+        "Custom colors for background, text, border, icon, and trends",
+    },
+    {
+      id: 10,
+      prop: "alert",
+      type: "object",
+      default: "-",
+      description: "Alert message with type (info, warning, error, success)",
+    },
+    {
+      id: 11,
+      prop: "format",
+      type: '"number" | "currency" | "percentage" | "custom"',
+      default: "-",
+      description: "Value formatting type",
+    },
+    {
+      id: 12,
+      prop: "prefix",
       type: "string",
-      default: '""',
-      description: "Additional CSS classes to apply to the trend indicator",
+      default: "-",
+      description: "Prefix for the value",
+    },
+    {
+      id: 13,
+      prop: "suffix",
+      type: "string",
+      default: "-",
+      description: "Suffix for the value",
+    },
+    {
+      id: 14,
+      prop: "onClick",
+      type: "() => void",
+      default: "-",
+      description: "Click handler for the card",
     },
   ];
 
@@ -106,21 +153,24 @@ export default function StatCardPage() {
       <div>
         <h1 className="text-3xl font-bold">StatCard</h1>
         <p className="text-gray-600 dark:text-gray-400 mt-2">
-          A versatile card component for displaying statistics with optional
-          icons, trends, and descriptions.
+          A versatile card component for displaying statistics with support for
+          icons, trends, alerts, and various styling options.
         </p>
       </div>
 
       <div className="space-y-4">
         <h2 className="text-2xl font-semibold">Features</h2>
         <ul className="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-400">
-          <li>Icon support</li>
-          <li>Trend indicators</li>
-          <li>Descriptive text</li>
+          <li>Multiple variants (default, bordered, elevated, gradient)</li>
+          <li>Icon support with custom colors</li>
+          <li>Trend indicators with labels</li>
+          <li>Value formatting (currency, percentage, custom)</li>
+          <li>Loading and skeleton states</li>
+          <li>Alert system with different types</li>
+          <li>Custom colors and gradients</li>
+          <li>Interactive features (clickable cards)</li>
           <li>Dark mode support</li>
-          <li>Customizable styling</li>
           <li>Responsive design</li>
-          <li>Accessibility features</li>
         </ul>
       </div>
 
@@ -128,7 +178,7 @@ export default function StatCardPage() {
         <h2 className="text-2xl font-semibold">Examples</h2>
 
         <div className="space-y-4">
-          <h3 className="text-xl font-medium">Basic StatCard</h3>
+          <h3 className="text-xl font-medium">Basic Usage</h3>
           <div className="border rounded-lg p-4">
             <StatCard title="Total Users" value="12,345" icon={HiUsers} />
           </div>
@@ -146,69 +196,267 @@ export default function StatCardPage() {
           <div className="border rounded-lg p-4">
             <StatCard
               title="Revenue"
-              value="$45,231"
+              value={45231}
+              format="currency"
               icon={HiCurrencyDollar}
-              trend={{ value: 20.1, isPositive: true }}
-              description="vs. last month"
+              trend={{ value: 20.1, isPositive: true, label: "vs. last month" }}
             />
           </div>
           <CodeBlock
             code={`<StatCard
   title="Revenue"
-  value="$45,231"
+  value={45231}
+  format="currency"
   icon={HiCurrencyDollar}
-  trend={{ value: 20.1, isPositive: true }}
-  description="vs. last month"
+  trend={{ value: 20.1, isPositive: true, label: "vs. last month" }}
 />`}
           />
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-xl font-medium">Negative Trend</h3>
-          <div className="border rounded-lg p-4">
+          <h3 className="text-xl font-medium">Different Variants</h3>
+          <div className="border rounded-lg p-4 space-y-4">
             <StatCard
-              title="Sales"
+              title="Bordered Card"
               value="1,234"
               icon={HiShoppingCart}
-              trend={{ value: 5.2, isPositive: false }}
-              description="vs. last month"
+              variant="bordered"
+            />
+            <StatCard
+              title="Elevated Card"
+              value="89.1%"
+              icon={HiChartBar}
+              variant="elevated"
+            />
+            <StatCard
+              title="Gradient Card"
+              value="2,345"
+              icon={HiArrowTrendingUp}
+              variant="gradient"
+              colors={{
+                gradient: {
+                  from: "from-purple-500",
+                  to: "to-indigo-600",
+                },
+              }}
             />
           </div>
           <CodeBlock
             code={`<StatCard
-  title="Sales"
+  title="Bordered Card"
   value="1,234"
   icon={HiShoppingCart}
-  trend={{ value: 5.2, isPositive: false }}
-  description="vs. last month"
+  variant="bordered"
+/>
+
+<StatCard
+  title="Elevated Card"
+  value="89.1%"
+  icon={HiChartBar}
+  variant="elevated"
+/>
+
+<StatCard
+  title="Gradient Card"
+  value="2,345"
+  icon={HiArrowTrendingUp}
+  variant="gradient"
+  colors={{
+    gradient: {
+      from: "from-purple-500",
+      to: "to-indigo-600"
+    }
+  }}
 />`}
           />
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-xl font-medium">Custom Styling</h3>
-          <div className="border rounded-lg p-4">
+          <h3 className="text-xl font-medium">Value Formatting</h3>
+          <div className="border rounded-lg p-4 space-y-4">
             <StatCard
-              title="Growth Rate"
-              value="89.1%"
+              title="Currency"
+              value={1234567}
+              format="currency"
+              icon={HiCurrencyDollar}
+            />
+            <StatCard
+              title="Percentage"
+              value={89.1}
+              format="percentage"
               icon={HiChartBar}
-              trend={{ value: 12.5, isPositive: true }}
-              description="vs. last quarter"
-              className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800"
-              iconClassName="bg-blue-200 dark:bg-blue-700"
-              trendClassName="font-medium"
+            />
+            <StatCard
+              title="Custom Format"
+              value={1234}
+              prefix="#"
+              suffix=" orders"
+              icon={HiShoppingCart}
             />
           </div>
           <CodeBlock
             code={`<StatCard
-  title="Growth Rate"
+  title="Currency"
+  value={1234567}
+  format="currency"
+  icon={HiCurrencyDollar}
+/>
+
+<StatCard
+  title="Percentage"
+  value={89.1}
+  format="percentage"
+  icon={HiChartBar}
+/>
+
+<StatCard
+  title="Custom Format"
+  value={1234}
+  prefix="#"
+  suffix=" orders"
+  icon={HiShoppingCart}
+/>`}
+          />
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-xl font-medium">Loading States</h3>
+          <div className="border rounded-lg p-4 space-y-4">
+            <StatCard
+              title="Loading Card"
+              value="1,234"
+              icon={HiClock}
+              loading
+            />
+            <StatCard
+              title="Skeleton Card"
+              value="1,234"
+              icon={HiClock}
+              skeleton
+            />
+          </div>
+          <CodeBlock
+            code={`<StatCard
+  title="Loading Card"
+  value="1,234"
+  icon={HiClock}
+  loading
+/>
+
+<StatCard
+  title="Skeleton Card"
+  value="1,234"
+  icon={HiClock}
+  skeleton
+/>`}
+          />
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-xl font-medium">With Alerts</h3>
+          <div className="border rounded-lg p-4 space-y-4">
+            <StatCard
+              title="Success Alert"
+              value="89.1%"
+              icon={HiChartBar}
+              alert={{
+                type: "success",
+                message: "Performance is above target",
+              }}
+            />
+            <StatCard
+              title="Warning Alert"
+              value="45.2%"
+              icon={HiExclamationCircle}
+              alert={{
+                type: "warning",
+                message: "Performance is below target",
+              }}
+            />
+          </div>
+          <CodeBlock
+            code={`<StatCard
+  title="Success Alert"
   value="89.1%"
   icon={HiChartBar}
-  trend={{ value: 12.5, isPositive: true }}
-  description="vs. last quarter"
-  className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800"
-  iconClassName="bg-blue-200 dark:bg-blue-700"
-  trendClassName="font-medium"
+  alert={{
+    type: "success",
+    message: "Performance is above target"
+  }}
+/>
+
+<StatCard
+  title="Warning Alert"
+  value="45.2%"
+  icon={HiExclamationCircle}
+  alert={{
+    type: "warning",
+    message: "Performance is below target"
+  }}
+/>`}
+          />
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-xl font-medium">Advanced Example</h3>
+          <div className="border rounded-lg p-4">
+            <StatCard
+              title="Total Revenue"
+              value={1234567}
+              format="currency"
+              icon={HiCurrencyDollar}
+              trend={{
+                value: 12.5,
+                isPositive: true,
+                label: "vs last month",
+                showArrow: true,
+              }}
+              variant="gradient"
+              colors={{
+                gradient: {
+                  from: "from-purple-500",
+                  to: "to-indigo-600",
+                },
+                iconBg: "bg-white/20",
+                iconColor: "text-white",
+                trendPositive: "text-green-200",
+                trendNegative: "text-red-200",
+              }}
+              alert={{
+                type: "success",
+                message: "Revenue is up 12.5% from last month",
+              }}
+              onClick={() => console.log("Card clicked")}
+            />
+          </div>
+          <CodeBlock
+            code={`<StatCard
+  title="Total Revenue"
+  value={1234567}
+  format="currency"
+  icon={HiCurrencyDollar}
+  trend={{
+    value: 12.5,
+    isPositive: true,
+    label: "vs last month",
+    showArrow: true
+  }}
+  variant="gradient"
+  colors={{
+    gradient: {
+      from: "from-purple-500",
+      to: "to-indigo-600"
+    },
+    iconBg: "bg-white/20",
+    iconColor: "text-white",
+    trendPositive: "text-green-200",
+    trendNegative: "text-red-200"
+  }}
+  alert={{
+    type: "success",
+    message: "Revenue is up 12.5% from last month"
+  }}
+  onClick={() => console.log("Card clicked")}
 />`}
           />
         </div>

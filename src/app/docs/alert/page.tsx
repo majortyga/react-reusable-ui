@@ -177,12 +177,40 @@ export default function AlertDocs() {
         />
       </section>
 
+      {/* Custom Styled Alert */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          Custom Styled Alert
+        </h2>
+        <Card>
+          <div className="space-y-4">
+            <Alert
+              type="success"
+              message="Custom styled alert"
+              bgColor="bg-purple-50 dark:bg-purple-950/50"
+              textColor="text-purple-700 dark:text-purple-300"
+              borderColor="border-purple-200 dark:border-purple-800"
+            />
+          </div>
+        </Card>
+        <CodeBlock
+          code={`<Alert 
+  type="success"
+  message="Custom styled alert"
+  bgColor="bg-purple-50 dark:bg-purple-950/50"
+  textColor="text-purple-700 dark:text-purple-300"
+  borderColor="border-purple-200 dark:border-purple-800"
+/>`}
+          language="tsx"
+        />
+      </section>
+
       {/* API Reference */}
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
           API Reference
         </h2>
-        <Card>
+        <Card className="overflow-auto max-w-[90vw]">
           <div className="space-y-4">
             <h3 className="text-lg font-medium text-gray-900 dark:text-white">
               Props

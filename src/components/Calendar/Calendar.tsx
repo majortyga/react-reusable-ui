@@ -1,28 +1,53 @@
 import React from "react";
 import Select from "@/components/Select/Select";
 
+/**
+ * Props for the Calendar component
+ * @interface CalendarProps
+ */
 export interface CalendarProps {
+  /** The currently selected date */
   value?: Date;
+  /** Callback fired when a date is selected */
   onChange?: (date: Date) => void;
+  /** Additional CSS classes for the calendar container */
   className?: string;
+  /** Additional CSS classes for calendar buttons and interactive elements */
+  calendarButtonClassName?: string;
+  /** Text color class to be applied to calendar elements */
+  textColor?: string;
+  /** Whether to show the time picker */
   showTimePicker?: boolean;
+  /** Whether to show seconds in the time picker */
   showSeconds?: boolean;
+  /** Whether to use 12-hour format (AM/PM) */
   hour12?: boolean;
-  timeInterval?: number; // minutes interval
-  secondInterval?: number; // seconds interval
+  /** Interval in minutes for the minute picker (e.g., 5 for 5-minute intervals) */
+  timeInterval?: number;
+  /** Interval in seconds for the second picker (e.g., 5 for 5-second intervals) */
+  secondInterval?: number;
+  /** Minimum selectable date */
   minDate?: Date;
+  /** Maximum selectable date */
   maxDate?: Date;
+  /** Function to disable specific dates */
   disableDate?: (date: Date) => boolean;
+  /** Function to disable specific times */
   disableTime?: (date: Date, h: number, m: number, s: number) => boolean;
+  /** Whether to show time picker inline with the calendar */
   timePickerInline?: boolean;
+  /** Callback fired when the calendar opens */
   onOpen?: () => void;
+  /** Callback fired when the calendar closes */
   onClose?: () => void;
+  /** Custom render function for day cells */
   renderDay?: (
     date: Date,
     isSelected: boolean,
     isToday: boolean,
     disabled: boolean
   ) => React.ReactNode;
+  /** Custom render function for time picker cells */
   renderTimeCell?: (
     h: number,
     m: number,
@@ -32,6 +57,22 @@ export interface CalendarProps {
   ) => React.ReactNode;
 }
 
+/**
+ * Calendar component for date and time selection
+ * @component
+ * @example
+ * ```tsx
+ * <Calendar
+ *   value={selectedDate}
+ *   onChange={setSelectedDate}
+ *   showTimePicker
+ *   hour12
+ *   className="bg-white"
+ *   calendarButtonClassName="hover:bg-blue-100"
+ *   textColor="text-gray-900"
+ * />
+ * ```
+ */
 function getDaysInMonth(year: number, month: number) {
   return new Date(year, month + 1, 0).getDate();
 }
@@ -57,6 +98,8 @@ const Calendar: React.FC<CalendarProps> = ({
   disableTime,
   timePickerInline = true,
   renderDay,
+  calendarButtonClassName = "",
+  textColor = "",
 }) => {
   const today = new Date();
   const [current, setCurrent] = React.useState(() => value || today);
@@ -122,12 +165,12 @@ const Calendar: React.FC<CalendarProps> = ({
   // --- Render ---
   return (
     <div
-      className={`w-full max-w-[320px] sm:max-w-sm p-2 sm:p-4 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 ${className}`}
+      className={`w-full max-w-[320px] sm:max-w-sm p-2 sm:p-4 rounded-lg ${className} ${textColor}`}
     >
       <div className="flex items-center justify-between w-full mb-2 gap-1 sm:gap-2">
         <button
           onClick={() => setCurrent(new Date(year, month - 1, 1))}
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full flex items-center justify-center min-w-[32px] min-h-[32px]"
+          className={`p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full flex items-center justify-center min-w-[32px] min-h-[32px] ${calendarButtonClassName}`}
         >
           &lt;
         </button>
@@ -138,14 +181,18 @@ const Calendar: React.FC<CalendarProps> = ({
             value: y.toString(),
             label: y.toString(),
           }))}
-          className="w-20 sm:w-24"
+          className={`w-20 sm:w-24`}
+          wrapperClassName={`${calendarButtonClassName}`}
+          optionClassName={`${calendarButtonClassName}`}
+          labelClassName={`${textColor}`}
+          selectClassName={`${textColor}`}
         />
         <span className="font-semibold text-sm sm:text-base flex-1 text-center">
           {current.toLocaleString("default", { month: "long" })}
         </span>
         <button
           onClick={() => setCurrent(new Date(year, month + 1, 1))}
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full flex items-center justify-center min-w-[32px] min-h-[32px]"
+          className={`p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full flex items-center justify-center min-w-[32px] min-h-[32px] ${calendarButtonClassName}`}
         >
           &gt;
         </button>
@@ -185,13 +232,13 @@ const Calendar: React.FC<CalendarProps> = ({
           ) : (
             <button
               key={`day-${day}`}
-              className={`min-w-[36px] min-h-[36px] sm:min-w-[40px] sm:min-h-[40px] rounded-full text-center transition-colors text-sm sm:text-base flex items-center justify-center
+              className={`min-w-[36px] min-h-[36px] sm:min-w-[40px] sm:min-h-[40px] rounded-full text-center transition-colors text-sm sm:text-base flex items-center justify-center ${calendarButtonClassName}
                 ${
                   isSelected
                     ? "bg-blue-600 text-white"
                     : isToday
                     ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200"
-                    : "hover:bg-gray-100 dark:hover:bg-gray-800"
+                    : "hover:bg-gray-100 dark:hover:bg-gray-500/50"
                 }
                 ${disabled ? "opacity-40 cursor-not-allowed" : ""}`}
               onClick={() => handleSelect(day)}
@@ -226,7 +273,9 @@ const Calendar: React.FC<CalendarProps> = ({
                 value: (hour12 ? i + 1 : i).toString(),
                 label: (hour12 ? i + 1 : i).toString().padStart(2, "0"),
               }))}
-              className="w-16 sm:w-20"
+              className={`w-16 sm:w-20`}
+              wrapperClassName={`${calendarButtonClassName}`}
+              optionClassName={`${calendarButtonClassName}`}
             />
             <span className="text-gray-500 font-medium">:</span>
             {/* Minute */}
@@ -243,7 +292,9 @@ const Calendar: React.FC<CalendarProps> = ({
                 value: m.toString(),
                 label: m.toString().padStart(2, "0"),
               }))}
-              className="w-16 sm:w-20"
+              className={`w-16 sm:w-20`}
+              wrapperClassName={`${calendarButtonClassName}`}
+              optionClassName={`${calendarButtonClassName}`}
             />
             {showSeconds && (
               <>
@@ -266,7 +317,9 @@ const Calendar: React.FC<CalendarProps> = ({
                     value: s.toString(),
                     label: s.toString().padStart(2, "0"),
                   }))}
-                  className="w-16 sm:w-20"
+                  className={`w-16 sm:w-20`}
+                  wrapperClassName={`${calendarButtonClassName}`}
+                  optionClassName={`${calendarButtonClassName}`}
                 />
               </>
             )}
@@ -286,7 +339,9 @@ const Calendar: React.FC<CalendarProps> = ({
                   { value: "AM", label: "AM" },
                   { value: "PM", label: "PM" },
                 ]}
-                className="w-16 sm:w-20"
+                className={`w-16 sm:w-20`}
+                wrapperClassName={`${calendarButtonClassName}`}
+                optionClassName={`${calendarButtonClassName}`}
               />
             )}
           </div>
@@ -294,7 +349,7 @@ const Calendar: React.FC<CalendarProps> = ({
       )}
       {showTimePicker && !timePickerInline && (
         <button
-          className="mt-2 text-sm sm:text-base text-blue-600 dark:text-blue-400 underline w-full py-2"
+          className={`mt-2 text-sm sm:text-base text-blue-600 dark:text-blue-400 underline w-full py-2 ${calendarButtonClassName}`}
           onClick={() => setShowTime((v) => !v)}
         >
           {showTime ? "Hide Time Picker" : "Show Time Picker"}

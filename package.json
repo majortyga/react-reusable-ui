@@ -1,6 +1,6 @@
 {
   "name": "@majordev/react-reusable-ui",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/majortyga/react-reusable-ui/issues"
   },
-  "homepage": "https://github.com/majortyga/react-reusable-ui#readme",
+  "homepage": "https://ui.gci.ng",
   "scripts": {
     "dev": "next dev --turbopack",
     "prepublishOnly": "next build --no-lint",

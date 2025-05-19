@@ -44,11 +44,7 @@ const TagInput: React.FC<TagInputProps> = ({
 
   return (
     <div className={`flex flex-col gap-1 ${className}`}>
-      {label && (
-        <label className="text-sm font-medium text-black dark:text-white">
-          {label}
-        </label>
-      )}
+      {label && <label className="text-sm font-medium">{label}</label>}
       <div className="flex flex-wrap gap-2 p-2 border rounded-md dark:border-gray-700 dark:bg-gray-800">
         {tags.map((tag) => (
           <span
@@ -77,7 +73,7 @@ const TagInput: React.FC<TagInputProps> = ({
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={tags.length === 0 ? placeholder : ""}
-            className={`flex-1 bg-transparent outline-none text-black dark:text-white ${inputClassName}`}
+            className={`flex-1 bg-transparent outline-none  ${inputClassName}`}
           />
         </div>
       </div>

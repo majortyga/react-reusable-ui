@@ -64,7 +64,7 @@ export default function SliderDocs() {
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
           API Reference
         </h2>
-        <Card>
+        <Card className="overflow-x-auto max-w-[85vw] md:max-w-full">
           <Table
             columns={[
               { key: "prop", title: "Prop", dataIndex: "prop" },

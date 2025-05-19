@@ -8,7 +8,7 @@ export interface BadgeProps {
   className?: string;
   animation?: "pulse" | "bounce" | "none";
   dot?: boolean;
-  count?: number;
+  count?: number | string;
   maxCount?: number;
   showZero?: boolean;
   offset?: [number, number];
@@ -42,25 +42,28 @@ const Badge: React.FC<BadgeProps> = ({
   ribbonColor = "primary",
 }) => {
   const variantClasses = {
-    default: "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200",
-    primary: "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200",
+    default:
+      "bg-gray-100/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700",
+    primary:
+      "bg-blue-50/80 dark:bg-blue-900/80 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800",
     success:
-      "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200",
+      "bg-emerald-50/80 dark:bg-emerald-900/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800",
     warning:
-      "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200",
-    error: "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200",
-    info: "bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200",
+      "bg-amber-50/80 dark:bg-amber-900/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800",
+    error:
+      "bg-rose-50/80 dark:bg-rose-900/80 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800",
+    info: "bg-sky-50/80 dark:bg-sky-900/80 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800",
   };
 
   const sizeClasses = {
-    sm: "text-xs px-1.5 py-0.5",
-    md: "text-sm px-2 py-0.5",
-    lg: "text-base px-2.5 py-1",
+    sm: "text-xs px-2 py-0.5 min-w-[1.25rem] h-5",
+    md: "text-sm px-2.5 py-0.5 min-w-[1.5rem] h-6",
+    lg: "text-base px-3 py-1 min-w-[1.75rem] h-7",
   };
 
   const roundedClasses = {
     none: "rounded-none",
-    sm: "rounded-sm",
+    sm: "rounded",
     md: "rounded-md",
     lg: "rounded-lg",
     full: "rounded-full",
@@ -73,10 +76,10 @@ const Badge: React.FC<BadgeProps> = ({
   };
 
   const statusClasses = {
-    online: "bg-green-500 dark:bg-green-400",
-    offline: "bg-gray-500 dark:bg-gray-400",
-    away: "bg-yellow-500 dark:bg-yellow-400",
-    busy: "bg-red-500 dark:bg-red-400",
+    online: "bg-emerald-500 dark:bg-emerald-400",
+    offline: "bg-gray-400 dark:bg-gray-500",
+    away: "bg-amber-500 dark:bg-amber-400",
+    busy: "bg-rose-500 dark:bg-rose-400",
   };
 
   const positionClasses = {
@@ -87,11 +90,11 @@ const Badge: React.FC<BadgeProps> = ({
   };
 
   const ribbonClasses = {
-    primary: "bg-blue-500 dark:bg-blue-600",
-    success: "bg-green-500 dark:bg-green-600",
-    warning: "bg-yellow-500 dark:bg-yellow-600",
-    error: "bg-red-500 dark:bg-red-600",
-    info: "bg-indigo-500 dark:bg-indigo-600",
+    primary: "bg-blue-600 dark:bg-blue-500",
+    success: "bg-emerald-600 dark:bg-emerald-500",
+    warning: "bg-amber-600 dark:bg-amber-500",
+    error: "bg-rose-600 dark:bg-rose-500",
+    info: "bg-sky-600 dark:bg-sky-500",
   };
 
   const renderContent = () => {
@@ -107,11 +110,19 @@ const Badge: React.FC<BadgeProps> = ({
       );
     }
 
-    if (count !== undefined) {
+    if (typeof count === "number") {
       if (count === 0 && !showZero) return null;
       return (
-        <span className="inline-flex items-center justify-center">
+        <span className="inline-flex items-center justify-center font-medium">
           {count > maxCount ? `${maxCount}+` : count}
+        </span>
+      );
+    }
+
+    if (typeof count === "string") {
+      return (
+        <span className="inline-flex items-center justify-center font-medium">
+          {count}
         </span>
       );
     }
@@ -148,7 +159,7 @@ const Badge: React.FC<BadgeProps> = ({
           }`}
         >
           <div
-            className={`absolute top-0 right-0 w-32 h-32 transform rotate-45 translate-x-8 -translate-y-8 ${ribbonClasses[ribbonColor]} text-white text-xs font-medium flex items-center justify-center`}
+            className={`absolute top-0 right-0 w-32 h-32 transform rotate-45 translate-x-8 -translate-y-8 ${ribbonClasses[ribbonColor]} text-white text-xs font-medium flex items-center justify-center shadow-sm`}
           >
             {ribbonText}
           </div>
@@ -168,7 +179,7 @@ const Badge: React.FC<BadgeProps> = ({
           dot ? "w-2 h-2" : sizeClasses[size]
         } ${roundedClasses[rounded]} ${variantClasses[variant]} ${
           animationClasses[animation]
-        } ${processing ? "animate-spin" : ""} ${className}`}
+        } ${processing ? "animate-spin" : ""} ${className} shadow-sm`}
       >
         {renderContent()}
       </span>

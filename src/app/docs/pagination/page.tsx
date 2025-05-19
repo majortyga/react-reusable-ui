@@ -3,6 +3,11 @@ import React from "react";
 import Pagination from "@/components/Pagination/Pagination";
 import Table, { Column } from "@/components/Table/Table";
 import CodeBlock from "@/components/CodeBlock/CodeBlock";
+import {
+  HiChevronLeft,
+  HiChevronRight,
+  HiEllipsisHorizontal,
+} from "react-icons/hi2";
 
 interface TableData {
   id: number;
@@ -67,35 +72,125 @@ export default function PaginationPage() {
     },
     {
       id: 5,
-      prop: "className",
-      type: "string",
-      default: '""',
-      description: "Additional CSS classes to apply to the component",
+      prop: "showFirstLast",
+      type: "boolean",
+      default: "false",
+      description: "Show first and last page buttons",
+    },
+    {
+      id: 6,
+      prop: "showSizeChanger",
+      type: "boolean",
+      default: "false",
+      description: "Show page size selector",
+    },
+    {
+      id: 7,
+      prop: "pageSizeOptions",
+      type: "number[]",
+      default: "[10, 20, 50, 100]",
+      description: "Available page size options",
+    },
+    {
+      id: 8,
+      prop: "onPageSizeChange",
+      type: "(size: number) => void",
+      default: "-",
+      description: "Callback when page size changes",
+    },
+    {
+      id: 9,
+      prop: "siblingCount",
+      type: "number",
+      default: "1",
+      description: "Number of pages to show before and after current page",
+    },
+    {
+      id: 10,
+      prop: "colors",
+      type: "object",
+      default: "-",
+      description:
+        "Custom colors for all states (normal, active, hover, disabled)",
+    },
+    {
+      id: 11,
+      prop: "icons",
+      type: "object",
+      default: "-",
+      description: "Custom icons for navigation buttons",
+    },
+    {
+      id: 12,
+      prop: "showTotal",
+      type: "boolean",
+      default: "false",
+      description: "Show total items count",
+    },
+    {
+      id: 13,
+      prop: "totalText",
+      type: "(total: number, range: [number, number]) => string",
+      default: "-",
+      description: "Custom total items text formatter",
+    },
+    {
+      id: 14,
+      prop: "showCurrent",
+      type: "boolean",
+      default: "false",
+      description: "Show current page info",
+    },
+    {
+      id: 15,
+      prop: "currentText",
+      type: "(current: number, total: number) => string",
+      default: "-",
+      description: "Custom current page text formatter",
+    },
+    {
+      id: 16,
+      prop: "disabled",
+      type: "boolean",
+      default: "false",
+      description: "Disable pagination",
+    },
+    {
+      id: 17,
+      prop: "size",
+      type: '"small" | "middle" | "large"',
+      default: '"middle"',
+      description: "Size of the pagination",
     },
   ];
 
   const [currentPage, setCurrentPage] = React.useState(1);
-  const totalItems = 100;
-  const itemsPerPage = 10;
+  const [pageSize, setPageSize] = React.useState(10);
+  const [totalItems, setTotalItems] = React.useState(100);
+  const [siblingCount, setSiblingCount] = React.useState(1);
 
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold">Pagination</h1>
         <p className="text-gray-600 dark:text-gray-400 mt-2">
-          A flexible pagination component that helps users navigate through
-          large sets of data.
+          A flexible pagination component with support for ellipsis,
+          customizable styling, and various display options.
         </p>
       </div>
 
       <div className="space-y-4">
         <h2 className="text-2xl font-semibold">Features</h2>
         <ul className="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-400">
-          <li>Previous and next buttons</li>
-          <li>Page number buttons</li>
-          <li>Customizable page size</li>
+          <li>Smart ellipsis for large page counts</li>
+          <li>First/Last page quick access</li>
+          <li>Page size selector</li>
+          <li>Total items count display</li>
+          <li>Current page info</li>
+          <li>Customizable colors and icons</li>
+          <li>Three sizes: small, middle, large</li>
           <li>Dark mode support</li>
-          <li>Customizable styling</li>
+          <li>Disabled state</li>
           <li>Accessibility features</li>
         </ul>
       </div>
@@ -104,74 +199,177 @@ export default function PaginationPage() {
         <h2 className="text-2xl font-semibold">Examples</h2>
 
         <div className="space-y-4">
-          <h3 className="text-xl font-medium">Basic Pagination</h3>
+          <h3 className="text-xl font-medium">Basic Usage</h3>
           <div className="border rounded-lg p-4">
             <Pagination
               current={currentPage}
               total={totalItems}
-              pageSize={itemsPerPage}
+              pageSize={pageSize}
               onChange={setCurrentPage}
             />
           </div>
           <CodeBlock
             code={`const [currentPage, setCurrentPage] = React.useState(1);
+const pageSize = 10;
 const totalItems = 100;
-const itemsPerPage = 10;
 
 <Pagination
   current={currentPage}
   total={totalItems}
-  pageSize={itemsPerPage}
+  pageSize={pageSize}
   onChange={setCurrentPage}
 />`}
           />
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-xl font-medium">Custom Styling</h3>
+          <h3 className="text-xl font-medium">With Ellipsis</h3>
+          <div className="border rounded-lg p-4 space-y-4">
+            <Pagination
+              current={currentPage}
+              total={totalItems}
+              pageSize={pageSize}
+              onChange={setCurrentPage}
+              siblingCount={siblingCount}
+            />
+          </div>
+          <CodeBlock
+            code={`const [currentPage, setCurrentPage] = React.useState(1);
+const [totalItems, setTotalItems] = React.useState(100);
+const [siblingCount, setSiblingCount] = React.useState(1);
+const pageSize = 10;
+
+<Pagination
+  current={currentPage}
+  total={totalItems}
+  pageSize={pageSize}
+  onChange={setCurrentPage}
+  siblingCount={siblingCount}
+/>`}
+          />
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-xl font-medium">With First/Last Buttons</h3>
           <div className="border rounded-lg p-4">
             <Pagination
               current={currentPage}
               total={totalItems}
-              pageSize={itemsPerPage}
+              pageSize={pageSize}
               onChange={setCurrentPage}
-              className="gap-4 [&>button]:px-4 [&>button]:py-2 [&>button]:rounded-lg [&>button]:font-medium"
+              showFirstLast
             />
           </div>
           <CodeBlock
             code={`<Pagination
   current={currentPage}
   total={totalItems}
-  pageSize={itemsPerPage}
+  pageSize={pageSize}
   onChange={setCurrentPage}
-  className="gap-4 [&>button]:px-4 [&>button]:py-2 [&>button]:rounded-lg [&>button]:font-medium"
+  showFirstLast
 />`}
           />
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-xl font-medium">Different Page Sizes</h3>
+          <h3 className="text-xl font-medium">With Page Size Selector</h3>
+          <div className="border rounded-lg p-4">
+            <Pagination
+              current={currentPage}
+              total={totalItems}
+              pageSize={pageSize}
+              onChange={setCurrentPage}
+              showSizeChanger
+              onPageSizeChange={setPageSize}
+              pageSizeOptions={[5, 10, 20, 50]}
+            />
+          </div>
+          <CodeBlock
+            code={`const [pageSize, setPageSize] = React.useState(10);
+
+<Pagination
+  current={currentPage}
+  total={totalItems}
+  pageSize={pageSize}
+  onChange={setCurrentPage}
+  showSizeChanger
+  onPageSizeChange={setPageSize}
+  pageSizeOptions={[5, 10, 20, 50]}
+/>`}
+          />
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-xl font-medium">With Total and Current Info</h3>
+          <div className="border rounded-lg p-4">
+            <Pagination
+              current={currentPage}
+              total={totalItems}
+              pageSize={pageSize}
+              onChange={setCurrentPage}
+              showTotal
+              showCurrent
+              totalText={(total, [start, end]) =>
+                `Showing ${start}-${end} of ${total} items`
+              }
+              currentText={(current, total) => `Page ${current} of ${total}`}
+            />
+          </div>
+          <CodeBlock
+            code={`<Pagination
+  current={currentPage}
+  total={totalItems}
+  pageSize={pageSize}
+  onChange={setCurrentPage}
+  showTotal
+  showCurrent
+  totalText={(total, [start, end]) => 
+    \`Showing \${start}-\${end} of \${total} items\`
+  }
+  currentText={(current, total) => 
+    \`Page \${current} of \${total}\`
+  }
+/>`}
+          />
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-xl font-medium">Different Sizes</h3>
           <div className="border rounded-lg p-4 space-y-4">
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                5 items per page
+                Small size
               </p>
               <Pagination
                 current={currentPage}
                 total={totalItems}
-                pageSize={5}
+                pageSize={pageSize}
                 onChange={setCurrentPage}
+                size="small"
               />
             </div>
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                20 items per page
+                Middle size (default)
               </p>
               <Pagination
                 current={currentPage}
                 total={totalItems}
-                pageSize={20}
+                pageSize={pageSize}
                 onChange={setCurrentPage}
+                size="middle"
+              />
+            </div>
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                Large size
+              </p>
+              <Pagination
+                current={currentPage}
+                total={totalItems}
+                pageSize={pageSize}
+                onChange={setCurrentPage}
+                size="large"
               />
             </div>
           </div>
@@ -179,15 +377,181 @@ const itemsPerPage = 10;
             code={`<Pagination
   current={currentPage}
   total={totalItems}
-  pageSize={5}
+  pageSize={pageSize}
   onChange={setCurrentPage}
+  size="small"
 />
 
 <Pagination
   current={currentPage}
   total={totalItems}
-  pageSize={20}
+  pageSize={pageSize}
   onChange={setCurrentPage}
+  size="middle"
+/>
+
+<Pagination
+  current={currentPage}
+  total={totalItems}
+  pageSize={pageSize}
+  onChange={setCurrentPage}
+  size="large"
+/>`}
+          />
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-xl font-medium">Custom Colors</h3>
+          <div className="border rounded-lg p-4">
+            <Pagination
+              current={currentPage}
+              total={totalItems}
+              pageSize={pageSize}
+              onChange={setCurrentPage}
+              colors={{
+                activeBg: "bg-purple-600",
+                activeText: "text-white",
+                activeBorder: "border-purple-600",
+                hoverBg: "bg-purple-50",
+                hoverText: "text-purple-600",
+                hoverBorder: "border-purple-200",
+              }}
+            />
+          </div>
+          <CodeBlock
+            code={`<Pagination
+  current={currentPage}
+  total={totalItems}
+  pageSize={pageSize}
+  onChange={setCurrentPage}
+  colors={{
+    activeBg: "bg-purple-600",
+    activeText: "text-white",
+    activeBorder: "border-purple-600",
+    hoverBg: "bg-purple-50",
+    hoverText: "text-purple-600",
+    hoverBorder: "border-purple-200"
+  }}
+/>`}
+          />
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-xl font-medium">Custom Icons</h3>
+          <div className="border rounded-lg p-4">
+            <Pagination
+              current={currentPage}
+              total={totalItems}
+              pageSize={pageSize}
+              onChange={setCurrentPage}
+              showFirstLast
+              icons={{
+                prev: <HiChevronLeft className="w-5 h-5" />,
+                next: <HiChevronRight className="w-5 h-5" />,
+                first: "«",
+                last: "»",
+                ellipsis: <HiEllipsisHorizontal className="w-5 h-5" />,
+              }}
+            />
+          </div>
+          <CodeBlock
+            code={`<Pagination
+  current={currentPage}
+  total={totalItems}
+  pageSize={pageSize}
+  onChange={setCurrentPage}
+  showFirstLast
+  icons={{
+    prev: <HiChevronLeft className="w-5 h-5" />,
+    next: <HiChevronRight className="w-5 h-5" />,
+    first: "«",
+    last: "»",
+    ellipsis: <HiEllipsisHorizontal className="w-5 h-5" />
+  }}
+/>`}
+          />
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-xl font-medium">Disabled State</h3>
+          <div className="border rounded-lg p-4">
+            <Pagination
+              current={currentPage}
+              total={totalItems}
+              pageSize={pageSize}
+              onChange={setCurrentPage}
+              disabled
+            />
+          </div>
+          <CodeBlock
+            code={`<Pagination
+  current={currentPage}
+  total={totalItems}
+  pageSize={pageSize}
+  onChange={setCurrentPage}
+  disabled
+/>`}
+          />
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-xl font-medium">Advanced Example</h3>
+          <div className="border rounded-lg p-4">
+            <Pagination
+              current={currentPage}
+              total={totalItems}
+              pageSize={pageSize}
+              onChange={setCurrentPage}
+              showFirstLast
+              showSizeChanger
+              showTotal
+              showCurrent
+              size="middle"
+              colors={{
+                activeBg: "bg-purple-600",
+                activeText: "text-white",
+                activeBorder: "border-purple-600",
+                hoverBg: "bg-purple-50",
+                hoverText: "text-purple-600",
+                hoverBorder: "border-purple-200",
+              }}
+              icons={{
+                prev: <HiChevronLeft className="w-5 h-5" />,
+                next: <HiChevronRight className="w-5 h-5" />,
+                first: "«",
+                last: "»",
+                ellipsis: <HiEllipsisHorizontal className="w-5 h-5" />,
+              }}
+              onPageSizeChange={setPageSize}
+            />
+          </div>
+          <CodeBlock
+            code={`<Pagination
+  current={currentPage}
+  total={totalItems}
+  pageSize={pageSize}
+  onChange={setCurrentPage}
+  showFirstLast
+  showSizeChanger
+  showTotal
+  showCurrent
+  size="middle"
+  colors={{
+    activeBg: "bg-purple-600",
+    activeText: "text-white",
+    activeBorder: "border-purple-600",
+    hoverBg: "bg-purple-50",
+    hoverText: "text-purple-600",
+    hoverBorder: "border-purple-200"
+  }}
+  icons={{
+    prev: <HiChevronLeft className="w-5 h-5" />,
+    next: <HiChevronRight className="w-5 h-5" />,
+    first: "«",
+    last: "»",
+    ellipsis: <HiEllipsisHorizontal className="w-5 h-5" />
+  }}
+  onPageSizeChange={setPageSize}
 />`}
           />
         </div>

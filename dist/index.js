@@ -569,17 +569,11 @@ var Select = ({
       onKeyDown: handleKeyDown,
       tabIndex: 0
     },
-    label && /* @__PURE__ */ import_react2.default.createElement(
-      "label",
-      {
-        className: `text-sm font-medium text-black dark:text-white ${labelClassName}`
-      },
-      label
-    ),
+    label && /* @__PURE__ */ import_react2.default.createElement("label", { className: `text-sm font-medium  ${labelClassName}` }, label),
     /* @__PURE__ */ import_react2.default.createElement(
       "div",
       {
-        className: `relative flex items-center border rounded-md ${isOpen ? "ring-2 ring-blue-500 border-blue-500" : "border-gray-300"} ${error ? "border-red-500" : ""} ${disabled ? "bg-gray-100 dark:bg-gray-800" : ""} ${selectContainerClassName}`
+        className: `relative flex items-center border rounded-md ${isOpen ? "ring-2 ring-blue-500 border-blue-500" : "border-gray-300 dark:border-gray-600"} ${error ? "border-red-500" : ""} ${disabled ? "bg-gray-100 dark:bg-gray-800" : ""} ${selectContainerClassName}`
       },
       LeftIcon && /* @__PURE__ */ import_react2.default.createElement(
         "div",
@@ -591,7 +585,7 @@ var Select = ({
       /* @__PURE__ */ import_react2.default.createElement(
         "div",
         {
-          className: `flex-1 px-3 py-2 cursor-pointer text-black dark:text-white ${disabled ? "cursor-not-allowed" : ""} ${selectClassName}`,
+          className: `flex-1 px-3 py-2 cursor-pointer ${disabled ? "cursor-not-allowed" : ""} ${selectClassName}`,
           onClick: () => !disabled && setIsOpen(!isOpen)
         },
         getSelectedLabels()
@@ -604,25 +598,19 @@ var Select = ({
           className: "p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
         },
         "\xD7"
-      ), /* @__PURE__ */ import_react2.default.createElement(
-        "div",
+      ), /* @__PURE__ */ import_react2.default.createElement("div", { className: `flex items-center px-3  ${iconContainerClassName}` }, /* @__PURE__ */ import_react2.default.createElement(
+        import_io.IoIosArrowDown,
         {
-          className: `flex items-center px-3 text-gray-500 dark:text-gray-400 ${iconContainerClassName}`
-        },
-        /* @__PURE__ */ import_react2.default.createElement(
-          import_io.IoIosArrowDown,
-          {
-            className: `w-5 h-5 cursor-pointer transition-transform ${isOpen ? "transform rotate-180" : ""} ${iconClassName}`,
-            onClick: () => !disabled && setIsOpen(!isOpen)
-          }
-        )
-      ))
+          className: `w-5 h-5 cursor-pointer transition-transform ${isOpen ? "transform rotate-180" : ""} ${iconClassName}`,
+          onClick: () => !disabled && setIsOpen(!isOpen)
+        }
+      )))
     ),
     error && /* @__PURE__ */ import_react2.default.createElement("span", { className: `text-sm text-red-500 ${errorClassName}` }, error),
     isOpen && /* @__PURE__ */ import_react2.default.createElement(
       "div",
       {
-        className: `absolute z-[10000] left-0 right-0 max-w-[100vw] overflow-x-auto ${popupPosition === "top" ? "bottom-full mb-1" : "top-full mt-1"} bg-white dark:bg-gray-800 border rounded-md shadow-lg max-h-60 overflow-y-auto ${optionsContainerClassName}`
+        className: `absolute z-[10000] left-0 right-0 max-w-[100vw] overflow-x-auto ${popupPosition === "top" ? "bottom-full mb-1" : "top-full mt-1"} rounded-md shadow-lg max-h-60 overflow-y-auto ${optionsContainerClassName}`
       },
       searchable && /* @__PURE__ */ import_react2.default.createElement(
         "input",
@@ -638,25 +626,19 @@ var Select = ({
       Object.entries(groupedOptions).map(([group, groupOptions]) => /* @__PURE__ */ import_react2.default.createElement("div", { key: group, className: optionsListClassName }, group && /* @__PURE__ */ import_react2.default.createElement(
         "div",
         {
-          className: `px-3 py-1 text-sm font-medium text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 ${groupHeaderClassName}`
+          className: `px-3 py-1 text-sm font-medium  ${groupHeaderClassName}`
         },
         group
       ), groupOptions.map((option, index) => /* @__PURE__ */ import_react2.default.createElement(
         "div",
         {
           key: option.value,
-          className: `px-3 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 text-black dark:text-white ${isSelected(option.value) ? "bg-blue-50 dark:bg-blue-900" : ""} ${focusedIndex === index ? "bg-gray-100 dark:bg-gray-700" : ""} ${option.disabled ? "opacity-50 cursor-not-allowed" : ""} ${optionClassName}`,
+          className: `px-3 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-violet-700 flex items-center gap-2 ${isSelected(option.value) ? "bg-blue-50 dark:bg-violet-900" : ""} ${focusedIndex === index ? "bg-gray-100 dark:bg-violet-700" : ""} ${option.disabled ? "opacity-50 cursor-not-allowed" : ""} ${optionClassName}`,
           onClick: () => !option.disabled && handleSelect(option.value)
         },
         customOptionRenderer ? customOptionRenderer(option) : /* @__PURE__ */ import_react2.default.createElement(import_react2.default.Fragment, null, option.icon && /* @__PURE__ */ import_react2.default.createElement(option.icon, { className: "w-5 h-5 text-gray-500 dark:text-gray-400" }), /* @__PURE__ */ import_react2.default.createElement("div", { className: "flex flex-col" }, /* @__PURE__ */ import_react2.default.createElement("span", null, option.label), option.description && /* @__PURE__ */ import_react2.default.createElement("span", { className: "text-sm text-gray-500 dark:text-gray-400" }, option.description)))
       )))),
-      filteredOptions.length === 0 && /* @__PURE__ */ import_react2.default.createElement(
-        "div",
-        {
-          className: `px-3 py-2 text-gray-500 dark:text-gray-400 text-center ${noOptionsClassName}`
-        },
-        "No options found"
-      )
+      filteredOptions.length === 0 && /* @__PURE__ */ import_react2.default.createElement("div", { className: `px-3 py-2 text-center ${noOptionsClassName}` }, "No options found")
     )
   );
 };
@@ -1157,28 +1139,35 @@ var Card = ({
   loading = false,
   skeleton = false,
   metadata,
-  link
+  link,
+  colors = {}
 }) => {
   const getVariantClasses = () => {
+    const baseClasses = {
+      bg: colors.bg || "bg-white dark:bg-gray-800",
+      border: colors.border || "border-gray-200 dark:border-gray-700",
+      text: colors.text || "text-gray-900 dark:text-white"
+    };
     switch (variant) {
       case "bordered":
-        return "border border-gray-200 dark:border-gray-700";
+        return `border ${baseClasses.border}`;
       case "elevated":
-        return "shadow-lg hover:shadow-xl transition-shadow duration-200";
+        return `${baseClasses.bg} shadow-lg hover:shadow-xl transition-shadow duration-200`;
       case "news":
-        return "bg-white dark:bg-gray-800 overflow-hidden relative";
+        return `${baseClasses.bg} overflow-hidden relative`;
       default:
-        return "bg-white dark:bg-gray-800";
+        return baseClasses.bg;
     }
   };
   const getHoverEffectClasses = () => {
+    const hoverColor = colors.hover || "rgba(0,0,0,0.1)";
     switch (hoverEffect) {
       case "scale":
         return "transition-transform duration-200 hover:scale-105";
       case "lift":
         return "transition-all duration-200 hover:-translate-y-1 hover:shadow-lg";
       case "glow":
-        return "transition-all duration-200 hover:shadow-[0_0_15px_rgba(0,0,0,0.1)]";
+        return `transition-all duration-200 hover:shadow-[0_0_15px_${hoverColor}]`;
       default:
         return "";
     }
@@ -1204,6 +1193,7 @@ var Card = ({
   };
   const renderImage = () => {
     if (!image) return null;
+    const overlayColor = image.overlayColor || colors.overlay || "rgba(0,0,0,0.4)";
     return /* @__PURE__ */ import_react6.default.createElement("div", { className: getImageClasses() }, /* @__PURE__ */ import_react6.default.createElement(
       "img",
       {
@@ -1211,128 +1201,163 @@ var Card = ({
         alt: image.alt || "",
         className: `
             w-full h-full object-cover
-            ${image.overlay ? "absolute inset-0" : ""}
+            ${image.overlay ? "absolute inset-0 z-50" : ""}
           `,
-        loading: "lazy"
+        loading: "lazy",
+        onError: (e) => {
+          const target = e.target;
+          target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%239ca3af'%3EImage not found%3C/text%3E%3C/svg%3E`;
+        }
       }
-    ), image.overlay && /* @__PURE__ */ import_react6.default.createElement("div", { className: "absolute inset-0 bg-black bg-opacity-40" }));
+    ), image.overlay && /* @__PURE__ */ import_react6.default.createElement(
+      "div",
+      {
+        className: "absolute inset-0",
+        style: { backgroundColor: overlayColor }
+      }
+    ));
   };
-  const renderSkeleton = () => /* @__PURE__ */ import_react6.default.createElement("div", { className: "animate-pulse" }, image && /* @__PURE__ */ import_react6.default.createElement("div", { className: `${getImageClasses()} bg-gray-200 dark:bg-gray-700` }), /* @__PURE__ */ import_react6.default.createElement("div", { className: "p-4" }, /* @__PURE__ */ import_react6.default.createElement("div", { className: "h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2" }), /* @__PURE__ */ import_react6.default.createElement("div", { className: "h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" })));
+  const renderSkeleton = () => {
+    const skeletonColor = colors.skeleton || "bg-gray-200 dark:bg-gray-700";
+    return /* @__PURE__ */ import_react6.default.createElement("div", { className: "animate-pulse" }, image && /* @__PURE__ */ import_react6.default.createElement("div", { className: `${getImageClasses()} ${skeletonColor}` }), /* @__PURE__ */ import_react6.default.createElement("div", { className: "p-4" }, /* @__PURE__ */ import_react6.default.createElement("div", { className: `h-4 ${skeletonColor} rounded w-3/4 mb-2` }), /* @__PURE__ */ import_react6.default.createElement("div", { className: `h-3 ${skeletonColor} rounded w-1/2` })));
+  };
   const renderNewsMetadata = () => {
     if (!metadata) return null;
-    return /* @__PURE__ */ import_react6.default.createElement("div", { className: "flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mt-2" }, metadata.category && /* @__PURE__ */ import_react6.default.createElement("span", { className: "px-2 py-1 bg-red-600 text-white text-xs font-semibold rounded" }, metadata.category), /* @__PURE__ */ import_react6.default.createElement("div", { className: "flex flex-wrap items-center gap-3" }, metadata.time && /* @__PURE__ */ import_react6.default.createElement("span", { className: "flex items-center gap-1" }, /* @__PURE__ */ import_react6.default.createElement(
-      "svg",
+    const textColor = colors.text || "text-gray-500 dark:text-gray-400";
+    return /* @__PURE__ */ import_react6.default.createElement(
+      "div",
       {
-        className: "w-4 h-4",
-        fill: "none",
-        stroke: "currentColor",
-        viewBox: "0 0 24 24"
+        className: `flex flex-wrap items-center gap-3 text-sm ${textColor} mt-2`
       },
-      /* @__PURE__ */ import_react6.default.createElement(
-        "path",
+      metadata.category && /* @__PURE__ */ import_react6.default.createElement("span", { className: "px-2 py-1 bg-red-600 text-white text-xs font-semibold rounded" }, metadata.category),
+      /* @__PURE__ */ import_react6.default.createElement("div", { className: "flex flex-wrap items-center gap-3" }, metadata.time && /* @__PURE__ */ import_react6.default.createElement("span", { className: "flex items-center gap-1" }, /* @__PURE__ */ import_react6.default.createElement(
+        "svg",
         {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          strokeWidth: 2,
-          d: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-        }
-      )
-    ), metadata.time), metadata.author && /* @__PURE__ */ import_react6.default.createElement("span", { className: "flex items-center gap-1" }, /* @__PURE__ */ import_react6.default.createElement(
-      "svg",
-      {
-        className: "w-4 h-4",
-        fill: "none",
-        stroke: "currentColor",
-        viewBox: "0 0 24 24"
-      },
-      /* @__PURE__ */ import_react6.default.createElement(
-        "path",
+          className: "w-4 h-4",
+          fill: "none",
+          stroke: "currentColor",
+          viewBox: "0 0 24 24"
+        },
+        /* @__PURE__ */ import_react6.default.createElement(
+          "path",
+          {
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 2,
+            d: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+          }
+        )
+      ), metadata.time), metadata.author && /* @__PURE__ */ import_react6.default.createElement("span", { className: "flex items-center gap-1" }, /* @__PURE__ */ import_react6.default.createElement(
+        "svg",
         {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          strokeWidth: 2,
-          d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-        }
-      )
-    ), metadata.author), metadata.comments !== void 0 && /* @__PURE__ */ import_react6.default.createElement("span", { className: "flex items-center gap-1" }, /* @__PURE__ */ import_react6.default.createElement(
-      "svg",
-      {
-        className: "w-4 h-4",
-        fill: "none",
-        stroke: "currentColor",
-        viewBox: "0 0 24 24"
-      },
-      /* @__PURE__ */ import_react6.default.createElement(
-        "path",
+          className: "w-4 h-4",
+          fill: "none",
+          stroke: "currentColor",
+          viewBox: "0 0 24 24"
+        },
+        /* @__PURE__ */ import_react6.default.createElement(
+          "path",
+          {
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 2,
+            d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+          }
+        )
+      ), metadata.author), metadata.comments !== void 0 && /* @__PURE__ */ import_react6.default.createElement("span", { className: "flex items-center gap-1" }, /* @__PURE__ */ import_react6.default.createElement(
+        "svg",
         {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          strokeWidth: 2,
-          d: "M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-        }
-      )
-    ), metadata.comments), metadata.views !== void 0 && /* @__PURE__ */ import_react6.default.createElement("span", { className: "flex items-center gap-1" }, /* @__PURE__ */ import_react6.default.createElement(
-      "svg",
-      {
-        className: "w-4 h-4",
-        fill: "none",
-        stroke: "currentColor",
-        viewBox: "0 0 24 24"
-      },
-      /* @__PURE__ */ import_react6.default.createElement(
-        "path",
+          className: "w-4 h-4",
+          fill: "none",
+          stroke: "currentColor",
+          viewBox: "0 0 24 24"
+        },
+        /* @__PURE__ */ import_react6.default.createElement(
+          "path",
+          {
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 2,
+            d: "M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+          }
+        )
+      ), metadata.comments), metadata.views !== void 0 && /* @__PURE__ */ import_react6.default.createElement("span", { className: "flex items-center gap-1" }, /* @__PURE__ */ import_react6.default.createElement(
+        "svg",
         {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          strokeWidth: 2,
-          d: "M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-        }
-      ),
-      /* @__PURE__ */ import_react6.default.createElement(
-        "path",
-        {
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          strokeWidth: 2,
-          d: "M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-        }
-      )
-    ), metadata.views)));
+          className: "w-4 h-4",
+          fill: "none",
+          stroke: "currentColor",
+          viewBox: "0 0 24 24"
+        },
+        /* @__PURE__ */ import_react6.default.createElement(
+          "path",
+          {
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 2,
+            d: "M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+          }
+        ),
+        /* @__PURE__ */ import_react6.default.createElement(
+          "path",
+          {
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 2,
+            d: "M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+          }
+        )
+      ), metadata.views))
+    );
   };
   const renderNewsCard = () => /* @__PURE__ */ import_react6.default.createElement("div", { className: "flex flex-col" }, /* @__PURE__ */ import_react6.default.createElement("div", { className: "relative" }, renderImage(), (metadata == null ? void 0 : metadata.category) && /* @__PURE__ */ import_react6.default.createElement("div", { className: "absolute top-4 left-4 z-10" }, /* @__PURE__ */ import_react6.default.createElement("span", { className: "px-3 py-1 bg-red-600 text-white text-sm font-semibold rounded" }, metadata.category))), /* @__PURE__ */ import_react6.default.createElement("div", { className: "p-4" }, title && /* @__PURE__ */ import_react6.default.createElement("h3", { className: "text-lg md:text-xl font-bold text-gray-900 dark:text-white hover:text-red-600 dark:hover:text-red-500 transition-colors" }, title), subtitle && /* @__PURE__ */ import_react6.default.createElement("p", { className: "mt-2 text-sm md:text-base text-gray-600 dark:text-gray-400" }, subtitle), renderNewsMetadata(), children && /* @__PURE__ */ import_react6.default.createElement("div", { className: `mt-4 ${bodyClassName}` }, children)));
-  const renderCard = () => /* @__PURE__ */ import_react6.default.createElement(
-    "div",
-    {
-      className: `
-        rounded-lg 
-        ${getVariantClasses()}
-        ${getHoverEffectClasses()}
-        ${onClick ? "cursor-pointer" : ""}
-        ${isHorizontal ? "flex flex-col md:flex-row" : ""}
-        ${className}
-      `,
-      onClick
-    },
-    isNewsCard ? renderNewsCard() : /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, (image == null ? void 0 : image.position) === "top" && renderImage(), (image == null ? void 0 : image.position) === "left" && renderImage(), /* @__PURE__ */ import_react6.default.createElement("div", { className: "flex-1" }, (title || subtitle || Icon) && /* @__PURE__ */ import_react6.default.createElement(
+  const renderCard = () => {
+    const headerBg = colors.headerBg || "bg-white dark:bg-gray-800";
+    const headerText = colors.headerText || "text-gray-900 dark:text-white";
+    const headerBorder = colors.headerBorder || "border-gray-200 dark:border-gray-700";
+    const footerBg = colors.footerBg || "bg-white dark:bg-gray-800";
+    const footerText = colors.footerText || "text-gray-900 dark:text-white";
+    const footerBorder = colors.footerBorder || "border-gray-200 dark:border-gray-700";
+    return /* @__PURE__ */ import_react6.default.createElement(
       "div",
       {
         className: `
-                  p-4 border-b border-gray-200 dark:border-gray-700
-                  ${headerClassName}
-                `
+          rounded-lg 
+          ${getVariantClasses()}
+          ${getHoverEffectClasses()}
+          ${onClick ? "cursor-pointer" : ""}
+          ${isHorizontal ? "flex flex-col md:flex-row" : ""}
+          ${className}
+        `,
+        onClick
       },
-      /* @__PURE__ */ import_react6.default.createElement("div", { className: "flex items-center gap-3" }, Icon && /* @__PURE__ */ import_react6.default.createElement("div", { className: "flex-shrink-0" }, /* @__PURE__ */ import_react6.default.createElement(Icon, { className: "w-5 h-5 text-gray-500 dark:text-gray-400" })), /* @__PURE__ */ import_react6.default.createElement("div", { className: "flex-1" }, title && /* @__PURE__ */ import_react6.default.createElement("h3", { className: "text-lg font-medium text-gray-900 dark:text-white" }, title), subtitle && /* @__PURE__ */ import_react6.default.createElement("p", { className: "mt-1 text-sm text-gray-500 dark:text-gray-400" }, subtitle)))
-    ), /* @__PURE__ */ import_react6.default.createElement("div", { className: `p-4 ${bodyClassName}` }, children), footer && /* @__PURE__ */ import_react6.default.createElement(
-      "div",
-      {
-        className: `
-                  p-4 border-t border-gray-200 dark:border-gray-700
-                  ${footerClassName}
-                `
-      },
-      footer
-    )), (image == null ? void 0 : image.position) === "right" && renderImage(), (image == null ? void 0 : image.position) === "bottom" && renderImage())
-  );
+      isNewsCard ? renderNewsCard() : /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, (image == null ? void 0 : image.position) === "top" && renderImage(), (image == null ? void 0 : image.position) === "left" && renderImage(), /* @__PURE__ */ import_react6.default.createElement("div", { className: "flex-1" }, (title || subtitle || Icon) && /* @__PURE__ */ import_react6.default.createElement(
+        "div",
+        {
+          className: `
+                    p-4 border-b ${headerBorder} ${headerBg}
+                    ${headerClassName}
+                  `
+        },
+        /* @__PURE__ */ import_react6.default.createElement("div", { className: "flex items-center gap-3" }, Icon && /* @__PURE__ */ import_react6.default.createElement("div", { className: "flex-shrink-0" }, /* @__PURE__ */ import_react6.default.createElement(Icon, { className: "w-5 h-5 text-gray-500 dark:text-gray-400" })), /* @__PURE__ */ import_react6.default.createElement("div", { className: "flex-1" }, title && /* @__PURE__ */ import_react6.default.createElement("h3", { className: `text-lg font-medium ${headerText}` }, title), subtitle && /* @__PURE__ */ import_react6.default.createElement(
+          "p",
+          {
+            className: `mt-1 text-sm ${colors.text || "text-gray-500 dark:text-gray-400"}`
+          },
+          subtitle
+        )))
+      ), /* @__PURE__ */ import_react6.default.createElement("div", { className: `p-4 ${bodyClassName}` }, children), footer && /* @__PURE__ */ import_react6.default.createElement(
+        "div",
+        {
+          className: `
+                    p-4 border-t ${footerBorder} ${footerBg}
+                    ${footerClassName}
+                  `
+        },
+        footer
+      )), (image == null ? void 0 : image.position) === "right" && renderImage(), (image == null ? void 0 : image.position) === "bottom" && renderImage())
+    );
+  };
   if (loading || skeleton) {
     return renderSkeleton();
   }
@@ -2002,21 +2027,21 @@ var Badge = ({
   ribbonColor = "primary"
 }) => {
   const variantClasses = {
-    default: "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200",
-    primary: "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200",
-    success: "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200",
-    warning: "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200",
-    error: "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200",
-    info: "bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200"
+    default: "bg-gray-100/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700",
+    primary: "bg-blue-50/80 dark:bg-blue-900/80 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800",
+    success: "bg-emerald-50/80 dark:bg-emerald-900/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800",
+    warning: "bg-amber-50/80 dark:bg-amber-900/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800",
+    error: "bg-rose-50/80 dark:bg-rose-900/80 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800",
+    info: "bg-sky-50/80 dark:bg-sky-900/80 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800"
   };
   const sizeClasses = {
-    sm: "text-xs px-1.5 py-0.5",
-    md: "text-sm px-2 py-0.5",
-    lg: "text-base px-2.5 py-1"
+    sm: "text-xs px-2 py-0.5 min-w-[1.25rem] h-5",
+    md: "text-sm px-2.5 py-0.5 min-w-[1.5rem] h-6",
+    lg: "text-base px-3 py-1 min-w-[1.75rem] h-7"
   };
   const roundedClasses = {
     none: "rounded-none",
-    sm: "rounded-sm",
+    sm: "rounded",
     md: "rounded-md",
     lg: "rounded-lg",
     full: "rounded-full"
@@ -2027,10 +2052,10 @@ var Badge = ({
     none: ""
   };
   const statusClasses = {
-    online: "bg-green-500 dark:bg-green-400",
-    offline: "bg-gray-500 dark:bg-gray-400",
-    away: "bg-yellow-500 dark:bg-yellow-400",
-    busy: "bg-red-500 dark:bg-red-400"
+    online: "bg-emerald-500 dark:bg-emerald-400",
+    offline: "bg-gray-400 dark:bg-gray-500",
+    away: "bg-amber-500 dark:bg-amber-400",
+    busy: "bg-rose-500 dark:bg-rose-400"
   };
   const positionClasses = {
     "top-right": "-top-1 -right-1",
@@ -2039,11 +2064,11 @@ var Badge = ({
     "bottom-left": "-bottom-1 -left-1"
   };
   const ribbonClasses = {
-    primary: "bg-blue-500 dark:bg-blue-600",
-    success: "bg-green-500 dark:bg-green-600",
-    warning: "bg-yellow-500 dark:bg-yellow-600",
-    error: "bg-red-500 dark:bg-red-600",
-    info: "bg-indigo-500 dark:bg-indigo-600"
+    primary: "bg-blue-600 dark:bg-blue-500",
+    success: "bg-emerald-600 dark:bg-emerald-500",
+    warning: "bg-amber-600 dark:bg-amber-500",
+    error: "bg-rose-600 dark:bg-rose-500",
+    info: "bg-sky-600 dark:bg-sky-500"
   };
   const renderContent = () => {
     if (dot) {
@@ -2054,9 +2079,12 @@ var Badge = ({
         }
       );
     }
-    if (count !== void 0) {
+    if (typeof count === "number") {
       if (count === 0 && !showZero) return null;
-      return /* @__PURE__ */ import_react9.default.createElement("span", { className: "inline-flex items-center justify-center" }, count > maxCount ? `${maxCount}+` : count);
+      return /* @__PURE__ */ import_react9.default.createElement("span", { className: "inline-flex items-center justify-center font-medium" }, count > maxCount ? `${maxCount}+` : count);
+    }
+    if (typeof count === "string") {
+      return /* @__PURE__ */ import_react9.default.createElement("span", { className: "inline-flex items-center justify-center font-medium" }, count);
     }
     return children;
   };
@@ -2082,7 +2110,7 @@ var Badge = ({
       /* @__PURE__ */ import_react9.default.createElement(
         "div",
         {
-          className: `absolute top-0 right-0 w-32 h-32 transform rotate-45 translate-x-8 -translate-y-8 ${ribbonClasses[ribbonColor]} text-white text-xs font-medium flex items-center justify-center`
+          className: `absolute top-0 right-0 w-32 h-32 transform rotate-45 translate-x-8 -translate-y-8 ${ribbonClasses[ribbonColor]} text-white text-xs font-medium flex items-center justify-center shadow-sm`
         },
         ribbonText
       )
@@ -2092,7 +2120,7 @@ var Badge = ({
     "span",
     {
       style: badgeStyle,
-      className: `absolute ${positionClasses[position]} z-10 inline-flex items-center justify-center ${dot ? "w-2 h-2" : sizeClasses[size]} ${roundedClasses[rounded]} ${variantClasses[variant]} ${animationClasses[animation]} ${processing ? "animate-spin" : ""} ${className}`
+      className: `absolute ${positionClasses[position]} z-10 inline-flex items-center justify-center ${dot ? "w-2 h-2" : sizeClasses[size]} ${roundedClasses[rounded]} ${variantClasses[variant]} ${animationClasses[animation]} ${processing ? "animate-spin" : ""} ${className} shadow-sm`
     },
     renderContent()
   ));
@@ -2102,32 +2130,59 @@ var Badge_default = Badge;
 // src/components/Alert/Alert.tsx
 var import_react10 = __toESM(require("react"));
 var typeStyles = {
-  success: "bg-green-100 text-green-800 border-green-300 dark:bg-green-900 dark:text-green-200 dark:border-green-700",
-  error: "bg-red-100 text-red-800 border-red-300 dark:bg-red-900 dark:text-red-200 dark:border-red-700",
-  warning: "bg-yellow-100 text-yellow-800 border-yellow-300 dark:bg-yellow-900 dark:text-yellow-200 dark:border-yellow-700",
-  info: "bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-900 dark:text-blue-200 dark:border-blue-700"
+  success: {
+    bg: "bg-emerald-50 dark:bg-emerald-950/50",
+    text: "text-emerald-700 dark:text-emerald-300",
+    border: "border-emerald-200 dark:border-emerald-800"
+  },
+  error: {
+    bg: "bg-rose-50 dark:bg-rose-950/50",
+    text: "text-rose-700 dark:text-rose-300",
+    border: "border-rose-200 dark:border-rose-800"
+  },
+  warning: {
+    bg: "bg-amber-50 dark:bg-amber-950/50",
+    text: "text-amber-700 dark:text-amber-300",
+    border: "border-amber-200 dark:border-amber-800"
+  },
+  info: {
+    bg: "bg-sky-50 dark:bg-sky-950/50",
+    text: "text-sky-700 dark:text-sky-300",
+    border: "border-sky-200 dark:border-sky-800"
+  }
 };
 var Alert = ({
   type = "info",
   message,
   description,
   closable = false,
-  onClose
-}) => /* @__PURE__ */ import_react10.default.createElement(
-  "div",
-  {
-    className: `flex items-start gap-3 border-l-4 p-4 rounded-md shadow-sm ${typeStyles[type]}`
-  },
-  /* @__PURE__ */ import_react10.default.createElement("div", { className: "flex-1" }, /* @__PURE__ */ import_react10.default.createElement("div", { className: "font-semibold" }, message), description && /* @__PURE__ */ import_react10.default.createElement("div", { className: "text-sm mt-1 opacity-80" }, description)),
-  closable && /* @__PURE__ */ import_react10.default.createElement(
-    "button",
+  onClose,
+  bgColor,
+  textColor,
+  borderColor
+}) => {
+  const defaultStyles = typeStyles[type];
+  const styles = {
+    bg: bgColor || defaultStyles.bg,
+    text: textColor || defaultStyles.text,
+    border: borderColor || defaultStyles.border
+  };
+  return /* @__PURE__ */ import_react10.default.createElement(
+    "div",
     {
-      onClick: onClose,
-      className: "ml-2 text-lg font-bold opacity-60 hover:opacity-100"
+      className: `flex items-start gap-3 border-l-4 p-4 rounded-md shadow-sm ${styles.bg} ${styles.text} ${styles.border}`
     },
-    "\xD7"
-  )
-);
+    /* @__PURE__ */ import_react10.default.createElement("div", { className: "flex-1" }, /* @__PURE__ */ import_react10.default.createElement("div", { className: "font-semibold" }, message), description && /* @__PURE__ */ import_react10.default.createElement("div", { className: "text-sm mt-1 opacity-80" }, description)),
+    closable && /* @__PURE__ */ import_react10.default.createElement(
+      "button",
+      {
+        onClick: onClose,
+        className: "ml-2 text-lg font-bold opacity-60 hover:opacity-100"
+      },
+      "\xD7"
+    )
+  );
+};
 var Alert_default = Alert;
 
 // src/components/Avatar/Avatar.tsx
@@ -2215,7 +2270,9 @@ var Calendar = ({
   disableDate,
   disableTime,
   timePickerInline = true,
-  renderDay
+  renderDay,
+  calendarButtonClassName = "",
+  textColor = ""
 }) => {
   const today = /* @__PURE__ */ new Date();
   const [current, setCurrent] = import_react13.default.useState(() => value || today);
@@ -2267,13 +2324,13 @@ var Calendar = ({
   return /* @__PURE__ */ import_react13.default.createElement(
     "div",
     {
-      className: `w-full max-w-[320px] sm:max-w-sm p-2 sm:p-4 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 ${className}`
+      className: `w-full max-w-[320px] sm:max-w-sm p-2 sm:p-4 rounded-lg ${className} ${textColor}`
     },
     /* @__PURE__ */ import_react13.default.createElement("div", { className: "flex items-center justify-between w-full mb-2 gap-1 sm:gap-2" }, /* @__PURE__ */ import_react13.default.createElement(
       "button",
       {
         onClick: () => setCurrent(new Date(year, month - 1, 1)),
-        className: "p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full flex items-center justify-center min-w-[32px] min-h-[32px]"
+        className: `p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full flex items-center justify-center min-w-[32px] min-h-[32px] ${calendarButtonClassName}`
       },
       "<"
     ), /* @__PURE__ */ import_react13.default.createElement(
@@ -2285,13 +2342,17 @@ var Calendar = ({
           value: y.toString(),
           label: y.toString()
         })),
-        className: "w-20 sm:w-24"
+        className: `w-20 sm:w-24`,
+        wrapperClassName: `${calendarButtonClassName}`,
+        optionClassName: `${calendarButtonClassName}`,
+        labelClassName: `${textColor}`,
+        selectClassName: `${textColor}`
       }
     ), /* @__PURE__ */ import_react13.default.createElement("span", { className: "font-semibold text-sm sm:text-base flex-1 text-center" }, current.toLocaleString("default", { month: "long" })), /* @__PURE__ */ import_react13.default.createElement(
       "button",
       {
         onClick: () => setCurrent(new Date(year, month + 1, 1)),
-        className: "p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full flex items-center justify-center min-w-[32px] min-h-[32px]"
+        className: `p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full flex items-center justify-center min-w-[32px] min-h-[32px] ${calendarButtonClassName}`
       },
       ">"
     )),
@@ -2315,8 +2376,8 @@ var Calendar = ({
         "button",
         {
           key: `day-${day}`,
-          className: `min-w-[36px] min-h-[36px] sm:min-w-[40px] sm:min-h-[40px] rounded-full text-center transition-colors text-sm sm:text-base flex items-center justify-center
-                ${isSelected ? "bg-blue-600 text-white" : isToday ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200" : "hover:bg-gray-100 dark:hover:bg-gray-800"}
+          className: `min-w-[36px] min-h-[36px] sm:min-w-[40px] sm:min-h-[40px] rounded-full text-center transition-colors text-sm sm:text-base flex items-center justify-center ${calendarButtonClassName}
+                ${isSelected ? "bg-blue-600 text-white" : isToday ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200" : "hover:bg-gray-100 dark:hover:bg-gray-500/50"}
                 ${disabled ? "opacity-40 cursor-not-allowed" : ""}`,
           onClick: () => handleSelect(day),
           disabled
@@ -2339,7 +2400,9 @@ var Calendar = ({
           value: (hour12 ? i + 1 : i).toString(),
           label: (hour12 ? i + 1 : i).toString().padStart(2, "0")
         })),
-        className: "w-16 sm:w-20"
+        className: `w-16 sm:w-20`,
+        wrapperClassName: `${calendarButtonClassName}`,
+        optionClassName: `${calendarButtonClassName}`
       }
     ), /* @__PURE__ */ import_react13.default.createElement("span", { className: "text-gray-500 font-medium" }, ":"), /* @__PURE__ */ import_react13.default.createElement(
       Select_default,
@@ -2354,7 +2417,9 @@ var Calendar = ({
           value: m.toString(),
           label: m.toString().padStart(2, "0")
         })),
-        className: "w-16 sm:w-20"
+        className: `w-16 sm:w-20`,
+        wrapperClassName: `${calendarButtonClassName}`,
+        optionClassName: `${calendarButtonClassName}`
       }
     ), showSeconds && /* @__PURE__ */ import_react13.default.createElement(import_react13.default.Fragment, null, /* @__PURE__ */ import_react13.default.createElement("span", { className: "text-gray-500 font-medium" }, ":"), /* @__PURE__ */ import_react13.default.createElement(
       Select_default,
@@ -2374,7 +2439,9 @@ var Calendar = ({
           value: s.toString(),
           label: s.toString().padStart(2, "0")
         })),
-        className: "w-16 sm:w-20"
+        className: `w-16 sm:w-20`,
+        wrapperClassName: `${calendarButtonClassName}`,
+        optionClassName: `${calendarButtonClassName}`
       }
     )), hour12 && /* @__PURE__ */ import_react13.default.createElement(
       Select_default,
@@ -2391,13 +2458,15 @@ var Calendar = ({
           { value: "AM", label: "AM" },
           { value: "PM", label: "PM" }
         ],
-        className: "w-16 sm:w-20"
+        className: `w-16 sm:w-20`,
+        wrapperClassName: `${calendarButtonClassName}`,
+        optionClassName: `${calendarButtonClassName}`
       }
     ))),
     showTimePicker && !timePickerInline && /* @__PURE__ */ import_react13.default.createElement(
       "button",
       {
-        className: "mt-2 text-sm sm:text-base text-blue-600 dark:text-blue-400 underline w-full py-2",
+        className: `mt-2 text-sm sm:text-base text-blue-600 dark:text-blue-400 underline w-full py-2 ${calendarButtonClassName}`,
         onClick: () => setShowTime((v) => !v)
       },
       showTime ? "Hide Time Picker" : "Show Time Picker"
@@ -2548,40 +2617,176 @@ var List_default = List;
 
 // src/components/Pagination/Pagination.tsx
 var import_react16 = __toESM(require("react"));
+var import_hi22 = require("react-icons/hi2");
 var Pagination = ({
   current,
   total,
   pageSize,
   onChange,
-  className = ""
+  className = "",
+  showFirstLast = false,
+  showSizeChanger = false,
+  pageSizeOptions = [10, 20, 50, 100],
+  onPageSizeChange,
+  siblingCount = 1,
+  colors = {},
+  icons = {},
+  showTotal = false,
+  totalText,
+  showCurrent = false,
+  currentText,
+  disabled = false,
+  size = "middle"
 }) => {
   const pageCount = Math.ceil(total / pageSize);
-  const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
-  return /* @__PURE__ */ import_react16.default.createElement("div", { className: `flex items-center gap-2 ${className}` }, /* @__PURE__ */ import_react16.default.createElement(
-    "button",
+  const getSizeClasses = () => {
+    switch (size) {
+      case "small":
+        return "text-sm px-2 py-1";
+      case "large":
+        return "text-lg px-4 py-2";
+      default:
+        return "text-base px-3 py-1.5";
+    }
+  };
+  const getButtonClasses = (isActive = false, isDisabled = false) => {
+    const baseClasses = `
+      rounded border transition-colors
+      ${getSizeClasses()}
+      ${disabled || isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
+    `;
+    if (isActive) {
+      return `
+        ${baseClasses}
+        ${colors.activeBg || "bg-blue-600 dark:bg-blue-700"}
+        ${colors.activeText || "text-white"}
+        ${colors.activeBorder || "border-blue-600 dark:border-blue-700"}
+      `;
+    }
+    if (disabled || isDisabled) {
+      return `
+        ${baseClasses}
+        ${colors.disabledBg || "bg-gray-100 dark:bg-gray-800"}
+        ${colors.disabledText || "text-gray-400 dark:text-gray-500"}
+        ${colors.disabledBorder || "border-gray-200 dark:border-gray-700"}
+      `;
+    }
+    return `
+      ${baseClasses}
+      ${colors.bg || "bg-white dark:bg-gray-900"}
+      ${colors.text || "text-gray-700 dark:text-gray-200"}
+      ${colors.border || "border-gray-300 dark:border-gray-700"}
+      hover:${colors.hoverBg || "bg-gray-50 dark:bg-gray-800"}
+      hover:${colors.hoverText || "text-gray-900 dark:text-white"}
+      hover:${colors.hoverBorder || "border-gray-400 dark:border-gray-600"}
+    `;
+  };
+  const getPageNumbers = () => {
+    const totalNumbers = siblingCount + 5;
+    const totalBlocks = totalNumbers + 2;
+    if (pageCount > totalBlocks) {
+      const startPage = Math.max(2, current - siblingCount);
+      const endPage = Math.min(pageCount - 1, current + siblingCount);
+      const pages = [];
+      if (startPage > 2) {
+        pages.push(1, "...");
+      } else {
+        pages.push(1);
+      }
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
+      if (endPage < pageCount - 1) {
+        pages.push("...", pageCount);
+      } else {
+        pages.push(pageCount);
+      }
+      return pages;
+    }
+    return Array.from({ length: pageCount }, (_, i) => i + 1);
+  };
+  const handlePageSizeChange = (e) => {
+    const newSize = Number(e.target.value);
+    onPageSizeChange == null ? void 0 : onPageSizeChange(newSize);
+  };
+  const renderTotal = () => {
+    if (!showTotal) return null;
+    const start = (current - 1) * pageSize + 1;
+    const end = Math.min(current * pageSize, total);
+    const text = totalText ? totalText(total, [start, end]) : `Showing ${start}-${end} of ${total} items`;
+    return /* @__PURE__ */ import_react16.default.createElement("span", { className: "text-gray-600 dark:text-gray-400" }, text);
+  };
+  const renderCurrent = () => {
+    if (!showCurrent) return null;
+    const text = currentText ? currentText(current, pageCount) : `Page ${current} of ${pageCount}`;
+    return /* @__PURE__ */ import_react16.default.createElement("span", { className: "text-gray-600 dark:text-gray-400" }, text);
+  };
+  return /* @__PURE__ */ import_react16.default.createElement(
+    "div",
     {
-      className: "px-2 py-1 rounded border bg-gray-100 dark:bg-gray-800 disabled:opacity-50",
-      onClick: () => onChange(current - 1),
-      disabled: current === 1
+      className: `flex items-center gap-2 overflow-x-auto max-w-[80vw] md:max-w-full ${className}`
     },
-    "Prev"
-  ), pages.map((page) => /* @__PURE__ */ import_react16.default.createElement(
-    "button",
-    {
-      key: page,
-      className: `px-3 py-1 rounded border transition-colors ${page === current ? "bg-blue-600 text-white border-blue-600" : "bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-200"}`,
-      onClick: () => onChange(page)
-    },
-    page
-  )), /* @__PURE__ */ import_react16.default.createElement(
-    "button",
-    {
-      className: "px-2 py-1 rounded border bg-gray-100 dark:bg-gray-800 disabled:opacity-50",
-      onClick: () => onChange(current + 1),
-      disabled: current === pageCount
-    },
-    "Next"
-  ));
+    renderTotal(),
+    /* @__PURE__ */ import_react16.default.createElement("div", { className: "flex items-center gap-1" }, showFirstLast && /* @__PURE__ */ import_react16.default.createElement(
+      "button",
+      {
+        className: getButtonClasses(false, current === 1),
+        onClick: () => onChange(1),
+        disabled: disabled || current === 1
+      },
+      icons.first || "\xAB"
+    ), /* @__PURE__ */ import_react16.default.createElement(
+      "button",
+      {
+        className: getButtonClasses(false, current === 1),
+        onClick: () => onChange(current - 1),
+        disabled: disabled || current === 1
+      },
+      icons.prev || /* @__PURE__ */ import_react16.default.createElement(import_hi22.HiChevronLeft, { className: "w-5 h-5" })
+    ), getPageNumbers().map((page, index) => /* @__PURE__ */ import_react16.default.createElement(import_react16.default.Fragment, { key: index }, page === "..." ? /* @__PURE__ */ import_react16.default.createElement("span", { className: "px-2 py-1" }, icons.ellipsis || /* @__PURE__ */ import_react16.default.createElement(import_hi22.HiEllipsisHorizontal, { className: "w-5 h-5" })) : /* @__PURE__ */ import_react16.default.createElement(
+      "button",
+      {
+        className: getButtonClasses(page === current),
+        onClick: () => onChange(page),
+        disabled
+      },
+      page
+    ))), /* @__PURE__ */ import_react16.default.createElement(
+      "button",
+      {
+        className: getButtonClasses(false, current === pageCount),
+        onClick: () => onChange(current + 1),
+        disabled: disabled || current === pageCount
+      },
+      icons.next || /* @__PURE__ */ import_react16.default.createElement(import_hi22.HiChevronRight, { className: "w-5 h-5" })
+    ), showFirstLast && /* @__PURE__ */ import_react16.default.createElement(
+      "button",
+      {
+        className: getButtonClasses(false, current === pageCount),
+        onClick: () => onChange(pageCount),
+        disabled: disabled || current === pageCount
+      },
+      icons.last || "\xBB"
+    )),
+    showSizeChanger && /* @__PURE__ */ import_react16.default.createElement(
+      "select",
+      {
+        className: `
+            rounded border transition-colors
+            ${getSizeClasses()}
+            ${colors.border || "border-gray-300 dark:border-gray-700"}
+            ${colors.bg || "bg-white dark:bg-gray-900"}
+            ${colors.text || "text-gray-700 dark:text-gray-200"}
+            ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
+          `,
+        value: pageSize,
+        onChange: handlePageSizeChange,
+        disabled
+      },
+      pageSizeOptions.map((size2) => /* @__PURE__ */ import_react16.default.createElement("option", { key: size2, value: size2 }, size2, " / page"))
+    ),
+    renderCurrent()
+  );
 };
 var Pagination_default = Pagination;
 
@@ -2807,7 +3012,7 @@ var Slider_default = Slider;
 
 // src/components/StatCard/StatCard.tsx
 var import_react21 = __toESM(require("react"));
-var import_hi22 = require("react-icons/hi2");
+var import_hi23 = require("react-icons/hi2");
 var StatCard = ({
   title,
   value,
@@ -2816,39 +3021,139 @@ var StatCard = ({
   description,
   className = "",
   iconClassName = "",
-  trendClassName = ""
+  trendClassName = "",
+  variant = "default",
+  loading = false,
+  skeleton = false,
+  onClick,
+  colors = {},
+  alert,
+  prefix,
+  suffix,
+  format,
+  formatter,
+  animationDuration = 300
 }) => {
+  const getVariantClasses = () => {
+    var _a, _b;
+    const baseClasses = {
+      bg: colors.bg || "bg-white dark:bg-gray-800",
+      border: colors.border || "border-gray-200 dark:border-gray-700",
+      text: colors.text || "text-gray-900 dark:text-white"
+    };
+    switch (variant) {
+      case "bordered":
+        return `border ${baseClasses.border}`;
+      case "elevated":
+        return `${baseClasses.bg} shadow-lg hover:shadow-xl transition-shadow duration-200`;
+      case "gradient":
+        const gradientFrom = ((_a = colors.gradient) == null ? void 0 : _a.from) || "from-blue-500";
+        const gradientTo = ((_b = colors.gradient) == null ? void 0 : _b.to) || "to-blue-600";
+        return `bg-gradient-to-r ${gradientFrom} ${gradientTo} text-white`;
+      default:
+        return baseClasses.bg;
+    }
+  };
+  const formatValue = (val) => {
+    if (formatter) return formatter(val);
+    if (typeof val === "number") {
+      switch (format) {
+        case "currency":
+          return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD"
+          }).format(val);
+        case "percentage":
+          return `${val}%`;
+        case "number":
+          return new Intl.NumberFormat("en-US").format(val);
+        default:
+          return val.toString();
+      }
+    }
+    return val;
+  };
+  const getAlertClasses = () => {
+    if (!alert) return "";
+    const baseClasses = "mt-4 p-2 rounded-md text-sm flex items-center gap-2";
+    switch (alert.type) {
+      case "info":
+        return `${baseClasses} bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300`;
+      case "warning":
+        return `${baseClasses} bg-yellow-50 text-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-300`;
+      case "error":
+        return `${baseClasses} bg-red-50 text-red-700 dark:bg-red-900/50 dark:text-red-300`;
+      case "success":
+        return `${baseClasses} bg-green-50 text-green-700 dark:bg-green-900/50 dark:text-green-300`;
+      default:
+        return baseClasses;
+    }
+  };
+  const renderSkeleton = () => /* @__PURE__ */ import_react21.default.createElement("div", { className: "animate-pulse" }, /* @__PURE__ */ import_react21.default.createElement("div", { className: "h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-2" }), /* @__PURE__ */ import_react21.default.createElement("div", { className: "h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-4" }), /* @__PURE__ */ import_react21.default.createElement("div", { className: "h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3" }));
+  if (loading || skeleton) {
+    return /* @__PURE__ */ import_react21.default.createElement(
+      "div",
+      {
+        className: `
+          p-6 rounded-lg
+          ${getVariantClasses()}
+          ${className}
+        `
+      },
+      renderSkeleton()
+    );
+  }
   return /* @__PURE__ */ import_react21.default.createElement(
     "div",
     {
       className: `
-        p-6 rounded-lg bg-white dark:bg-gray-800
-        border border-gray-200 dark:border-gray-700
+        p-6 rounded-lg
+        ${getVariantClasses()}
+        ${onClick ? "cursor-pointer hover:opacity-90 transition-opacity" : ""}
         ${className}
-      `
+      `,
+      onClick
     },
-    /* @__PURE__ */ import_react21.default.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ import_react21.default.createElement("div", null, /* @__PURE__ */ import_react21.default.createElement("p", { className: "text-sm font-medium text-gray-500 dark:text-gray-400" }, title), /* @__PURE__ */ import_react21.default.createElement("p", { className: "mt-2 text-3xl font-semibold text-gray-900 dark:text-white" }, value)), Icon && /* @__PURE__ */ import_react21.default.createElement(
+    /* @__PURE__ */ import_react21.default.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ import_react21.default.createElement("div", null, /* @__PURE__ */ import_react21.default.createElement("p", { className: "text-sm font-medium text-gray-500 dark:text-gray-400" }, title), /* @__PURE__ */ import_react21.default.createElement(
+      "p",
+      {
+        className: "mt-2 text-3xl font-semibold",
+        style: {
+          transition: `all ${animationDuration}ms ease-in-out`
+        }
+      },
+      prefix && /* @__PURE__ */ import_react21.default.createElement("span", { className: "text-lg" }, prefix),
+      formatValue(value),
+      suffix && /* @__PURE__ */ import_react21.default.createElement("span", { className: "text-lg" }, suffix)
+    )), Icon && /* @__PURE__ */ import_react21.default.createElement(
       "div",
       {
         className: `
-              p-3 rounded-full bg-blue-100 dark:bg-blue-900
+              p-3 rounded-full
+              ${colors.iconBg || "bg-blue-100 dark:bg-blue-900"}
               ${iconClassName}
             `
       },
-      /* @__PURE__ */ import_react21.default.createElement(Icon, { className: "w-6 h-6 text-blue-600 dark:text-blue-400" })
+      /* @__PURE__ */ import_react21.default.createElement(
+        Icon,
+        {
+          className: `w-6 h-6 ${colors.iconColor || "text-blue-600 dark:text-blue-400"}`
+        }
+      )
     )),
     (trend || description) && /* @__PURE__ */ import_react21.default.createElement("div", { className: "mt-4 flex items-center justify-between" }, trend && /* @__PURE__ */ import_react21.default.createElement(
       "div",
       {
         className: `
                 flex items-center gap-1 text-sm
-                ${trend.isPositive ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}
+                ${trend.isPositive ? colors.trendPositive || "text-green-600 dark:text-green-400" : colors.trendNegative || "text-red-600 dark:text-red-400"}
                 ${trendClassName}
               `
       },
-      trend.isPositive ? /* @__PURE__ */ import_react21.default.createElement(import_hi22.HiArrowUp, { className: "w-4 h-4" }) : /* @__PURE__ */ import_react21.default.createElement(import_hi22.HiArrowDown, { className: "w-4 h-4" }),
-      /* @__PURE__ */ import_react21.default.createElement("span", null, Math.abs(trend.value), "%")
-    ), description && /* @__PURE__ */ import_react21.default.createElement("p", { className: "text-sm text-gray-500 dark:text-gray-400" }, description))
+      trend.showArrow !== false && (trend.isPositive ? /* @__PURE__ */ import_react21.default.createElement(import_hi23.HiArrowUp, { className: "w-4 h-4" }) : /* @__PURE__ */ import_react21.default.createElement(import_hi23.HiArrowDown, { className: "w-4 h-4" })),
+      /* @__PURE__ */ import_react21.default.createElement("span", null, Math.abs(trend.value), "%", trend.label && /* @__PURE__ */ import_react21.default.createElement("span", { className: "ml-1" }, trend.label))
+    ), description && /* @__PURE__ */ import_react21.default.createElement("p", { className: "text-sm text-gray-500 dark:text-gray-400" }, description)),
+    alert && /* @__PURE__ */ import_react21.default.createElement("div", { className: getAlertClasses() }, /* @__PURE__ */ import_react21.default.createElement(import_hi23.HiExclamationCircle, { className: "w-4 h-4" }), alert.message)
   );
 };
 var StatCard_default = StatCard;
@@ -2858,16 +3163,118 @@ var import_react22 = __toESM(require("react"));
 var Stepper = ({
   steps,
   current,
-  className = ""
+  className = "",
+  stepClassName = "",
+  stepContentClassName = "",
+  circleClassName = "",
+  activeCircleClassName = "",
+  completedCircleClassName = "",
+  inactiveCircleClassName = "",
+  labelClassName = "",
+  activeLabelClassName = "",
+  completedLabelClassName = "",
+  inactiveLabelClassName = "",
+  descriptionClassName = "",
+  activeDescriptionClassName = "",
+  completedDescriptionClassName = "",
+  inactiveDescriptionClassName = "",
+  lineClassName = "",
+  activeLineClassName = "",
+  completedLineClassName = "",
+  inactiveLineClassName = "",
+  showDescriptionOnMobile = true,
+  verticalOnMobile = false,
+  renderStep,
+  renderCircle
 }) => {
-  return /* @__PURE__ */ import_react22.default.createElement("div", { className: `flex items-center gap-4 ${className}` }, steps.map((step, idx) => /* @__PURE__ */ import_react22.default.createElement("div", { key: idx, className: "flex items-center gap-2" }, /* @__PURE__ */ import_react22.default.createElement(
+  var _a;
+  const getStepStatus = (index) => {
+    if (index < current) return "completed";
+    if (index === current) return "active";
+    return "inactive";
+  };
+  const getCircleClasses = (index) => {
+    const baseClasses = `flex items-center justify-center w-8 h-8 rounded-full border-2 font-bold transition-all ${circleClassName}`;
+    const status = getStepStatus(index);
+    switch (status) {
+      case "completed":
+        return `${baseClasses} bg-blue-600 text-white border-blue-600 ${completedCircleClassName}`;
+      case "active":
+        return `${baseClasses} bg-white dark:bg-gray-900 border-blue-600 text-blue-600 ${activeCircleClassName}`;
+      default:
+        return `${baseClasses} bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-400 ${inactiveCircleClassName}`;
+    }
+  };
+  const getLabelClasses = (index) => {
+    const baseClasses = `text-sm font-medium ${labelClassName}`;
+    const status = getStepStatus(index);
+    switch (status) {
+      case "completed":
+        return `${baseClasses} text-blue-600 ${completedLabelClassName}`;
+      case "active":
+        return `${baseClasses} text-blue-600 ${activeLabelClassName}`;
+      default:
+        return `${baseClasses} text-gray-500 dark:text-gray-400 ${inactiveLabelClassName}`;
+    }
+  };
+  const getDescriptionClasses = (index) => {
+    const baseClasses = `text-xs ${descriptionClassName}`;
+    const status = getStepStatus(index);
+    switch (status) {
+      case "completed":
+        return `${baseClasses} text-blue-500 ${completedDescriptionClassName}`;
+      case "active":
+        return `${baseClasses} text-blue-500 ${activeDescriptionClassName}`;
+      default:
+        return `${baseClasses} text-gray-500 dark:text-gray-400 ${inactiveDescriptionClassName}`;
+    }
+  };
+  const getLineClasses = (index) => {
+    const baseClasses = `w-8 h-0.5 ${lineClassName}`;
+    const status = getStepStatus(index);
+    switch (status) {
+      case "completed":
+        return `${baseClasses} bg-blue-600 ${completedLineClassName}`;
+      case "active":
+        return `${baseClasses} bg-blue-600 ${activeLineClassName}`;
+      default:
+        return `${baseClasses} bg-gray-300 dark:bg-gray-600 ${inactiveLineClassName}`;
+    }
+  };
+  return /* @__PURE__ */ import_react22.default.createElement("div", { className: "flex flex-col gap-4" }, /* @__PURE__ */ import_react22.default.createElement(
     "div",
     {
-      className: `flex items-center justify-center w-8 h-8 rounded-full border-2 font-bold transition-all
-            ${idx < current ? "bg-blue-600 text-white border-blue-600" : idx === current ? "bg-white dark:bg-gray-900 border-blue-600 text-blue-600" : "bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-400"}`
+      className: `${verticalOnMobile ? "flex-col md:flex-row" : "flex-row"} flex items-center gap-4 max-w-[85vw] overflow-x-auto md:max-w-full ${className}`
     },
-    idx + 1
-  ), /* @__PURE__ */ import_react22.default.createElement("div", { className: "flex flex-col" }, /* @__PURE__ */ import_react22.default.createElement("span", { className: "text-sm font-medium" }, step.label), step.description && /* @__PURE__ */ import_react22.default.createElement("span", { className: "text-xs text-gray-500 dark:text-gray-400" }, step.description)), idx < steps.length - 1 && /* @__PURE__ */ import_react22.default.createElement("div", { className: "w-8 h-0.5 bg-gray-300 dark:bg-gray-600 mx-2" }))));
+    steps.map((step, idx) => /* @__PURE__ */ import_react22.default.createElement(
+      "div",
+      {
+        key: idx,
+        className: `flex ${verticalOnMobile ? "flex-col md:flex-row" : "flex-row"} items-center gap-2 ${stepClassName}`
+      },
+      renderStep ? renderStep(step, idx, idx === current, idx < current) : /* @__PURE__ */ import_react22.default.createElement(import_react22.default.Fragment, null, renderCircle ? renderCircle(step, idx, idx === current, idx < current) : /* @__PURE__ */ import_react22.default.createElement("div", { className: getCircleClasses(idx) }, step.icon || idx + 1), /* @__PURE__ */ import_react22.default.createElement("div", { className: `flex flex-col ${stepContentClassName}` }, /* @__PURE__ */ import_react22.default.createElement(
+        "span",
+        {
+          className: `${getLabelClasses(
+            idx
+          )} whitespace-nowrap font-semibold`
+        },
+        step.label
+      ), step.description && /* @__PURE__ */ import_react22.default.createElement(
+        "span",
+        {
+          className: `${getDescriptionClasses(idx)} ${!showDescriptionOnMobile ? "hidden md:block" : ""} line-clamp-2 text-ellipsis`
+        },
+        step.description
+      ))),
+      idx < steps.length - 1 && /* @__PURE__ */ import_react22.default.createElement(
+        "div",
+        {
+          className: `${verticalOnMobile ? "h-8 w-0.5 md:h-0.5 md:w-8" : "w-8 h-0.5"} ${getLineClasses(idx)}`
+        }
+      )
+    ))
+  ), ((_a = steps[current]) == null ? void 0 : _a.component) && /* @__PURE__ */ import_react22.default.createElement("div", { className: "mt-4" }, steps[current].component));
 };
 var Stepper_default = Stepper;
 
@@ -2900,7 +3307,7 @@ var TagInput = ({
   const removeTag = (tagToRemove) => {
     onChange(tags.filter((tag) => tag !== tagToRemove));
   };
-  return /* @__PURE__ */ import_react23.default.createElement("div", { className: `flex flex-col gap-1 ${className}` }, label && /* @__PURE__ */ import_react23.default.createElement("label", { className: "text-sm font-medium text-black dark:text-white" }, label), /* @__PURE__ */ import_react23.default.createElement("div", { className: "flex flex-wrap gap-2 p-2 border rounded-md dark:border-gray-700 dark:bg-gray-800" }, tags.map((tag) => /* @__PURE__ */ import_react23.default.createElement(
+  return /* @__PURE__ */ import_react23.default.createElement("div", { className: `flex flex-col gap-1 ${className}` }, label && /* @__PURE__ */ import_react23.default.createElement("label", { className: "text-sm font-medium" }, label), /* @__PURE__ */ import_react23.default.createElement("div", { className: "flex flex-wrap gap-2 p-2 border rounded-md dark:border-gray-700 dark:bg-gray-800" }, tags.map((tag) => /* @__PURE__ */ import_react23.default.createElement(
     "span",
     {
       key: tag,
@@ -2924,7 +3331,7 @@ var TagInput = ({
       onChange: (e) => setInputValue(e.target.value),
       onKeyDown: handleKeyDown,
       placeholder: tags.length === 0 ? placeholder : "",
-      className: `flex-1 bg-transparent outline-none text-black dark:text-white ${inputClassName}`
+      className: `flex-1 bg-transparent outline-none  ${inputClassName}`
     }
   ))));
 };
