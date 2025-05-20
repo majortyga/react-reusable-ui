@@ -2508,8 +2508,716 @@ var Collapse = ({
 };
 var Collapse_default = Collapse;
 
+// src/components/Dropdown/Dropdown.tsx
+import React15, { useState as useState4, useRef as useRef5, useEffect as useEffect5 } from "react";
+import { FaChevronDown, FaChevronRight, FaSearch } from "react-icons/fa";
+var Dropdown = ({
+  value,
+  onChange,
+  options,
+  disabled = false,
+  isLoading = false,
+  className = "",
+  wrapperClassName = "",
+  triggerClassName = "",
+  optionsContainerClassName = "",
+  optionClassName = "",
+  colors,
+  theme = "light",
+  showArrow = true,
+  plain = false,
+  hover = false,
+  renderTrigger,
+  renderOption,
+  renderGroup,
+  onOpen,
+  onClose,
+  LinkComponent,
+  searchable = false,
+  onSearch,
+  searchPlaceholder = "Search...",
+  maxHeight = "300px",
+  closeOnSelect = true,
+  loadingSpinner,
+  checkmark,
+  groupDivider,
+  tooltip: Tooltip2,
+  badge: Badge2,
+  display = {
+    triggerIcon: true,
+    triggerDescription: false,
+    optionIcons: true,
+    optionDescriptions: true,
+    submenuIcons: true,
+    submenuDescriptions: true,
+    searchIcon: true,
+    submenuArrow: true,
+    dropdownArrow: true,
+    loadingSpinner: true,
+    checkmark: true,
+    groupDivider: true,
+    tooltips: false,
+    badges: false,
+    arrow: true
+  }
+}) => {
+  const [isOpen, setIsOpen] = useState4(false);
+  const [selectedValues, setSelectedValues] = useState4(
+    value ? [value] : []
+  );
+  const [activeSubmenu, setActiveSubmenu] = useState4(null);
+  const [position, setPosition] = useState4("bottom");
+  const [searchQuery, setSearchQuery] = useState4("");
+  const [focusedIndex, setFocusedIndex] = useState4(-1);
+  const [dropdownPosition, setDropdownPosition] = useState4({ top: "0", bottom: "auto" });
+  const dropdownRef = useRef5(null);
+  const triggerRef = useRef5(null);
+  const searchInputRef = useRef5(null);
+  const [isHovering, setIsHovering] = useState4(false);
+  const hoverTimeoutRef = useRef5(null);
+  const [submenuPosition, setSubmenuPosition] = useState4({ left: "calc(100% - 4px)", top: "0" });
+  const updateSubmenuPosition = (optionElement) => {
+    if (!optionElement) return;
+    const rect = optionElement.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const spaceRight = viewportWidth - rect.right;
+    const spaceLeft = rect.left;
+    const spaceBelow = viewportHeight - rect.top;
+    const spaceAbove = rect.top;
+    const left = spaceRight < 200 && spaceLeft > spaceRight ? "auto" : "calc(100% - 4px)";
+    const right = spaceRight < 200 && spaceLeft > spaceRight ? "calc(100% - 4px)" : "auto";
+    const top = spaceBelow < 200 && spaceAbove > spaceBelow ? "auto" : "0";
+    const bottom = spaceBelow < 200 && spaceAbove > spaceBelow ? "0" : "auto";
+    setSubmenuPosition({ left, top });
+  };
+  const updateDropdownPosition = () => {
+    if (triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const spaceBelow = viewportHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      setDropdownPosition(
+        spaceBelow < 200 && spaceAbove > spaceBelow ? { top: "auto", bottom: "100%" } : { top: "100%", bottom: "auto" }
+      );
+    }
+  };
+  useEffect5(() => {
+    const handleScroll = () => {
+      updateDropdownPosition();
+      const activeOption = document.querySelector(".submenu-active");
+      if (activeOption) {
+        updateSubmenuPosition(activeOption);
+      }
+    };
+    window.addEventListener("scroll", handleScroll, true);
+    return () => window.removeEventListener("scroll", handleScroll, true);
+  }, []);
+  const getThemeClasses = () => {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w;
+    if (colors) {
+      return {
+        trigger: plain ? colors.text || "" : `${colors.base || ""} ${colors.text || ""} ${colors.border || ""}`,
+        hover: plain ? "" : colors.hover || "",
+        focus: plain ? "" : colors.focus || "",
+        background: colors.background || "",
+        option: `${((_a = colors.option) == null ? void 0 : _a.text) || ""} ${((_c = (_b = colors.option) == null ? void 0 : _b.hover) == null ? void 0 : _c.background) || ""} ${((_e = (_d = colors.option) == null ? void 0 : _d.hover) == null ? void 0 : _e.text) || ""}`,
+        selected: `${((_g = (_f = colors.option) == null ? void 0 : _f.selected) == null ? void 0 : _g.background) || ""} ${((_i = (_h = colors.option) == null ? void 0 : _h.selected) == null ? void 0 : _i.text) || ""}`,
+        border: colors.border || "",
+        text: colors.text || "",
+        container: {
+          background: ((_j = colors.container) == null ? void 0 : _j.background) || "",
+          border: ((_k = colors.container) == null ? void 0 : _k.border) || "",
+          shadow: ((_l = colors.container) == null ? void 0 : _l.shadow) || ""
+        },
+        search: {
+          background: ((_m = colors.search) == null ? void 0 : _m.background) || "",
+          text: ((_n = colors.search) == null ? void 0 : _n.text) || "",
+          border: ((_o = colors.search) == null ? void 0 : _o.border) || "",
+          placeholder: ((_p = colors.search) == null ? void 0 : _p.placeholder) || ""
+        },
+        group: {
+          text: ((_q = colors.group) == null ? void 0 : _q.text) || "",
+          background: ((_r = colors.group) == null ? void 0 : _r.background) || ""
+        },
+        divider: colors.divider || "",
+        description: ((_s = colors.option) == null ? void 0 : _s.description) || "",
+        disabled: {
+          text: ((_u = (_t = colors.option) == null ? void 0 : _t.disabled) == null ? void 0 : _u.text) || "",
+          background: ((_w = (_v = colors.option) == null ? void 0 : _v.disabled) == null ? void 0 : _w.background) || ""
+        }
+      };
+    }
+    return theme === "dark" ? {
+      trigger: plain ? "text-white" : "bg-gray-800 text-white border-gray-700",
+      hover: "hover:bg-gray-700 hover:text-white",
+      focus: "focus:ring-gray-500 focus:border-gray-500",
+      background: "bg-gray-900",
+      option: "text-gray-200 hover:bg-gray-700 hover:text-white",
+      selected: "bg-gray-700 text-white",
+      border: "border-gray-700",
+      text: "text-white",
+      container: {
+        background: "bg-gray-900",
+        border: "border-gray-700",
+        shadow: "shadow-lg"
+      },
+      search: {
+        background: "bg-gray-800",
+        text: "text-white",
+        border: "border-gray-700",
+        placeholder: "placeholder-gray-400"
+      },
+      group: {
+        text: "text-gray-400",
+        background: "bg-gray-900"
+      },
+      divider: "bg-gray-700",
+      description: "text-gray-400",
+      disabled: {
+        text: "text-gray-500",
+        background: "bg-gray-800"
+      }
+    } : {
+      trigger: plain ? "text-gray-900" : "bg-white text-gray-900 border-gray-300",
+      hover: "hover:bg-gray-50 hover:text-gray-900",
+      focus: "focus:ring-blue-500 focus:border-blue-500",
+      background: "bg-white",
+      option: "text-gray-700 hover:bg-gray-50 hover:text-gray-900",
+      selected: "bg-blue-50 text-blue-900",
+      border: "border-gray-200",
+      text: "text-gray-900",
+      container: {
+        background: "bg-white",
+        border: "border-gray-200",
+        shadow: "shadow-lg"
+      },
+      search: {
+        background: "bg-white",
+        text: "text-gray-900",
+        border: "border-gray-300",
+        placeholder: "placeholder-gray-400"
+      },
+      group: {
+        text: "text-gray-500",
+        background: "bg-white"
+      },
+      divider: "bg-gray-200",
+      description: "text-gray-500",
+      disabled: {
+        text: "text-gray-400",
+        background: "bg-gray-50"
+      }
+    };
+  };
+  const themeClasses = getThemeClasses();
+  useEffect5(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+        setActiveSubmenu(null);
+        onClose == null ? void 0 : onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [onClose]);
+  useEffect5(() => {
+    if (triggerRef.current && isOpen) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const spaceBelow = viewportHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      setPosition(
+        spaceBelow < 200 && spaceAbove > spaceBelow ? "top" : "bottom"
+      );
+    }
+  }, [isOpen]);
+  useEffect5(() => {
+    if (isOpen && searchable && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isOpen, searchable]);
+  const handleTriggerClick = () => {
+    if (!disabled && !isLoading && !hover) {
+      setIsOpen(!isOpen);
+      if (!isOpen) {
+        onOpen == null ? void 0 : onOpen();
+      } else {
+        onClose == null ? void 0 : onClose();
+      }
+    }
+  };
+  const handleTriggerHover = (event) => {
+    if (!disabled && !isLoading && hover) {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+      setIsHovering(true);
+      setIsOpen(true);
+      updateDropdownPosition();
+      onOpen == null ? void 0 : onOpen();
+    }
+  };
+  const handleTriggerLeave = (event) => {
+    if (hover) {
+      const relatedTarget = event.relatedTarget;
+      if (relatedTarget == null ? void 0 : relatedTarget.closest(".dropdown-content")) {
+        return;
+      }
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+      hoverTimeoutRef.current = setTimeout(() => {
+        if (!isHovering) {
+          setIsOpen(false);
+          setActiveSubmenu(null);
+          onClose == null ? void 0 : onClose();
+        }
+      }, 100);
+    }
+  };
+  const handleDropdownContentHover = () => {
+    if (hover) {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+      setIsHovering(true);
+      setIsOpen(true);
+    }
+  };
+  const handleDropdownContentLeave = (event) => {
+    if (hover) {
+      const relatedTarget = event.relatedTarget;
+      if (relatedTarget == null ? void 0 : relatedTarget.closest(".dropdown-trigger")) {
+        return;
+      }
+      setIsHovering(false);
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+      hoverTimeoutRef.current = setTimeout(() => {
+        if (!isHovering) {
+          setIsOpen(false);
+          setActiveSubmenu(null);
+          onClose == null ? void 0 : onClose();
+        }
+      }, 100);
+    }
+  };
+  useEffect5(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, []);
+  const handleOptionClick = (option) => {
+    if (option.disabled) return;
+    if (option.submenu) {
+      setActiveSubmenu(option.value);
+      return;
+    }
+    setSelectedValues([option.value]);
+    onChange == null ? void 0 : onChange(option.value);
+    if (closeOnSelect) {
+      setIsOpen(false);
+      setActiveSubmenu(null);
+      onClose == null ? void 0 : onClose();
+    }
+  };
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    onSearch == null ? void 0 : onSearch(query);
+  };
+  const handleKeyDown = (event) => {
+    if (!isOpen) return;
+    switch (event.key) {
+      case "ArrowDown":
+        event.preventDefault();
+        setFocusedIndex((prev) => Math.min(prev + 1, options.length - 1));
+        break;
+      case "ArrowUp":
+        event.preventDefault();
+        setFocusedIndex((prev) => Math.max(prev - 1, 0));
+        break;
+      case "Enter":
+        event.preventDefault();
+        if (focusedIndex >= 0 && focusedIndex < options.length) {
+          handleOptionClick(options[focusedIndex]);
+        }
+        break;
+      case "Escape":
+        event.preventDefault();
+        setIsOpen(false);
+        setActiveSubmenu(null);
+        onClose == null ? void 0 : onClose();
+        break;
+    }
+  };
+  const getSelectedOption = () => {
+    return options.find((option) => option.value === value);
+  };
+  const filteredOptions = searchQuery ? options.filter(
+    (option) => {
+      var _a;
+      return !option.hideFromSearch && (option.label.toLowerCase().includes(searchQuery.toLowerCase()) || ((_a = option.description) == null ? void 0 : _a.toLowerCase().includes(searchQuery.toLowerCase())));
+    }
+  ) : options;
+  const selectedOption = getSelectedOption();
+  const renderGroupHeader = (group) => {
+    if (renderGroup) {
+      return renderGroup(group);
+    }
+    return /* @__PURE__ */ React15.createElement(
+      "div",
+      {
+        className: `px-4 py-2 text-xs font-semibold ${themeClasses.group.text} ${themeClasses.group.background}`
+      },
+      group
+    );
+  };
+  const renderGroupDivider = () => {
+    if (groupDivider) {
+      return groupDivider;
+    }
+    return /* @__PURE__ */ React15.createElement("div", { className: `h-px ${themeClasses.divider} my-1` });
+  };
+  const handleOptionHover = (option, event) => {
+    if (option.submenu && option.submenu.length > 0) {
+      const target = event.currentTarget;
+      target.classList.add("submenu-active");
+      updateSubmenuPosition(target);
+      setActiveSubmenu(option.value);
+    }
+  };
+  const handleOptionLeave = (event) => {
+    const target = event.currentTarget;
+    const relatedTarget = event.relatedTarget;
+    if (relatedTarget == null ? void 0 : relatedTarget.closest(".submenu-container")) {
+      return;
+    }
+    target.classList.remove("submenu-active");
+    setActiveSubmenu(null);
+  };
+  const handleSubmenuHover = (option) => {
+    if (option.submenu && option.submenu.length > 0) {
+      setActiveSubmenu(option.value);
+    }
+  };
+  const handleSubmenuLeave = (event) => {
+    const relatedTarget = event.relatedTarget;
+    if (relatedTarget == null ? void 0 : relatedTarget.closest(".group")) {
+      return;
+    }
+    setActiveSubmenu(null);
+  };
+  const renderOptions = (options2) => {
+    const groupedOptions = options2.reduce((acc, option) => {
+      const group = option.group || "default";
+      if (!acc[group]) {
+        acc[group] = [];
+      }
+      acc[group].push(option);
+      return acc;
+    }, {});
+    return Object.entries(groupedOptions).map(
+      ([group, groupOptions], groupIndex) => /* @__PURE__ */ React15.createElement("div", { key: group }, group !== "default" && renderGroupHeader(group), groupOptions.map((option, index) => {
+        var _a, _b, _c;
+        const isSelected = selectedValues.includes(option.value);
+        const isSubmenuActive = activeSubmenu === option.value;
+        const isFocused = index === focusedIndex;
+        return renderOption ? /* @__PURE__ */ React15.createElement("div", { key: option.value }, renderOption(option, isSelected)) : /* @__PURE__ */ React15.createElement(
+          "div",
+          {
+            key: option.value,
+            className: "relative group",
+            onMouseEnter: (event) => handleOptionHover(option, event),
+            onMouseLeave: handleOptionLeave
+          },
+          option.href ? LinkComponent ? /* @__PURE__ */ React15.createElement(
+            LinkComponent,
+            {
+              href: option.href,
+              className: `block w-full px-4 py-2 text-left text-sm ${option.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"} ${isSelected ? themeClasses.selected : themeClasses.option} ${option.className || ""} ${optionClassName} ${isFocused ? "bg-gray-100 dark:bg-gray-800" : ""}`,
+              onClick: () => !option.disabled && handleOptionClick(option)
+            },
+            /* @__PURE__ */ React15.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React15.createElement("div", { className: "flex items-center" }, display.optionIcons && option.icon && /* @__PURE__ */ React15.createElement("span", { className: "mr-2" }, React15.createElement(option.icon, {
+              className: "h-5 w-5"
+            })), /* @__PURE__ */ React15.createElement("div", null, /* @__PURE__ */ React15.createElement("div", null, option.label), display.optionDescriptions && option.description && /* @__PURE__ */ React15.createElement(
+              "div",
+              {
+                className: `text-xs opacity-75 ${themeClasses.text}`
+              },
+              option.description
+            ))), /* @__PURE__ */ React15.createElement("div", { className: "flex items-center" }, display.badges && Badge2 && ((_a = option.data) == null ? void 0 : _a.badge) && /* @__PURE__ */ React15.createElement(
+              Badge2,
+              {
+                content: option.data.badge
+              }
+            ), display.checkmark && isSelected && (checkmark || /* @__PURE__ */ React15.createElement("span", { className: "ml-2" }, "\u2713")), display.arrow && option.submenu && /* @__PURE__ */ React15.createElement(FaChevronRight, { className: "h-4 w-4 ml-2" })))
+          ) : /* @__PURE__ */ React15.createElement(
+            "a",
+            {
+              href: option.href,
+              className: `block w-full px-4 py-2 text-left text-sm ${option.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"} ${isSelected ? themeClasses.selected : themeClasses.option} ${option.className || ""} ${optionClassName} ${isFocused ? "bg-gray-100 dark:bg-gray-800" : ""}`,
+              onClick: () => !option.disabled && handleOptionClick(option)
+            },
+            /* @__PURE__ */ React15.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React15.createElement("div", { className: "flex items-center" }, display.optionIcons && option.icon && /* @__PURE__ */ React15.createElement("span", { className: "mr-2" }, React15.createElement(option.icon, {
+              className: "h-5 w-5"
+            })), /* @__PURE__ */ React15.createElement("div", null, /* @__PURE__ */ React15.createElement("div", null, option.label), display.optionDescriptions && option.description && /* @__PURE__ */ React15.createElement(
+              "div",
+              {
+                className: `text-xs opacity-75 ${themeClasses.text}`
+              },
+              option.description
+            ))), /* @__PURE__ */ React15.createElement("div", { className: "flex items-center" }, display.badges && Badge2 && ((_b = option.data) == null ? void 0 : _b.badge) && /* @__PURE__ */ React15.createElement(
+              Badge2,
+              {
+                content: option.data.badge
+              }
+            ), display.checkmark && isSelected && (checkmark || /* @__PURE__ */ React15.createElement("span", { className: "ml-2" }, "\u2713")), display.arrow && option.submenu && /* @__PURE__ */ React15.createElement(FaChevronRight, { className: "h-4 w-4 ml-2" })))
+          ) : /* @__PURE__ */ React15.createElement(
+            "button",
+            {
+              type: "button",
+              onClick: () => handleOptionClick(option),
+              disabled: option.disabled,
+              className: `w-full px-4 py-2 text-left text-sm ${option.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"} ${isSelected ? themeClasses.selected : themeClasses.option} ${option.className || ""} ${optionClassName} ${isFocused ? "bg-gray-100 dark:bg-gray-800" : ""}`
+            },
+            /* @__PURE__ */ React15.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React15.createElement("div", { className: "flex items-center" }, display.optionIcons && option.icon && /* @__PURE__ */ React15.createElement("span", { className: "mr-2" }, React15.createElement(option.icon, {
+              className: "h-5 w-5"
+            })), /* @__PURE__ */ React15.createElement("div", null, /* @__PURE__ */ React15.createElement("div", null, option.label), display.optionDescriptions && option.description && /* @__PURE__ */ React15.createElement(
+              "div",
+              {
+                className: `text-xs opacity-75 ${themeClasses.text}`
+              },
+              option.description
+            ))), /* @__PURE__ */ React15.createElement("div", { className: "flex items-center" }, display.badges && Badge2 && ((_c = option.data) == null ? void 0 : _c.badge) && /* @__PURE__ */ React15.createElement(
+              Badge2,
+              {
+                content: option.data.badge
+              }
+            ), display.checkmark && isSelected && (checkmark || /* @__PURE__ */ React15.createElement("span", { className: "ml-2" }, "\u2713")), display.arrow && option.submenu && /* @__PURE__ */ React15.createElement(FaChevronRight, { className: "h-4 w-4 ml-2" })))
+          ),
+          isSubmenuActive && option.submenu && option.submenu.length > 0 && /* @__PURE__ */ React15.createElement(
+            "div",
+            {
+              className: "absolute z-50 submenu-container",
+              style: {
+                position: "absolute",
+                left: submenuPosition.left,
+                right: submenuPosition.left === "auto" ? "calc(100% - 4px)" : "auto",
+                top: submenuPosition.top,
+                bottom: submenuPosition.top === "auto" ? "0" : "auto",
+                zIndex: 1e3
+              },
+              onMouseEnter: () => handleSubmenuHover(option),
+              onMouseLeave: handleSubmenuLeave
+            },
+            /* @__PURE__ */ React15.createElement(
+              "div",
+              {
+                className: `${themeClasses.background} border ${themeClasses.border} rounded-md shadow-lg ${optionsContainerClassName}`,
+                style: {
+                  minWidth: "200px",
+                  marginLeft: "4px"
+                },
+                onClick: (e) => e.stopPropagation()
+              },
+              option.submenu.map((subOption) => {
+                var _a2, _b2, _c2;
+                return /* @__PURE__ */ React15.createElement(
+                  "div",
+                  {
+                    key: subOption.value,
+                    className: "relative",
+                    onMouseEnter: () => handleSubmenuHover(subOption),
+                    onMouseLeave: handleSubmenuLeave
+                  },
+                  subOption.href ? LinkComponent ? /* @__PURE__ */ React15.createElement(
+                    LinkComponent,
+                    {
+                      href: subOption.href,
+                      className: `block w-full px-4 py-2 text-left text-sm ${subOption.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"} ${themeClasses.option} ${themeClasses.container.background} ${subOption.className || ""} ${optionClassName}`,
+                      onClick: () => !subOption.disabled && handleOptionClick(subOption)
+                    },
+                    /* @__PURE__ */ React15.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React15.createElement("div", { className: "flex items-center" }, display.submenuIcons && subOption.icon && /* @__PURE__ */ React15.createElement("span", { className: "mr-2" }, React15.createElement(
+                      subOption.icon,
+                      {
+                        className: "h-5 w-5"
+                      }
+                    )), /* @__PURE__ */ React15.createElement("div", null, /* @__PURE__ */ React15.createElement("div", null, subOption.label), display.submenuDescriptions && subOption.description && /* @__PURE__ */ React15.createElement(
+                      "div",
+                      {
+                        className: `text-xs opacity-75 ${themeClasses.text}`
+                      },
+                      subOption.description
+                    ))), /* @__PURE__ */ React15.createElement("div", { className: "flex items-center" }, display.badges && Badge2 && ((_a2 = subOption.data) == null ? void 0 : _a2.badge) && /* @__PURE__ */ React15.createElement(
+                      Badge2,
+                      {
+                        content: subOption.data.badge
+                      }
+                    ), display.checkmark && selectedValues.includes(
+                      subOption.value
+                    ) && (checkmark || /* @__PURE__ */ React15.createElement("span", { className: "ml-2" }, "\u2713")), display.arrow && subOption.submenu && subOption.submenu.length > 0 && /* @__PURE__ */ React15.createElement(FaChevronRight, { className: "h-4 w-4 ml-2" })))
+                  ) : /* @__PURE__ */ React15.createElement(
+                    "a",
+                    {
+                      href: subOption.href,
+                      className: `block w-full px-4 py-2 text-left text-sm ${subOption.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"} ${themeClasses.option} ${subOption.className || ""} ${optionClassName}`,
+                      onClick: () => !subOption.disabled && handleOptionClick(subOption)
+                    },
+                    /* @__PURE__ */ React15.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React15.createElement("div", { className: "flex items-center" }, display.submenuIcons && subOption.icon && /* @__PURE__ */ React15.createElement("span", { className: "mr-2" }, React15.createElement(
+                      subOption.icon,
+                      {
+                        className: "h-5 w-5"
+                      }
+                    )), /* @__PURE__ */ React15.createElement("div", null, /* @__PURE__ */ React15.createElement("div", null, subOption.label), display.submenuDescriptions && subOption.description && /* @__PURE__ */ React15.createElement(
+                      "div",
+                      {
+                        className: `text-xs opacity-75 ${themeClasses.text}`
+                      },
+                      subOption.description
+                    ))), /* @__PURE__ */ React15.createElement("div", { className: "flex items-center" }, display.badges && Badge2 && ((_b2 = subOption.data) == null ? void 0 : _b2.badge) && /* @__PURE__ */ React15.createElement(
+                      Badge2,
+                      {
+                        content: subOption.data.badge
+                      }
+                    ), display.checkmark && selectedValues.includes(
+                      subOption.value
+                    ) && (checkmark || /* @__PURE__ */ React15.createElement("span", { className: "ml-2" }, "\u2713")), display.arrow && subOption.submenu && subOption.submenu.length > 0 && /* @__PURE__ */ React15.createElement(FaChevronRight, { className: "h-4 w-4 ml-2" })))
+                  ) : /* @__PURE__ */ React15.createElement(
+                    "button",
+                    {
+                      type: "button",
+                      onClick: () => handleOptionClick(subOption),
+                      disabled: subOption.disabled,
+                      className: `w-full px-4 py-2 text-left text-sm ${subOption.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"} ${themeClasses.option} ${subOption.className || ""} ${optionClassName}`
+                    },
+                    /* @__PURE__ */ React15.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React15.createElement("div", { className: "flex items-center" }, display.submenuIcons && subOption.icon && /* @__PURE__ */ React15.createElement("span", { className: "mr-2" }, React15.createElement(subOption.icon, {
+                      className: "h-5 w-5"
+                    })), /* @__PURE__ */ React15.createElement("div", null, /* @__PURE__ */ React15.createElement("div", null, subOption.label), display.submenuDescriptions && subOption.description && /* @__PURE__ */ React15.createElement(
+                      "div",
+                      {
+                        className: `text-xs opacity-75 ${themeClasses.text}`
+                      },
+                      subOption.description
+                    ))), /* @__PURE__ */ React15.createElement("div", { className: "flex items-center" }, display.badges && Badge2 && ((_c2 = subOption.data) == null ? void 0 : _c2.badge) && /* @__PURE__ */ React15.createElement(
+                      Badge2,
+                      {
+                        content: subOption.data.badge
+                      }
+                    ), display.checkmark && selectedValues.includes(
+                      subOption.value
+                    ) && (checkmark || /* @__PURE__ */ React15.createElement("span", { className: "ml-2" }, "\u2713")), display.arrow && subOption.submenu && subOption.submenu.length > 0 && /* @__PURE__ */ React15.createElement(FaChevronRight, { className: "h-4 w-4 ml-2" })))
+                  )
+                );
+              })
+            )
+          )
+        );
+      }), groupIndex < Object.keys(groupedOptions).length - 1 && display.groupDivider && renderGroupDivider())
+    );
+  };
+  return /* @__PURE__ */ React15.createElement(
+    "div",
+    {
+      ref: dropdownRef,
+      className: `relative inline-block ${wrapperClassName}`,
+      onMouseEnter: handleTriggerHover,
+      onMouseLeave: handleTriggerLeave,
+      onKeyDown: handleKeyDown
+    },
+    renderTrigger ? renderTrigger(selectedOption) : /* @__PURE__ */ React15.createElement(
+      "button",
+      {
+        ref: triggerRef,
+        type: "button",
+        onClick: handleTriggerClick,
+        disabled: disabled || isLoading,
+        className: `inline-flex items-center px-4 py-2 text-sm font-medium transition-colors dropdown-trigger ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"} ${themeClasses.trigger} ${themeClasses.hover} ${themeClasses.focus} ${triggerClassName} ${className}`,
+        onMouseEnter: handleTriggerHover,
+        onMouseLeave: handleTriggerLeave
+      },
+      isLoading && display.loadingSpinner ? loadingSpinner || /* @__PURE__ */ React15.createElement("div", { className: "flex items-center justify-center" }, /* @__PURE__ */ React15.createElement(
+        "svg",
+        {
+          className: "animate-spin h-5 w-5",
+          xmlns: "http://www.w3.org/2000/svg",
+          fill: "none",
+          viewBox: "0 0 24 24"
+        },
+        /* @__PURE__ */ React15.createElement(
+          "circle",
+          {
+            className: "opacity-25",
+            cx: "12",
+            cy: "12",
+            r: "10",
+            stroke: "currentColor",
+            strokeWidth: "4"
+          }
+        ),
+        /* @__PURE__ */ React15.createElement(
+          "path",
+          {
+            className: "opacity-75",
+            fill: "currentColor",
+            d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          }
+        )
+      )) : /* @__PURE__ */ React15.createElement("div", { className: "flex items-center" }, display.triggerIcon && (selectedOption == null ? void 0 : selectedOption.icon) && /* @__PURE__ */ React15.createElement("span", { className: "mr-2" }, React15.createElement(selectedOption.icon, {
+        className: "h-5 w-5"
+      })), /* @__PURE__ */ React15.createElement("div", null, /* @__PURE__ */ React15.createElement("div", null, (selectedOption == null ? void 0 : selectedOption.label) || "Menu"), display.triggerDescription && (selectedOption == null ? void 0 : selectedOption.description) && /* @__PURE__ */ React15.createElement("div", { className: "text-xs opacity-75" }, selectedOption.description)), showArrow && display.dropdownArrow && /* @__PURE__ */ React15.createElement(
+        FaChevronDown,
+        {
+          className: `ml-2 h-4 w-4 transition-transform ${isOpen ? "transform rotate-180" : ""}`
+        }
+      ))
+    ),
+    isOpen && /* @__PURE__ */ React15.createElement(
+      "div",
+      {
+        className: `absolute z-10 min-w-[200px] dropdown-content ${themeClasses.container.background} border ${themeClasses.container.border} ${themeClasses.container.shadow} rounded-md ${optionsContainerClassName}`,
+        style: {
+          maxHeight,
+          // Add a small buffer zone at the top
+          marginTop: "-4px",
+          paddingTop: "4px",
+          top: dropdownPosition.top,
+          bottom: dropdownPosition.bottom
+        },
+        onMouseEnter: handleDropdownContentHover,
+        onMouseLeave: handleDropdownContentLeave
+      },
+      searchable && /* @__PURE__ */ React15.createElement("div", { className: `p-2 border-b ${themeClasses.border}` }, /* @__PURE__ */ React15.createElement("div", { className: "relative" }, display.searchIcon && /* @__PURE__ */ React15.createElement(FaSearch, { className: "absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" }), /* @__PURE__ */ React15.createElement(
+        "input",
+        {
+          ref: searchInputRef,
+          type: "text",
+          value: searchQuery,
+          onChange: (e) => handleSearch(e.target.value),
+          placeholder: searchPlaceholder,
+          className: `w-full pl-10 pr-4 py-2 text-sm rounded-md ${themeClasses.search.background} ${themeClasses.search.text} ${themeClasses.search.border} focus:outline-none focus:ring-2 focus:ring-blue-500 ${themeClasses.search.placeholder}`
+        }
+      ))),
+      /* @__PURE__ */ React15.createElement(
+        "div",
+        {
+          style: {
+            maxHeight: `calc(${maxHeight} - ${searchable ? "60px" : "0px"})`
+          }
+        },
+        renderOptions(filteredOptions)
+      )
+    )
+  );
+};
+var Dropdown_default = Dropdown;
+
 // src/components/List/List.tsx
-import React15 from "react";
+import React16 from "react";
 var List = ({
   items,
   loading = false,
@@ -2520,14 +3228,14 @@ var List = ({
   contentClassName = "",
   actionClassName = ""
 }) => {
-  return /* @__PURE__ */ React15.createElement(
+  return /* @__PURE__ */ React16.createElement(
     "div",
     {
       className: `divide-y divide-gray-200 dark:divide-gray-700 ${className}`
     },
-    loading ? /* @__PURE__ */ React15.createElement("div", { className: "p-4 text-center text-gray-500 dark:text-gray-400" }, "Loading...") : items.length === 0 ? /* @__PURE__ */ React15.createElement("div", { className: "p-4 text-center text-gray-500 dark:text-gray-400" }, emptyText) : items.map((item) => {
+    loading ? /* @__PURE__ */ React16.createElement("div", { className: "p-4 text-center text-gray-500 dark:text-gray-400" }, "Loading...") : items.length === 0 ? /* @__PURE__ */ React16.createElement("div", { className: "p-4 text-center text-gray-500 dark:text-gray-400" }, emptyText) : items.map((item) => {
       const Icon = item.icon;
-      return /* @__PURE__ */ React15.createElement(
+      return /* @__PURE__ */ React16.createElement(
         "div",
         {
           key: item.id,
@@ -2539,7 +3247,7 @@ var List = ({
               `,
           onClick: item.disabled ? void 0 : item.onClick
         },
-        item.avatar ? /* @__PURE__ */ React15.createElement(
+        item.avatar ? /* @__PURE__ */ React16.createElement(
           "img",
           {
             src: item.avatar,
@@ -2548,8 +3256,8 @@ var List = ({
             height: 40,
             className: "w-10 h-10 rounded-full object-cover"
           }
-        ) : Icon ? /* @__PURE__ */ React15.createElement("div", { className: "flex-shrink-0 p-2 rounded-full bg-gray-100 dark:bg-gray-800" }, /* @__PURE__ */ React15.createElement(Icon, { className: "w-6 h-6 text-gray-500 dark:text-gray-400" })) : null,
-        /* @__PURE__ */ React15.createElement("div", { className: `flex-1 min-w-0 ${contentClassName}` }, /* @__PURE__ */ React15.createElement(
+        ) : Icon ? /* @__PURE__ */ React16.createElement("div", { className: "flex-shrink-0 p-2 rounded-full bg-gray-100 dark:bg-gray-800" }, /* @__PURE__ */ React16.createElement(Icon, { className: "w-6 h-6 text-gray-500 dark:text-gray-400" })) : null,
+        /* @__PURE__ */ React16.createElement("div", { className: `flex-1 min-w-0 ${contentClassName}` }, /* @__PURE__ */ React16.createElement(
           "h3",
           {
             className: `
@@ -2558,8 +3266,8 @@ var List = ({
                   `
           },
           item.title
-        ), item.description && /* @__PURE__ */ React15.createElement("p", { className: "mt-1 text-sm text-gray-500 dark:text-gray-400" }, item.description)),
-        item.actions && /* @__PURE__ */ React15.createElement(
+        ), item.description && /* @__PURE__ */ React16.createElement("p", { className: "mt-1 text-sm text-gray-500 dark:text-gray-400" }, item.description)),
+        item.actions && /* @__PURE__ */ React16.createElement(
           "div",
           {
             className: `
@@ -2576,7 +3284,7 @@ var List = ({
 var List_default = List;
 
 // src/components/Pagination/Pagination.tsx
-import React16 from "react";
+import React17 from "react";
 import {
   HiChevronLeft as HiChevronLeft2,
   HiChevronRight as HiChevronRight2,
@@ -2678,20 +3386,20 @@ var Pagination = ({
     const start = (current - 1) * pageSize + 1;
     const end = Math.min(current * pageSize, total);
     const text = totalText ? totalText(total, [start, end]) : `Showing ${start}-${end} of ${total} items`;
-    return /* @__PURE__ */ React16.createElement("span", { className: "text-gray-600 dark:text-gray-400" }, text);
+    return /* @__PURE__ */ React17.createElement("span", { className: "text-gray-600 dark:text-gray-400" }, text);
   };
   const renderCurrent = () => {
     if (!showCurrent) return null;
     const text = currentText ? currentText(current, pageCount) : `Page ${current} of ${pageCount}`;
-    return /* @__PURE__ */ React16.createElement("span", { className: "text-gray-600 dark:text-gray-400" }, text);
+    return /* @__PURE__ */ React17.createElement("span", { className: "text-gray-600 dark:text-gray-400" }, text);
   };
-  return /* @__PURE__ */ React16.createElement(
+  return /* @__PURE__ */ React17.createElement(
     "div",
     {
       className: `flex items-center gap-2 overflow-x-auto max-w-[80vw] md:max-w-full ${className}`
     },
     renderTotal(),
-    /* @__PURE__ */ React16.createElement("div", { className: "flex items-center gap-1" }, showFirstLast && /* @__PURE__ */ React16.createElement(
+    /* @__PURE__ */ React17.createElement("div", { className: "flex items-center gap-1" }, showFirstLast && /* @__PURE__ */ React17.createElement(
       "button",
       {
         className: getButtonClasses(false, current === 1),
@@ -2699,15 +3407,15 @@ var Pagination = ({
         disabled: disabled || current === 1
       },
       icons.first || "\xAB"
-    ), /* @__PURE__ */ React16.createElement(
+    ), /* @__PURE__ */ React17.createElement(
       "button",
       {
         className: getButtonClasses(false, current === 1),
         onClick: () => onChange(current - 1),
         disabled: disabled || current === 1
       },
-      icons.prev || /* @__PURE__ */ React16.createElement(HiChevronLeft2, { className: "w-5 h-5" })
-    ), getPageNumbers().map((page, index) => /* @__PURE__ */ React16.createElement(React16.Fragment, { key: index }, page === "..." ? /* @__PURE__ */ React16.createElement("span", { className: "px-2 py-1" }, icons.ellipsis || /* @__PURE__ */ React16.createElement(HiEllipsisHorizontal, { className: "w-5 h-5" })) : /* @__PURE__ */ React16.createElement(
+      icons.prev || /* @__PURE__ */ React17.createElement(HiChevronLeft2, { className: "w-5 h-5" })
+    ), getPageNumbers().map((page, index) => /* @__PURE__ */ React17.createElement(React17.Fragment, { key: index }, page === "..." ? /* @__PURE__ */ React17.createElement("span", { className: "px-2 py-1" }, icons.ellipsis || /* @__PURE__ */ React17.createElement(HiEllipsisHorizontal, { className: "w-5 h-5" })) : /* @__PURE__ */ React17.createElement(
       "button",
       {
         className: getButtonClasses(page === current),
@@ -2715,15 +3423,15 @@ var Pagination = ({
         disabled
       },
       page
-    ))), /* @__PURE__ */ React16.createElement(
+    ))), /* @__PURE__ */ React17.createElement(
       "button",
       {
         className: getButtonClasses(false, current === pageCount),
         onClick: () => onChange(current + 1),
         disabled: disabled || current === pageCount
       },
-      icons.next || /* @__PURE__ */ React16.createElement(HiChevronRight2, { className: "w-5 h-5" })
-    ), showFirstLast && /* @__PURE__ */ React16.createElement(
+      icons.next || /* @__PURE__ */ React17.createElement(HiChevronRight2, { className: "w-5 h-5" })
+    ), showFirstLast && /* @__PURE__ */ React17.createElement(
       "button",
       {
         className: getButtonClasses(false, current === pageCount),
@@ -2732,7 +3440,7 @@ var Pagination = ({
       },
       icons.last || "\xBB"
     )),
-    showSizeChanger && /* @__PURE__ */ React16.createElement(
+    showSizeChanger && /* @__PURE__ */ React17.createElement(
       "select",
       {
         className: `
@@ -2747,7 +3455,7 @@ var Pagination = ({
         onChange: handlePageSizeChange,
         disabled
       },
-      pageSizeOptions.map((size2) => /* @__PURE__ */ React16.createElement("option", { key: size2, value: size2 }, size2, " / page"))
+      pageSizeOptions.map((size2) => /* @__PURE__ */ React17.createElement("option", { key: size2, value: size2 }, size2, " / page"))
     ),
     renderCurrent()
   );
@@ -2755,7 +3463,7 @@ var Pagination = ({
 var Pagination_default = Pagination;
 
 // src/components/Popover/Popover.tsx
-import React17, { useState as useState4, useRef as useRef5, useEffect as useEffect5 } from "react";
+import React18, { useState as useState5, useRef as useRef6, useEffect as useEffect6 } from "react";
 var Popover = ({
   trigger,
   content,
@@ -2763,9 +3471,9 @@ var Popover = ({
   hover = false,
   className = ""
 }) => {
-  const [open, setOpen] = useState4(false);
-  const ref = useRef5(null);
-  useEffect5(() => {
+  const [open, setOpen] = useState5(false);
+  const ref = useRef6(null);
+  useEffect6(() => {
     if (!hover && open) {
       const handleClick = (e) => {
         if (ref.current && !ref.current.contains(e.target)) {
@@ -2776,7 +3484,7 @@ var Popover = ({
       return () => document.removeEventListener("mousedown", handleClick);
     }
   }, [open, hover]);
-  return /* @__PURE__ */ React17.createElement("div", { ref, className: "relative inline-block" }, /* @__PURE__ */ React17.createElement(
+  return /* @__PURE__ */ React18.createElement("div", { ref, className: "relative inline-block" }, /* @__PURE__ */ React18.createElement(
     "span",
     {
       onClick: () => !hover && setOpen((v) => !v),
@@ -2785,7 +3493,7 @@ var Popover = ({
       className: "cursor-pointer"
     },
     trigger
-  ), open && /* @__PURE__ */ React17.createElement(
+  ), open && /* @__PURE__ */ React18.createElement(
     "div",
     {
       className: `absolute z-30 min-w-[160px] p-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded shadow-lg ${className}`,
@@ -2803,7 +3511,7 @@ var Popover = ({
 var Popover_default = Popover;
 
 // src/components/Progress/Progress.tsx
-import React18 from "react";
+import React19 from "react";
 var Progress = ({
   value,
   max = 100,
@@ -2853,7 +3561,7 @@ var Progress = ({
   const percentage = Math.min(100, Math.max(0, value / max * 100));
   const renderValue = () => {
     if (!showValue) return null;
-    return /* @__PURE__ */ React18.createElement(
+    return /* @__PURE__ */ React19.createElement(
       "span",
       {
         className: `text-xs font-medium ${valuePosition === "inside" ? "text-white" : "text-gray-700 dark:text-gray-300"} ${valueClassName}`
@@ -2864,7 +3572,7 @@ var Progress = ({
   };
   const renderLabel = () => {
     if (!label) return null;
-    return /* @__PURE__ */ React18.createElement(
+    return /* @__PURE__ */ React19.createElement(
       "div",
       {
         className: `text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 ${labelPosition === "bottom" ? "mt-1" : "mb-1"} ${labelClassName}`
@@ -2872,12 +3580,12 @@ var Progress = ({
       label
     );
   };
-  return /* @__PURE__ */ React18.createElement("div", { className: `w-full ${className}` }, labelPosition === "top" && renderLabel(), /* @__PURE__ */ React18.createElement(
+  return /* @__PURE__ */ React19.createElement("div", { className: `w-full ${className}` }, labelPosition === "top" && renderLabel(), /* @__PURE__ */ React19.createElement(
     "div",
     {
       className: `relative w-full overflow-hidden ${sizeClasses[size]} ${roundedClasses[rounded]} ${variantClasses[variant]} ${trackClassName}`
     },
-    /* @__PURE__ */ React18.createElement(
+    /* @__PURE__ */ React19.createElement(
       "div",
       {
         className: `h-full transition-all duration-300 ${barVariantClasses[variant]} ${roundedClasses[rounded]} ${striped ? "bg-stripes" : ""} ${animated ? "animate-progress" : ""} ${barClassName}`,
@@ -2885,12 +3593,12 @@ var Progress = ({
       },
       valuePosition === "inside" && renderValue()
     )
-  ), valuePosition === "outside" && /* @__PURE__ */ React18.createElement("div", { className: "mt-1 flex justify-end" }, renderValue()), labelPosition === "bottom" && renderLabel());
+  ), valuePosition === "outside" && /* @__PURE__ */ React19.createElement("div", { className: "mt-1 flex justify-end" }, renderValue()), labelPosition === "bottom" && renderLabel());
 };
 var Progress_default = Progress;
 
 // src/components/Rating/Rating.tsx
-import React19 from "react";
+import React20 from "react";
 var Rating = ({
   value,
   max = 5,
@@ -2907,17 +3615,17 @@ var Rating = ({
     const isHalf = event.clientX - rect.left < rect.width / 2;
     onChange(index + (isHalf ? 0.5 : 1));
   };
-  const stars = /* @__PURE__ */ React19.createElement("div", { className: "flex items-center gap-1" }, Array.from({ length: max }, (_, i) => {
+  const stars = /* @__PURE__ */ React20.createElement("div", { className: "flex items-center gap-1" }, Array.from({ length: max }, (_, i) => {
     const filled = i + 1 <= value;
     const half = !filled && i + 0.5 <= value;
-    return /* @__PURE__ */ React19.createElement(
+    return /* @__PURE__ */ React20.createElement(
       "span",
       {
         key: i,
         className: `cursor-pointer ${readOnly ? "pointer-events-none" : ""}`,
         onClick: (e) => handleClick(i, e)
       },
-      /* @__PURE__ */ React19.createElement(
+      /* @__PURE__ */ React20.createElement(
         "svg",
         {
           className: `w-6 h-6 ${filled ? "text-yellow-400" : half ? "text-yellow-300" : "text-gray-300 dark:text-gray-600"}`,
@@ -2926,31 +3634,31 @@ var Rating = ({
           stroke: "currentColor",
           strokeWidth: "1.5"
         },
-        half ? /* @__PURE__ */ React19.createElement(React19.Fragment, null, /* @__PURE__ */ React19.createElement(
+        half ? /* @__PURE__ */ React20.createElement(React20.Fragment, null, /* @__PURE__ */ React20.createElement(
           "path",
           {
             d: "M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z",
             fill: "currentColor",
             style: { clipPath: "inset(0 50% 0 0)" }
           }
-        ), /* @__PURE__ */ React19.createElement(
+        ), /* @__PURE__ */ React20.createElement(
           "path",
           {
             d: "M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z",
             fill: "none",
             style: { clipPath: "inset(0 0 0 50%)" }
           }
-        )) : /* @__PURE__ */ React19.createElement("path", { d: "M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" })
+        )) : /* @__PURE__ */ React20.createElement("path", { d: "M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" })
       )
     );
   }));
-  const info = showInfo && /* @__PURE__ */ React19.createElement("div", { className: "text-sm text-gray-600 dark:text-gray-400" }, value.toFixed(1), " / ", max);
-  return /* @__PURE__ */ React19.createElement("div", { className: `flex flex-col gap-1 ${className}` }, infoPosition === "top" && info, stars, infoPosition === "bottom" && info);
+  const info = showInfo && /* @__PURE__ */ React20.createElement("div", { className: "text-sm text-gray-600 dark:text-gray-400" }, value.toFixed(1), " / ", max);
+  return /* @__PURE__ */ React20.createElement("div", { className: `flex flex-col gap-1 ${className}` }, infoPosition === "top" && info, stars, infoPosition === "bottom" && info);
 };
 var Rating_default = Rating;
 
 // src/components/Slider/Slider.tsx
-import React20 from "react";
+import React21 from "react";
 var Slider = ({
   min = 0,
   max = 100,
@@ -2959,7 +3667,7 @@ var Slider = ({
   onChange,
   className = ""
 }) => {
-  return /* @__PURE__ */ React20.createElement("div", { className: `flex items-center gap-4 ${className}` }, /* @__PURE__ */ React20.createElement(
+  return /* @__PURE__ */ React21.createElement("div", { className: `flex items-center gap-4 ${className}` }, /* @__PURE__ */ React21.createElement(
     "input",
     {
       type: "range",
@@ -2970,12 +3678,12 @@ var Slider = ({
       onChange: (e) => onChange(Number(e.target.value)),
       className: "w-full accent-blue-600"
     }
-  ), /* @__PURE__ */ React20.createElement("span", { className: "w-10 text-right text-sm font-medium" }, value));
+  ), /* @__PURE__ */ React21.createElement("span", { className: "w-10 text-right text-sm font-medium" }, value));
 };
 var Slider_default = Slider;
 
 // src/components/StatCard/StatCard.tsx
-import React21 from "react";
+import React22 from "react";
 import { HiArrowUp, HiArrowDown, HiExclamationCircle } from "react-icons/hi2";
 var StatCard = ({
   title,
@@ -3053,9 +3761,9 @@ var StatCard = ({
         return baseClasses;
     }
   };
-  const renderSkeleton = () => /* @__PURE__ */ React21.createElement("div", { className: "animate-pulse" }, /* @__PURE__ */ React21.createElement("div", { className: "h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-2" }), /* @__PURE__ */ React21.createElement("div", { className: "h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-4" }), /* @__PURE__ */ React21.createElement("div", { className: "h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3" }));
+  const renderSkeleton = () => /* @__PURE__ */ React22.createElement("div", { className: "animate-pulse" }, /* @__PURE__ */ React22.createElement("div", { className: "h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-2" }), /* @__PURE__ */ React22.createElement("div", { className: "h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-4" }), /* @__PURE__ */ React22.createElement("div", { className: "h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3" }));
   if (loading || skeleton) {
-    return /* @__PURE__ */ React21.createElement(
+    return /* @__PURE__ */ React22.createElement(
       "div",
       {
         className: `
@@ -3067,7 +3775,7 @@ var StatCard = ({
       renderSkeleton()
     );
   }
-  return /* @__PURE__ */ React21.createElement(
+  return /* @__PURE__ */ React22.createElement(
     "div",
     {
       className: `
@@ -3078,7 +3786,7 @@ var StatCard = ({
       `,
       onClick
     },
-    /* @__PURE__ */ React21.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React21.createElement("div", null, /* @__PURE__ */ React21.createElement("p", { className: "text-sm font-medium text-gray-500 dark:text-gray-400" }, title), /* @__PURE__ */ React21.createElement(
+    /* @__PURE__ */ React22.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React22.createElement("div", null, /* @__PURE__ */ React22.createElement("p", { className: "text-sm font-medium text-gray-500 dark:text-gray-400" }, title), /* @__PURE__ */ React22.createElement(
       "p",
       {
         className: "mt-2 text-3xl font-semibold",
@@ -3086,10 +3794,10 @@ var StatCard = ({
           transition: `all ${animationDuration}ms ease-in-out`
         }
       },
-      prefix && /* @__PURE__ */ React21.createElement("span", { className: "text-lg" }, prefix),
+      prefix && /* @__PURE__ */ React22.createElement("span", { className: "text-lg" }, prefix),
       formatValue(value),
-      suffix && /* @__PURE__ */ React21.createElement("span", { className: "text-lg" }, suffix)
-    )), Icon && /* @__PURE__ */ React21.createElement(
+      suffix && /* @__PURE__ */ React22.createElement("span", { className: "text-lg" }, suffix)
+    )), Icon && /* @__PURE__ */ React22.createElement(
       "div",
       {
         className: `
@@ -3098,14 +3806,14 @@ var StatCard = ({
               ${iconClassName}
             `
       },
-      /* @__PURE__ */ React21.createElement(
+      /* @__PURE__ */ React22.createElement(
         Icon,
         {
           className: `w-6 h-6 ${colors.iconColor || "text-blue-600 dark:text-blue-400"}`
         }
       )
     )),
-    (trend || description) && /* @__PURE__ */ React21.createElement("div", { className: "mt-4 flex items-center justify-between" }, trend && /* @__PURE__ */ React21.createElement(
+    (trend || description) && /* @__PURE__ */ React22.createElement("div", { className: "mt-4 flex items-center justify-between" }, trend && /* @__PURE__ */ React22.createElement(
       "div",
       {
         className: `
@@ -3114,16 +3822,16 @@ var StatCard = ({
                 ${trendClassName}
               `
       },
-      trend.showArrow !== false && (trend.isPositive ? /* @__PURE__ */ React21.createElement(HiArrowUp, { className: "w-4 h-4" }) : /* @__PURE__ */ React21.createElement(HiArrowDown, { className: "w-4 h-4" })),
-      /* @__PURE__ */ React21.createElement("span", null, Math.abs(trend.value), "%", trend.label && /* @__PURE__ */ React21.createElement("span", { className: "ml-1" }, trend.label))
-    ), description && /* @__PURE__ */ React21.createElement("p", { className: "text-sm text-gray-500 dark:text-gray-400" }, description)),
-    alert && /* @__PURE__ */ React21.createElement("div", { className: getAlertClasses() }, /* @__PURE__ */ React21.createElement(HiExclamationCircle, { className: "w-4 h-4" }), alert.message)
+      trend.showArrow !== false && (trend.isPositive ? /* @__PURE__ */ React22.createElement(HiArrowUp, { className: "w-4 h-4" }) : /* @__PURE__ */ React22.createElement(HiArrowDown, { className: "w-4 h-4" })),
+      /* @__PURE__ */ React22.createElement("span", null, Math.abs(trend.value), "%", trend.label && /* @__PURE__ */ React22.createElement("span", { className: "ml-1" }, trend.label))
+    ), description && /* @__PURE__ */ React22.createElement("p", { className: "text-sm text-gray-500 dark:text-gray-400" }, description)),
+    alert && /* @__PURE__ */ React22.createElement("div", { className: getAlertClasses() }, /* @__PURE__ */ React22.createElement(HiExclamationCircle, { className: "w-4 h-4" }), alert.message)
   );
 };
 var StatCard_default = StatCard;
 
 // src/components/Stepper/Stepper.tsx
-import React22 from "react";
+import React23 from "react";
 var Stepper = ({
   steps,
   current,
@@ -3205,18 +3913,18 @@ var Stepper = ({
         return `${baseClasses} bg-gray-300 dark:bg-gray-600 ${inactiveLineClassName}`;
     }
   };
-  return /* @__PURE__ */ React22.createElement("div", { className: "flex flex-col gap-4" }, /* @__PURE__ */ React22.createElement(
+  return /* @__PURE__ */ React23.createElement("div", { className: "flex flex-col gap-4" }, /* @__PURE__ */ React23.createElement(
     "div",
     {
       className: `${verticalOnMobile ? "flex-col md:flex-row" : "flex-row"} flex items-center gap-4 max-w-[85vw] overflow-x-auto md:max-w-full ${className}`
     },
-    steps.map((step, idx) => /* @__PURE__ */ React22.createElement(
+    steps.map((step, idx) => /* @__PURE__ */ React23.createElement(
       "div",
       {
         key: idx,
         className: `flex ${verticalOnMobile ? "flex-col md:flex-row" : "flex-row"} items-center gap-2 ${stepClassName}`
       },
-      renderStep ? renderStep(step, idx, idx === current, idx < current) : /* @__PURE__ */ React22.createElement(React22.Fragment, null, renderCircle ? renderCircle(step, idx, idx === current, idx < current) : /* @__PURE__ */ React22.createElement("div", { className: getCircleClasses(idx) }, step.icon || idx + 1), /* @__PURE__ */ React22.createElement("div", { className: `flex flex-col ${stepContentClassName}` }, /* @__PURE__ */ React22.createElement(
+      renderStep ? renderStep(step, idx, idx === current, idx < current) : /* @__PURE__ */ React23.createElement(React23.Fragment, null, renderCircle ? renderCircle(step, idx, idx === current, idx < current) : /* @__PURE__ */ React23.createElement("div", { className: getCircleClasses(idx) }, step.icon || idx + 1), /* @__PURE__ */ React23.createElement("div", { className: `flex flex-col ${stepContentClassName}` }, /* @__PURE__ */ React23.createElement(
         "span",
         {
           className: `${getLabelClasses(
@@ -3224,26 +3932,26 @@ var Stepper = ({
           )} whitespace-nowrap font-semibold`
         },
         step.label
-      ), step.description && /* @__PURE__ */ React22.createElement(
+      ), step.description && /* @__PURE__ */ React23.createElement(
         "span",
         {
           className: `${getDescriptionClasses(idx)} ${!showDescriptionOnMobile ? "hidden md:block" : ""} line-clamp-2 text-ellipsis`
         },
         step.description
       ))),
-      idx < steps.length - 1 && /* @__PURE__ */ React22.createElement(
+      idx < steps.length - 1 && /* @__PURE__ */ React23.createElement(
         "div",
         {
           className: `${verticalOnMobile ? "h-8 w-0.5 md:h-0.5 md:w-8" : "w-8 h-0.5"} ${getLineClasses(idx)}`
         }
       )
     ))
-  ), ((_a = steps[current]) == null ? void 0 : _a.component) && /* @__PURE__ */ React22.createElement("div", { className: "mt-4" }, steps[current].component));
+  ), ((_a = steps[current]) == null ? void 0 : _a.component) && /* @__PURE__ */ React23.createElement("div", { className: "mt-4" }, steps[current].component));
 };
 var Stepper_default = Stepper;
 
 // src/components/TagInput/TagInput.tsx
-import React23, { useState as useState5 } from "react";
+import React24, { useState as useState6 } from "react";
 import { BsX } from "react-icons/bs";
 var TagInput = ({
   label,
@@ -3255,7 +3963,7 @@ var TagInput = ({
   inputClassName = "",
   tagClassName = ""
 }) => {
-  const [inputValue, setInputValue] = useState5("");
+  const [inputValue, setInputValue] = useState6("");
   const handleKeyDown = (e) => {
     if (e.key === "," || e.key === "Enter") {
       e.preventDefault();
@@ -3271,23 +3979,23 @@ var TagInput = ({
   const removeTag = (tagToRemove) => {
     onChange(tags.filter((tag) => tag !== tagToRemove));
   };
-  return /* @__PURE__ */ React23.createElement("div", { className: `flex flex-col gap-1 ${className}` }, label && /* @__PURE__ */ React23.createElement("label", { className: "text-sm font-medium" }, label), /* @__PURE__ */ React23.createElement("div", { className: "flex flex-wrap gap-2 p-2 border rounded-md dark:border-gray-700 dark:bg-gray-800" }, tags.map((tag) => /* @__PURE__ */ React23.createElement(
+  return /* @__PURE__ */ React24.createElement("div", { className: `flex flex-col gap-1 ${className}` }, label && /* @__PURE__ */ React24.createElement("label", { className: "text-sm font-medium" }, label), /* @__PURE__ */ React24.createElement("div", { className: "flex flex-wrap gap-2 p-2 border rounded-md dark:border-gray-700 dark:bg-gray-800" }, tags.map((tag) => /* @__PURE__ */ React24.createElement(
     "span",
     {
       key: tag,
       className: `inline-flex items-center gap-1 px-2 py-1 text-sm bg-blue-100 text-blue-800 rounded-md dark:bg-blue-900 dark:text-blue-200 ${tagClassName}`
     },
     tag,
-    /* @__PURE__ */ React23.createElement(
+    /* @__PURE__ */ React24.createElement(
       "button",
       {
         type: "button",
         onClick: () => removeTag(tag),
         className: "hover:text-blue-600 dark:hover:text-blue-300"
       },
-      /* @__PURE__ */ React23.createElement(BsX, { className: "w-4 h-4" })
+      /* @__PURE__ */ React24.createElement(BsX, { className: "w-4 h-4" })
     )
-  )), /* @__PURE__ */ React23.createElement("div", { className: "flex items-center flex-1 min-w-[120px]" }, LeftIcon && /* @__PURE__ */ React23.createElement("div", { className: "flex items-center px-2 text-gray-500" }, /* @__PURE__ */ React23.createElement(LeftIcon, { className: "w-5 h-5" })), /* @__PURE__ */ React23.createElement(
+  )), /* @__PURE__ */ React24.createElement("div", { className: "flex items-center flex-1 min-w-[120px]" }, LeftIcon && /* @__PURE__ */ React24.createElement("div", { className: "flex items-center px-2 text-gray-500" }, /* @__PURE__ */ React24.createElement(LeftIcon, { className: "w-5 h-5" })), /* @__PURE__ */ React24.createElement(
     "input",
     {
       type: "text",
@@ -3302,7 +4010,7 @@ var TagInput = ({
 var TagInput_default = TagInput;
 
 // src/components/Timeline/Timeline.tsx
-import React24 from "react";
+import React25 from "react";
 var Timeline = ({
   items,
   className = "",
@@ -3325,10 +4033,10 @@ var Timeline = ({
         return "bg-gray-500";
     }
   };
-  return /* @__PURE__ */ React24.createElement("div", { className: `space-y-4 ${className}` }, items.map((item, index) => {
+  return /* @__PURE__ */ React25.createElement("div", { className: `space-y-4 ${className}` }, items.map((item, index) => {
     const Icon = item.icon;
     const isLast = index === items.length - 1;
-    return /* @__PURE__ */ React24.createElement("div", { key: item.key, className: `flex gap-4 ${itemClassName}` }, /* @__PURE__ */ React24.createElement("div", { className: "flex flex-col items-center" }, /* @__PURE__ */ React24.createElement(
+    return /* @__PURE__ */ React25.createElement("div", { key: item.key, className: `flex gap-4 ${itemClassName}` }, /* @__PURE__ */ React25.createElement("div", { className: "flex flex-col items-center" }, /* @__PURE__ */ React25.createElement(
       "div",
       {
         className: `
@@ -3337,14 +4045,14 @@ var Timeline = ({
                   ${iconClassName}
                 `
       },
-      Icon ? /* @__PURE__ */ React24.createElement(Icon, { className: "w-4 h-4 text-white" }) : /* @__PURE__ */ React24.createElement("div", { className: "w-2 h-2 rounded-full bg-white" })
-    ), !isLast && /* @__PURE__ */ React24.createElement("div", { className: "w-0.5 h-full bg-gray-200 dark:bg-gray-700" })), /* @__PURE__ */ React24.createElement("div", { className: "flex-1 pb-8" }, /* @__PURE__ */ React24.createElement("div", { className: "flex items-center justify-between mb-1" }, /* @__PURE__ */ React24.createElement("h3", { className: "text-sm font-medium text-gray-900 dark:text-white" }, item.title), item.time && /* @__PURE__ */ React24.createElement(
+      Icon ? /* @__PURE__ */ React25.createElement(Icon, { className: "w-4 h-4 text-white" }) : /* @__PURE__ */ React25.createElement("div", { className: "w-2 h-2 rounded-full bg-white" })
+    ), !isLast && /* @__PURE__ */ React25.createElement("div", { className: "w-0.5 h-full bg-gray-200 dark:bg-gray-700" })), /* @__PURE__ */ React25.createElement("div", { className: "flex-1 pb-8" }, /* @__PURE__ */ React25.createElement("div", { className: "flex items-center justify-between mb-1" }, /* @__PURE__ */ React25.createElement("h3", { className: "text-sm font-medium text-gray-900 dark:text-white" }, item.title), item.time && /* @__PURE__ */ React25.createElement(
       "span",
       {
         className: `text-xs text-gray-500 dark:text-gray-400 ${timeClassName}`
       },
       item.time
-    )), /* @__PURE__ */ React24.createElement(
+    )), /* @__PURE__ */ React25.createElement(
       "div",
       {
         className: `text-sm text-gray-600 dark:text-gray-300 ${contentClassName}`
@@ -3356,7 +4064,7 @@ var Timeline = ({
 var Timeline_default = Timeline;
 
 // src/components/Toast/Toast.tsx
-import React25, { useEffect as useEffect6, useState as useState6 } from "react";
+import React26, { useEffect as useEffect7, useState as useState7 } from "react";
 import { BsCheck, BsExclamationCircle, BsInfo, BsX as BsX2 } from "react-icons/bs";
 var Toast = ({
   id,
@@ -3379,9 +4087,9 @@ var Toast = ({
   animation = "slide",
   animationDuration = "normal"
 }) => {
-  const [progress, setProgress] = useState6(100);
-  const [isPaused, setIsPaused] = useState6(false);
-  const [isExiting, setIsExiting] = useState6(false);
+  const [progress, setProgress] = useState7(100);
+  const [isPaused, setIsPaused] = useState7(false);
+  const [isExiting, setIsExiting] = useState7(false);
   const toastConfig = {
     success: {
       icon: BsCheck,
@@ -3438,7 +4146,7 @@ var Toast = ({
     normal: "duration-300",
     slow: "duration-500"
   };
-  useEffect6(() => {
+  useEffect7(() => {
     if (isExiting) {
       const timer = setTimeout(() => {
         onClose(id);
@@ -3446,7 +4154,7 @@ var Toast = ({
       return () => clearTimeout(timer);
     }
   }, [isExiting, id, onClose]);
-  useEffect6(() => {
+  useEffect7(() => {
     let animationFrame;
     let startTime;
     const updateProgress = () => {
@@ -3474,35 +4182,35 @@ var Toast = ({
   const handleClose = () => {
     setIsExiting(true);
   };
-  return /* @__PURE__ */ React25.createElement(
+  return /* @__PURE__ */ React26.createElement(
     "div",
     {
       className: `fixed ${positionClasses[position]} z-50 max-w-md w-full shadow-lg rounded-lg border ${config.bgColor} ${config.borderColor} ${animationClasses[animation]} ${durationClasses[animationDuration]} transform transition-all ${className}`,
       onMouseEnter: () => setIsPaused(true),
       onMouseLeave: () => setIsPaused(false)
     },
-    /* @__PURE__ */ React25.createElement("div", { className: `p-4 ${contentClassName}` }, /* @__PURE__ */ React25.createElement("div", { className: "flex items-start" }, /* @__PURE__ */ React25.createElement("div", { className: `flex-shrink-0 ${config.iconColor} ${iconClassName}` }, /* @__PURE__ */ React25.createElement(Icon, { className: "w-5 h-5" })), /* @__PURE__ */ React25.createElement("div", { className: "ml-3 w-0 flex-1" }, title && /* @__PURE__ */ React25.createElement(
+    /* @__PURE__ */ React26.createElement("div", { className: `p-4 ${contentClassName}` }, /* @__PURE__ */ React26.createElement("div", { className: "flex items-start" }, /* @__PURE__ */ React26.createElement("div", { className: `flex-shrink-0 ${config.iconColor} ${iconClassName}` }, /* @__PURE__ */ React26.createElement(Icon, { className: "w-5 h-5" })), /* @__PURE__ */ React26.createElement("div", { className: "ml-3 w-0 flex-1" }, title && /* @__PURE__ */ React26.createElement(
       "p",
       {
         className: `text-sm font-medium ${config.textColor} ${titleClassName}`
       },
       title
-    ), /* @__PURE__ */ React25.createElement("p", { className: `text-sm ${config.textColor} ${messageClassName}` }, message), action && /* @__PURE__ */ React25.createElement("div", { className: "mt-3" }, /* @__PURE__ */ React25.createElement(
+    ), /* @__PURE__ */ React26.createElement("p", { className: `text-sm ${config.textColor} ${messageClassName}` }, message), action && /* @__PURE__ */ React26.createElement("div", { className: "mt-3" }, /* @__PURE__ */ React26.createElement(
       "button",
       {
         onClick: action.onClick,
         className: `text-sm font-medium ${config.textColor} hover:underline focus:outline-none ${actionButtonClassName}`
       },
       action.label
-    ))), /* @__PURE__ */ React25.createElement("div", { className: "ml-4 flex-shrink-0 flex" }, /* @__PURE__ */ React25.createElement(
+    ))), /* @__PURE__ */ React26.createElement("div", { className: "ml-4 flex-shrink-0 flex" }, /* @__PURE__ */ React26.createElement(
       "button",
       {
         onClick: handleClose,
         className: `inline-flex text-gray-400 hover:text-gray-500 focus:outline-none ${closeButtonClassName}`
       },
-      /* @__PURE__ */ React25.createElement(BsX2, { className: "h-5 w-5" })
+      /* @__PURE__ */ React26.createElement(BsX2, { className: "h-5 w-5" })
     )))),
-    duration > 0 && /* @__PURE__ */ React25.createElement(
+    duration > 0 && /* @__PURE__ */ React26.createElement(
       "div",
       {
         className: `h-1 w-full ${config.progressColor} ${progressClassName}`,
@@ -3514,13 +4222,13 @@ var Toast = ({
 var Toast_default = Toast;
 
 // src/components/Toast/ToastContainer.tsx
-import React26, { useState as useState7, useCallback as useCallback2 } from "react";
+import React27, { useState as useState8, useCallback as useCallback2 } from "react";
 var ToastContainer = ({
   position = "top-right",
   className = "",
   limit = 5
 }) => {
-  const [toasts, setToasts] = useState7([]);
+  const [toasts, setToasts] = useState8([]);
   const addToast = useCallback2(
     (options) => {
       const id = Math.random().toString(36).substr(2, 9);
@@ -3570,7 +4278,7 @@ var ToastContainer = ({
       info
     };
   }
-  return /* @__PURE__ */ React26.createElement("div", { className: `fixed z-50 ${className}` }, toasts.map((toast) => /* @__PURE__ */ React26.createElement(
+  return /* @__PURE__ */ React27.createElement("div", { className: `fixed z-50 ${className}` }, toasts.map((toast) => /* @__PURE__ */ React27.createElement(
     Toast_default,
     __spreadProps(__spreadValues({
       key: toast.id,
@@ -3584,7 +4292,7 @@ var ToastContainer = ({
 var ToastContainer_default = ToastContainer;
 
 // src/components/Tooltip/Tooltip.tsx
-import React27, { useState as useState8, useRef as useRef6, useEffect as useEffect7, useCallback as useCallback3 } from "react";
+import React28, { useState as useState9, useRef as useRef7, useEffect as useEffect8, useCallback as useCallback3 } from "react";
 var Tooltip = ({
   content,
   children,
@@ -3598,11 +4306,11 @@ var Tooltip = ({
   maxWidth = "200px",
   interactive = false
 }) => {
-  const [isVisible, setIsVisible] = useState8(false);
-  const [coords, setCoords] = useState8({ x: 0, y: 0 });
-  const triggerRef = useRef6(null);
-  const tooltipRef = useRef6(null);
-  const timeoutRef = useRef6(
+  const [isVisible, setIsVisible] = useState9(false);
+  const [coords, setCoords] = useState9({ x: 0, y: 0 });
+  const triggerRef = useRef7(null);
+  const tooltipRef = useRef7(null);
+  const timeoutRef = useRef7(
     void 0
   );
   const positionClasses = {
@@ -3670,7 +4378,7 @@ var Tooltip = ({
     }
     setIsVisible(false);
   };
-  useEffect7(() => {
+  useEffect8(() => {
     if (isVisible) {
       updatePosition();
       window.addEventListener("scroll", updatePosition);
@@ -3684,7 +4392,7 @@ var Tooltip = ({
       }
     };
   }, [isVisible, updatePosition]);
-  return /* @__PURE__ */ React27.createElement(
+  return /* @__PURE__ */ React28.createElement(
     "div",
     {
       ref: triggerRef,
@@ -3693,7 +4401,7 @@ var Tooltip = ({
       onMouseLeave: handleMouseLeave
     },
     children,
-    isVisible && /* @__PURE__ */ React27.createElement(
+    isVisible && /* @__PURE__ */ React28.createElement(
       "div",
       {
         ref: tooltipRef,
@@ -3707,13 +4415,13 @@ var Tooltip = ({
         onMouseEnter: interactive ? handleMouseEnter : void 0,
         onMouseLeave: interactive ? handleMouseLeave : void 0
       },
-      /* @__PURE__ */ React27.createElement(
+      /* @__PURE__ */ React28.createElement(
         "div",
         {
           className: `bg-gray-900 text-white text-sm rounded-lg py-2 px-3 shadow-lg ${contentClassName}`
         },
         content,
-        /* @__PURE__ */ React27.createElement(
+        /* @__PURE__ */ React28.createElement(
           "div",
           {
             className: `absolute w-0 h-0 border-4 border-transparent ${arrowClasses[position]} ${arrowClassName}`
@@ -3726,21 +4434,21 @@ var Tooltip = ({
 var Tooltip_default = Tooltip;
 
 // src/components/Upload/Upload.tsx
-import React28, { useRef as useRef7 } from "react";
+import React29, { useRef as useRef8 } from "react";
 var Upload = ({
   onChange,
   multiple = false,
   accept,
   className = ""
 }) => {
-  const inputRef = useRef7(null);
-  const [dragActive, setDragActive] = React28.useState(false);
-  const [files, setFiles] = React28.useState(null);
+  const inputRef = useRef8(null);
+  const [dragActive, setDragActive] = React29.useState(false);
+  const [files, setFiles] = React29.useState(null);
   const handleFiles = (fileList) => {
     setFiles(fileList);
     onChange(fileList);
   };
-  return /* @__PURE__ */ React28.createElement(
+  return /* @__PURE__ */ React29.createElement(
     "div",
     {
       className: `border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${dragActive ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30" : "border-gray-300 dark:border-gray-600"} ${className}`,
@@ -3762,7 +4470,7 @@ var Upload = ({
         if (e.dataTransfer.files) handleFiles(e.dataTransfer.files);
       }
     },
-    /* @__PURE__ */ React28.createElement(
+    /* @__PURE__ */ React29.createElement(
       "input",
       {
         ref: inputRef,
@@ -3773,14 +4481,14 @@ var Upload = ({
         onChange: (e) => e.target.files && handleFiles(e.target.files)
       }
     ),
-    /* @__PURE__ */ React28.createElement("div", { className: "text-gray-500 dark:text-gray-300 mb-2" }, "Drag & drop files here or", " ", /* @__PURE__ */ React28.createElement("span", { className: "text-blue-600 dark:text-blue-400 underline" }, "browse")),
-    files && files.length > 0 && /* @__PURE__ */ React28.createElement("ul", { className: "mt-2 text-left text-xs text-gray-700 dark:text-gray-200" }, Array.from(files).map((file, i) => /* @__PURE__ */ React28.createElement("li", { key: i }, file.name)))
+    /* @__PURE__ */ React29.createElement("div", { className: "text-gray-500 dark:text-gray-300 mb-2" }, "Drag & drop files here or", " ", /* @__PURE__ */ React29.createElement("span", { className: "text-blue-600 dark:text-blue-400 underline" }, "browse")),
+    files && files.length > 0 && /* @__PURE__ */ React29.createElement("ul", { className: "mt-2 text-left text-xs text-gray-700 dark:text-gray-200" }, Array.from(files).map((file, i) => /* @__PURE__ */ React29.createElement("li", { key: i }, file.name)))
   );
 };
 var Upload_default = Upload;
 
 // src/components/Tabs/Tabs.tsx
-import React29 from "react";
+import React30 from "react";
 var Tabs = ({
   items,
   defaultActiveKey,
@@ -3792,7 +4500,7 @@ var Tabs = ({
   disabledTabClassName = ""
 }) => {
   var _a;
-  const [activeKey, setActiveKey] = React29.useState(
+  const [activeKey, setActiveKey] = React30.useState(
     defaultActiveKey || ((_a = items[0]) == null ? void 0 : _a.key)
   );
   const handleTabClick = (key) => {
@@ -3803,11 +4511,11 @@ var Tabs = ({
     }
   };
   const activeTab = items.find((item) => item.key === activeKey);
-  return /* @__PURE__ */ React29.createElement("div", { className: `flex flex-col ${className}` }, /* @__PURE__ */ React29.createElement("div", { className: "flex border-b border-gray-200 dark:border-gray-700" }, items.map((item) => {
+  return /* @__PURE__ */ React30.createElement("div", { className: `flex flex-col ${className}` }, /* @__PURE__ */ React30.createElement("div", { className: "flex border-b border-gray-200 dark:border-gray-700" }, items.map((item) => {
     const Icon = item.icon;
     const isActive = item.key === activeKey;
     const isDisabled = item.disabled;
-    return /* @__PURE__ */ React29.createElement(
+    return /* @__PURE__ */ React30.createElement(
       "button",
       {
         key: item.key,
@@ -3822,10 +4530,10 @@ var Tabs = ({
                 ${isDisabled ? disabledTabClassName : ""}
               `
       },
-      Icon && /* @__PURE__ */ React29.createElement(Icon, { className: "w-4 h-4" }),
+      Icon && /* @__PURE__ */ React30.createElement(Icon, { className: "w-4 h-4" }),
       item.label
     );
-  })), /* @__PURE__ */ React29.createElement("div", { className: `p-4 ${contentClassName}` }, activeTab == null ? void 0 : activeTab.content));
+  })), /* @__PURE__ */ React30.createElement("div", { className: `p-4 ${contentClassName}` }, activeTab == null ? void 0 : activeTab.content));
 };
 var Tabs_default = Tabs;
 export {
@@ -3837,6 +4545,7 @@ export {
   Calendar_default as Calendar,
   Card_default as Card,
   Collapse_default as Collapse,
+  Dropdown_default as Dropdown,
   Input_default as Input,
   List_default as List,
   Modal_default as Modal,

@@ -462,14 +462,14 @@ const Dropdown: React.FC<DropdownProps> = ({
     arrow: true,
   },
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedValues, setSelectedValues] = useState<string[]>(
     value ? [value] : []
   );
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
   const [position, setPosition] = useState<"top" | "bottom">("bottom");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [focusedIndex, setFocusedIndex] = useState<number>(-1);
   const [dropdownPosition, setDropdownPosition] = useState<{
     top: string;
     bottom: string;
@@ -477,7 +477,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const [isHovering, setIsHovering] = useState(false);
+  const [isHovering, setIsHovering] = useState<boolean>(false);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [submenuPosition, setSubmenuPosition] = useState<{
     left: string;
@@ -694,7 +694,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     }
   };
 
-  const handleTriggerHover = () => {
+  const handleTriggerHover = (event: React.MouseEvent<HTMLElement>) => {
     if (!disabled && !isLoading && hover) {
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current);
@@ -706,7 +706,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     }
   };
 
-  const handleTriggerLeave = (event: React.MouseEvent) => {
+  const handleTriggerLeave = (event: React.MouseEvent<HTMLElement>) => {
     if (hover) {
       const relatedTarget = event.relatedTarget as HTMLElement;
       // Don't close if we're moving to the dropdown content
@@ -738,7 +738,9 @@ const Dropdown: React.FC<DropdownProps> = ({
     }
   };
 
-  const handleDropdownContentLeave = (event: React.MouseEvent) => {
+  const handleDropdownContentLeave = (
+    event: React.MouseEvent<HTMLDivElement>
+  ) => {
     if (hover) {
       const relatedTarget = event.relatedTarget as HTMLElement;
       // Don't close if we're moving back to the trigger
@@ -792,7 +794,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     onSearch?.(query);
   };
 
-  const handleKeyDown = (event: KeyboardEvent) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (!isOpen) return;
 
     switch (event.key) {
@@ -858,7 +860,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   const handleOptionHover = (
     option: DropdownOption,
-    event: React.MouseEvent
+    event: React.MouseEvent<HTMLDivElement>
   ) => {
     if (option.submenu && option.submenu.length > 0) {
       const target = event.currentTarget as HTMLElement;
@@ -868,7 +870,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     }
   };
 
-  const handleOptionLeave = (event: React.MouseEvent) => {
+  const handleOptionLeave = (event: React.MouseEvent<HTMLDivElement>) => {
     const target = event.currentTarget as HTMLElement;
     const relatedTarget = event.relatedTarget as HTMLElement;
 
@@ -887,7 +889,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     }
   };
 
-  const handleSubmenuLeave = (event: React.MouseEvent) => {
+  const handleSubmenuLeave = (event: React.MouseEvent<HTMLDivElement>) => {
     const relatedTarget = event.relatedTarget as HTMLElement;
 
     // Don't close if we're moving back to the parent menu item

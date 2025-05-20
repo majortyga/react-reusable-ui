@@ -11,6 +11,7 @@ export { default as Avatar } from "./components/Avatar/Avatar";
 export { default as Breadcrumbs } from "./components/Breadcrumbs/Breadcrumbs";
 export { default as Calendar } from "./components/Calendar/Calendar";
 export { default as Collapse } from "./components/Collapse/Collapse";
+export { default as Dropdown } from "./components/Dropdown/Dropdown";
 export { default as List } from "./components/List/List";
 export { default as Pagination } from "./components/Pagination/Pagination";
 export { default as Popover } from "./components/Popover/Popover";
@@ -44,6 +45,10 @@ export type {
 } from "./components/Breadcrumbs/Breadcrumbs";
 export type { CalendarProps } from "./components/Calendar/Calendar";
 export type { CollapseProps } from "./components/Collapse/Collapse";
+export type {
+  DropdownProps,
+  DropdownOption,
+} from "./components/Dropdown/Dropdown";
 export type { ListProps, ListItem } from "./components/List/List";
 export type { PaginationProps } from "./components/Pagination/Pagination";
 export type { PopoverProps } from "./components/Popover/Popover";

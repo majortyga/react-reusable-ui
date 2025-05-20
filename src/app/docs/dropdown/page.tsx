@@ -20,10 +20,10 @@ import {
   FaChevronDown,
 } from "react-icons/fa";
 import Link from "next/link";
-import Dropdown from "@/components/Dropdown/Dropdown";
 import Card from "@/components/Card/Card";
 import CodeBlock from "@/components/CodeBlock/CodeBlock";
 import Table from "@/components/Table/Table";
+import Dropdown from "@/components/Dropdown/Dropdown";
 
 type ApiRow = {
   id: number;
@@ -398,7 +398,19 @@ export default function DropdownDocs() {
           </div>
         </Card>
         <CodeBlock
-          code={`const [selectedValue, setSelectedValue] = useState<string>();
+          code={`import React, { useState } from "react";
+import { FaHome, FaChartBar, FaUsers, FaFileAlt } from "react-icons/fa";
+import Link from "next/link";
+import Dropdown from "@majordev/react-reusable-ui";
+
+const mainNavOptions = [
+  { label: "Dashboard", value: "dashboard", icon: FaHome, href: "/docs" },
+  { label: "Analytics", value: "analytics", icon: FaChartBar, href: "/analytics" },
+  { label: "Team", value: "team", icon: FaUsers, href: "/team" },
+  { label: "Documents", value: "documents", icon: FaFileAlt, href: "/documents" },
+];
+
+const [selectedValue, setSelectedValue] = useState<string>();
 
 <Dropdown
   value={selectedValue}
@@ -504,7 +516,55 @@ export default function DropdownDocs() {
           </div>
         </Card>
         <CodeBlock
-          code={`const [selectedValue, setSelectedValue] = useState<string>();
+          code={`import React, { useState } from "react";
+import { FaHome, FaChartBar, FaUsers, FaFileAlt, FaBox, FaLightbulb, FaBook } from "react-icons/fa";
+import Link from "next/link";
+import Dropdown from "@majordev/react-reusable-ui";
+
+const mainNavOptions = [
+  { label: "Dashboard", value: "dashboard", icon: FaHome, href: "/docs" },
+  { label: "Analytics", value: "analytics", icon: FaChartBar, href: "/analytics" },
+  { label: "Team", value: "team", icon: FaUsers, href: "/team" },
+  { label: "Documents", value: "documents", icon: FaFileAlt, href: "/documents" },
+];
+
+const productOptions = [
+  {
+    label: "Products",
+    value: "products",
+    icon: FaBox,
+    href: "#",
+    submenu: [
+      { label: "Overview", value: "overview", href: "/docs/select" },
+      { label: "Features", value: "features", href: "/products/features" },
+      { label: "Pricing", value: "pricing", href: "/products/pricing" },
+    ],
+  },
+  {
+    label: "Solutions",
+    value: "solutions",
+    icon: FaLightbulb,
+    href: "#",
+    submenu: [
+      { label: "For Business", value: "business", href: "/solutions/business" },
+      { label: "For Enterprise", value: "enterprise", href: "/solutions/enterprise" },
+      { label: "For Developers", value: "developers", href: "/solutions/developers" },
+    ],
+  },
+  {
+    label: "Resources",
+    value: "resources",
+    icon: FaBook,
+    href: "#",
+    submenu: [
+      { label: "Documentation", value: "docs", href: "/resources/docs" },
+      { label: "Tutorials", value: "tutorials", href: "/resources/tutorials" },
+      { label: "Blog", value: "blog", href: "/resources/blog" },
+    ],
+  },
+];
+
+const [selectedValue, setSelectedValue] = useState<string>();
 
 <div className="flex items-center space-x-8 border-b border-gray-200 dark:border-gray-700 pb-4">
   <Link href="/" className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
@@ -587,7 +647,48 @@ export default function DropdownDocs() {
           </div>
         </Card>
         <CodeBlock
-          code={`const [selectedValue, setSelectedValue] = useState<string>();
+          code={`import React, { useState } from "react";
+import { FaHome, FaChartBar, FaUsers, FaFileAlt } from "react-icons/fa";
+import Link from "next/link";
+import Dropdown from "@majordev/react-reusable-ui";
+
+const productOptions = [
+  {
+    label: "Products",
+    value: "products",
+    icon: FaBox,
+    href: "#",
+    submenu: [
+      { label: "Overview", value: "overview", href: "/docs/select" },
+      { label: "Features", value: "features", href: "/products/features" },
+      { label: "Pricing", value: "pricing", href: "/products/pricing" },
+    ],
+  },
+  {
+    label: "Solutions",
+    value: "solutions",
+    icon: FaLightbulb,
+    href: "#",
+    submenu: [
+      { label: "For Business", value: "business", href: "/solutions/business" },
+      { label: "For Enterprise", value: "enterprise", href: "/solutions/enterprise" },
+      { label: "For Developers", value: "developers", href: "/solutions/developers" },
+    ],
+  },
+  {
+    label: "Resources",
+    value: "resources",
+    icon: FaBook,
+    href: "#",
+    submenu: [
+      { label: "Documentation", value: "docs", href: "/resources/docs" },
+      { label: "Tutorials", value: "tutorials", href: "/resources/tutorials" },
+      { label: "Blog", value: "blog", href: "/resources/blog" },
+    ],
+  },
+];
+
+const [selectedValue, setSelectedValue] = useState<string>();
 
 <Dropdown
   value={selectedValue}
@@ -626,7 +727,50 @@ export default function DropdownDocs() {
           </div>
         </Card>
         <CodeBlock
-          code={`const [selectedValue, setSelectedValue] = useState<string>();
+          code={`import React, { useState } from "react";
+import { FaHome, FaChartBar, FaUsers, FaFileAlt } from "react-icons/fa";
+import Link from "next/link";
+import Dropdown from "@majordev/react-reusable-ui";
+
+const groupedOptions = [
+  {
+    label: "Dashboard",
+    value: "dashboard",
+    icon: FaHome,
+    href: "/docs",
+    group: "Navigation",
+  },
+  {
+    label: "Analytics",
+    value: "analytics",
+    icon: FaChartBar,
+    href: "/analytics",
+    group: "Navigation",
+  },
+  {
+    label: "Profile",
+    value: "profile",
+    icon: FaUser,
+    href: "/profile",
+    group: "Account",
+  },
+  {
+    label: "Settings",
+    value: "settings",
+    icon: FaCog,
+    href: "/settings",
+    group: "Account",
+  },
+  {
+    label: "Help",
+    value: "help",
+    icon: FaQuestionCircle,
+    href: "/help",
+    group: "Support",
+  },
+];
+
+const [selectedValue, setSelectedValue] = useState<string>();
 
 <Dropdown
   value={selectedValue}
@@ -667,7 +811,19 @@ export default function DropdownDocs() {
           </div>
         </Card>
         <CodeBlock
-          code={`const [selectedValue, setSelectedValue] = useState<string>();
+          code={`import React, { useState } from "react";
+import { FaHome, FaChartBar, FaUsers, FaFileAlt } from "react-icons/fa";
+import Link from "next/link";
+import Dropdown from "@majordev/react-reusable-ui";
+
+const mainNavOptions = [
+  { label: "Dashboard", value: "dashboard", icon: FaHome, href: "/docs" },
+  { label: "Analytics", value: "analytics", icon: FaChartBar, href: "/analytics" },
+  { label: "Team", value: "team", icon: FaUsers, href: "/team" },
+  { label: "Documents", value: "documents", icon: FaFileAlt, href: "/documents" },
+];
+
+const [selectedValue, setSelectedValue] = useState<string>();
 
 <Dropdown
   value={selectedValue}
@@ -675,7 +831,7 @@ export default function DropdownDocs() {
   options={mainNavOptions}
   searchable
   searchPlaceholder="Search options..."
-  onSearch={(query) => console.log('Searching:', query)}
+  onSearch={(query) => console.log("Searching:", query)}
 />`}
           language="tsx"
         />
@@ -704,7 +860,19 @@ export default function DropdownDocs() {
           </div>
         </Card>
         <CodeBlock
-          code={`const [selectedValue, setSelectedValue] = useState<string>();
+          code={`import React, { useState } from "react";
+import { FaHome, FaChartBar, FaUsers, FaFileAlt } from "react-icons/fa";
+import Link from "next/link";
+import Dropdown from "@majordev/react-reusable-ui";
+
+const mainNavOptions = [
+  { label: "Dashboard", value: "dashboard", icon: FaHome, href: "/docs" },
+  { label: "Analytics", value: "analytics", icon: FaChartBar, href: "/analytics" },
+  { label: "Team", value: "team", icon: FaUsers, href: "/team" },
+  { label: "Documents", value: "documents", icon: FaFileAlt, href: "/documents" },
+];
+
+const [selectedValue, setSelectedValue] = useState<string>();
 
 <Dropdown
   value={selectedValue}
@@ -776,7 +944,19 @@ export default function DropdownDocs() {
           </div>
         </Card>
         <CodeBlock
-          code={`const [selectedValue, setSelectedValue] = useState<string>();
+          code={`import React, { useState } from "react";
+import { FaHome, FaChartBar, FaUsers, FaFileAlt } from "react-icons/fa";
+import Link from "next/link";
+import Dropdown from "@majordev/react-reusable-ui";
+
+const mainNavOptions = [
+  { label: "Dashboard", value: "dashboard", icon: FaHome, href: "/docs" },
+  { label: "Analytics", value: "analytics", icon: FaChartBar, href: "/analytics" },
+  { label: "Team", value: "team", icon: FaUsers, href: "/team" },
+  { label: "Documents", value: "documents", icon: FaFileAlt, href: "/documents" },
+];
+
+const [selectedValue, setSelectedValue] = useState<string>();
 
 <Dropdown
   value={selectedValue}
@@ -876,45 +1056,62 @@ export default function DropdownDocs() {
           </div>
         </Card>
         <CodeBlock
-          code={`const [selectedValue, setSelectedValue] = useState<string>();
+          code={`import React, { useState } from "react";
+import { FaHome, FaChartBar, FaUsers, FaFileAlt } from "react-icons/fa";
+import Link from "next/link";
+import Dropdown from "@majordev/react-reusable-ui";
+
+const mainNavOptions = [
+  { label: "Dashboard", value: "dashboard", icon: FaHome, href: "/docs" },
+  { label: "Analytics", value: "analytics", icon: FaChartBar, href: "/analytics" },
+  { label: "Team", value: "team", icon: FaUsers, href: "/team" },
+  { label: "Documents", value: "documents", icon: FaFileAlt, href: "/documents" },
+];
+
+const [selectedValue, setSelectedValue] = useState<string>();
 
 <Dropdown
   value={selectedValue}
   onChange={setSelectedValue}
-  options={advancedOptions}
-  LinkComponent={Link}
-  display={{
-    triggerIcon: true,
-    triggerDescription: true,
-    optionIcons: true,
-    optionDescriptions: true,
-    submenuIcons: true,
-    submenuDescriptions: true,
-    searchIcon: true,
-    submenuArrow: true,
-    dropdownArrow: true,
-    loadingSpinner: true,
-    checkmark: true,
-    groupDivider: true,
-    tooltips: true,
-    badges: true,
-    arrow: true,
+  options={mainNavOptions}
+  colors={{
+    base: "bg-purple-500",
+    hover: "hover:bg-purple-600",
+    text: "text-white",
+    border: "border-purple-600",
+    container: {
+      background: "bg-white",
+      border: "border-purple-200",
+      shadow: "shadow-xl",
+    },
+    option: {
+      text: "text-gray-700",
+      hover: {
+        background: "hover:bg-purple-50",
+        text: "hover:text-purple-900",
+      },
+      selected: {
+        background: "bg-purple-100",
+        text: "text-purple-900",
+      },
+      disabled: {
+        text: "text-gray-400",
+        background: "bg-gray-50",
+      },
+      description: "text-gray-500",
+    },
+    search: {
+      background: "bg-gray-50",
+      text: "text-gray-900",
+      border: "border-purple-200",
+      placeholder: "placeholder-gray-400",
+    },
+    group: {
+      text: "text-purple-600",
+      background: "bg-purple-50",
+    },
+    divider: "bg-purple-100",
   }}
-  tooltip={({ content, children }) => (
-    <div className="group relative">
-      {children}
-      <div className="absolute left-full top-0 ml-2 hidden group-hover:block">
-        <div className="bg-gray-900 text-white text-xs rounded py-1 px-2">
-          {content}
-        </div>
-      </div>
-    </div>
-  )}
-  badge={({ content }) => (
-    <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
-      {content}
-    </span>
-  )}
 />`}
           language="tsx"
         />
@@ -945,7 +1142,19 @@ export default function DropdownDocs() {
           </div>
         </Card>
         <CodeBlock
-          code={`const [selectedValue, setSelectedValue] = useState<string>();
+          code={`import React, { useState } from "react";
+import { FaHome, FaChartBar, FaUsers, FaFileAlt } from "react-icons/fa";
+import Link from "next/link";
+import Dropdown from "@majordev/react-reusable-ui";
+
+const mainNavOptions = [
+  { label: "Dashboard", value: "dashboard", icon: FaHome, href: "/docs" },
+  { label: "Analytics", value: "analytics", icon: FaChartBar, href: "/analytics" },
+  { label: "Team", value: "team", icon: FaUsers, href: "/team" },
+  { label: "Documents", value: "documents", icon: FaFileAlt, href: "/documents" },
+];
+
+const [selectedValue, setSelectedValue] = useState<string>();
 
 <Dropdown
   value={selectedValue}
@@ -984,7 +1193,19 @@ export default function DropdownDocs() {
           </div>
         </Card>
         <CodeBlock
-          code={`const [selectedValue, setSelectedValue] = useState<string>();
+          code={`import React, { useState } from "react";
+import { FaHome, FaChartBar, FaUsers, FaFileAlt } from "react-icons/fa";
+import Link from "next/link";
+import Dropdown from "@majordev/react-reusable-ui";
+
+const mainNavOptions = [
+  { label: "Dashboard", value: "dashboard", icon: FaHome, href: "/docs" },
+  { label: "Analytics", value: "analytics", icon: FaChartBar, href: "/analytics" },
+  { label: "Team", value: "team", icon: FaUsers, href: "/team" },
+  { label: "Documents", value: "documents", icon: FaFileAlt, href: "/documents" },
+];
+
+const [selectedValue, setSelectedValue] = useState<string>();
 
 <Dropdown
   value={selectedValue}
@@ -1022,7 +1243,19 @@ export default function DropdownDocs() {
           </div>
         </Card>
         <CodeBlock
-          code={`const [selectedValue, setSelectedValue] = useState<string>();
+          code={`import React, { useState } from "react";
+import { FaHome, FaChartBar, FaUsers, FaFileAlt, FaChevronDown } from "react-icons/fa";
+import Link from "next/link";
+import Dropdown from "@majordev/react-reusable-ui";
+
+const mainNavOptions = [
+  { label: "Dashboard", value: "dashboard", icon: FaHome, href: "/docs" },
+  { label: "Analytics", value: "analytics", icon: FaChartBar, href: "/analytics" },
+  { label: "Team", value: "team", icon: FaUsers, href: "/team" },
+  { label: "Documents", value: "documents", icon: FaFileAlt, href: "/documents" },
+];
+
+const [selectedValue, setSelectedValue] = useState<string>();
 
 <Dropdown
   value={selectedValue}
@@ -1030,7 +1263,7 @@ export default function DropdownDocs() {
   options={mainNavOptions}
   renderTrigger={(selected) => (
     <button className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg">
-      <span>{selected?.label || 'Select'}</span>
+      <span>{selected?.label || "Select"}</span>
       <FaChevronDown className="h-4 w-4" />
     </button>
   )}

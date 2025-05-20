@@ -975,6 +975,176 @@ interface CollapseProps {
  */
 declare const Collapse: React.FC<CollapseProps>;
 
+interface DropdownOption {
+    label: string;
+    value: string;
+    icon?: IconType;
+    disabled?: boolean;
+    description?: string;
+    group?: string;
+    submenu?: DropdownOption[];
+    /** Link to navigate to when option is clicked */
+    href?: string;
+    /** Custom data for advanced use cases */
+    data?: {
+        badge?: string | number;
+        tooltip?: string;
+        [key: string]: unknown;
+    };
+    /** Custom class names for this specific option */
+    className?: string;
+    /** Whether this option should be hidden from search results */
+    hideFromSearch?: boolean;
+}
+interface DropdownProps {
+    /** The currently selected value */
+    value?: string;
+    /** Callback fired when an option is selected */
+    onChange?: (value: string) => void;
+    /** Array of options to display in the dropdown */
+    options: DropdownOption[];
+    /** Whether the dropdown is disabled */
+    disabled?: boolean;
+    /** Whether the dropdown is in a loading state */
+    isLoading?: boolean;
+    /** Custom class names for different parts of the dropdown */
+    className?: string;
+    wrapperClassName?: string;
+    triggerClassName?: string;
+    optionsContainerClassName?: string;
+    optionClassName?: string;
+    /** Custom colors for different states */
+    colors?: {
+        base?: string;
+        hover?: string;
+        focus?: string;
+        text?: string;
+        border?: string;
+        background?: string;
+        /** Colors for the options container */
+        container?: {
+            background?: string;
+            border?: string;
+            shadow?: string;
+        };
+        /** Colors for option text and hover states */
+        option?: {
+            text?: string;
+            hover?: {
+                background?: string;
+                text?: string;
+            };
+            selected?: {
+                background?: string;
+                text?: string;
+            };
+            disabled?: {
+                text?: string;
+                background?: string;
+            };
+            description?: string;
+        };
+        /** Colors for search input */
+        search?: {
+            background?: string;
+            text?: string;
+            border?: string;
+            placeholder?: string;
+        };
+        /** Colors for group headers */
+        group?: {
+            text?: string;
+            background?: string;
+        };
+        /** Colors for dividers */
+        divider?: string;
+    };
+    /** Theme variant */
+    theme?: "light" | "dark";
+    /** Whether to show the dropdown arrow */
+    showArrow?: boolean;
+    /** Whether to use plain text style without background */
+    plain?: boolean;
+    /** Whether to activate on hover */
+    hover?: boolean;
+    /** Custom render function for the trigger element */
+    renderTrigger?: (selected: DropdownOption | undefined) => React.ReactNode;
+    /** Custom render function for options */
+    renderOption?: (option: DropdownOption, isSelected: boolean) => React.ReactNode;
+    /** Custom render function for groups */
+    renderGroup?: (group: string) => React.ReactNode;
+    /** Callback fired when the dropdown opens */
+    onOpen?: () => void;
+    /** Callback fired when the dropdown closes */
+    onClose?: () => void;
+    /** Custom Link component to use for navigation */
+    LinkComponent?: React.ComponentType<{
+        href: string;
+        className?: string;
+        onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+        children: React.ReactNode;
+    }>;
+    /** Whether to enable search functionality */
+    searchable?: boolean;
+    /** Custom search function */
+    onSearch?: (query: string) => void;
+    /** Placeholder text for search input */
+    searchPlaceholder?: string;
+    /** Maximum height of the dropdown menu */
+    maxHeight?: string;
+    /** Whether to close the dropdown when an option is selected */
+    closeOnSelect?: boolean;
+    /** Custom loading spinner component */
+    loadingSpinner?: React.ReactNode;
+    /** Custom checkmark component */
+    checkmark?: React.ReactNode;
+    /** Custom divider component */
+    groupDivider?: React.ReactNode;
+    /** Custom tooltip component */
+    tooltip?: React.ComponentType<{
+        content: string;
+        children: React.ReactNode;
+    }>;
+    /** Custom badge component */
+    badge?: React.ComponentType<{
+        content: string | number;
+    }>;
+    /** Display options */
+    display?: {
+        /** Whether to show icons in the trigger */
+        triggerIcon?: boolean;
+        /** Whether to show descriptions in the trigger */
+        triggerDescription?: boolean;
+        /** Whether to show icons in options */
+        optionIcons?: boolean;
+        /** Whether to show descriptions in options */
+        optionDescriptions?: boolean;
+        /** Whether to show icons in submenus */
+        submenuIcons?: boolean;
+        /** Whether to show descriptions in submenus */
+        submenuDescriptions?: boolean;
+        /** Whether to show the search icon */
+        searchIcon?: boolean;
+        /** Whether to show the submenu arrow */
+        submenuArrow?: boolean;
+        /** Whether to show the dropdown arrow */
+        dropdownArrow?: boolean;
+        /** Whether to show the loading spinner */
+        loadingSpinner?: boolean;
+        /** Whether to show the checkmark */
+        checkmark?: boolean;
+        /** Whether to show the group divider */
+        groupDivider?: boolean;
+        /** Whether to show tooltips */
+        tooltips?: boolean;
+        /** Whether to show badges */
+        badges?: boolean;
+        /** Whether to show arrows in submenus */
+        arrow?: boolean;
+    };
+}
+declare const Dropdown: React.FC<DropdownProps>;
+
 interface ListItem {
     id: string | number;
     title: string;
@@ -1361,4 +1531,4 @@ interface TabsProps {
 }
 declare const Tabs: React.FC<TabsProps>;
 
-export { Alert, type AlertProps, Avatar, type AvatarProps, Badge, type BadgeProps, type BreadcrumbItem, Breadcrumbs, type BreadcrumbsProps, Button, type ButtonProps, Calendar, type CalendarProps, Card, type CardProps, Collapse, type CollapseProps, type Column, Input, type InputProps, List, type ListItem, type ListProps, Modal, type ModalProps, Pagination, type PaginationProps, Popover, type PopoverProps, Progress, type ProgressProps, Rating, type RatingProps, Select, type SelectOption, type SelectProps, Skeleton, type SkeletonProps, Slider, type SliderProps, Spinner, type SpinnerProps, StatCard, type StatCardProps, Stepper, type StepperProps, Table, type TableProps, Tabs, type TabsProps, TagInput, type TagInputProps, Timeline, type TimelineProps, Toast, ToastContainer, type ToastContainerProps, type ToastProps, Tooltip, type TooltipProps, Upload, type UploadProps };
+export { Alert, type AlertProps, Avatar, type AvatarProps, Badge, type BadgeProps, type BreadcrumbItem, Breadcrumbs, type BreadcrumbsProps, Button, type ButtonProps, Calendar, type CalendarProps, Card, type CardProps, Collapse, type CollapseProps, type Column, Dropdown, type DropdownOption, type DropdownProps, Input, type InputProps, List, type ListItem, type ListProps, Modal, type ModalProps, Pagination, type PaginationProps, Popover, type PopoverProps, Progress, type ProgressProps, Rating, type RatingProps, Select, type SelectOption, type SelectProps, Skeleton, type SkeletonProps, Slider, type SliderProps, Spinner, type SpinnerProps, StatCard, type StatCardProps, Stepper, type StepperProps, Table, type TableProps, Tabs, type TabsProps, TagInput, type TagInputProps, Timeline, type TimelineProps, Toast, ToastContainer, type ToastContainerProps, type ToastProps, Tooltip, type TooltipProps, Upload, type UploadProps };
