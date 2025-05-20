@@ -43,7 +43,9 @@ type ApiRow = {
     | "leftIcon"
     | "rightIcon"
     | "isLoading"
-    | "disabled";
+    | "disabled"
+    | "colors"
+    | "theme";
   type: string;
   default: string;
   description: string;
@@ -99,6 +101,20 @@ const apiData: ApiRow[] = [
     default: "false",
     description: "Whether the button is disabled",
   },
+  {
+    id: 7,
+    prop: "colors",
+    type: "{ base?: string; hover?: string; focus?: string; text?: string; }",
+    default: "-",
+    description: "Custom color classes to override default variant colors",
+  },
+  {
+    id: 8,
+    prop: "theme",
+    type: "light | dark",
+    default: "light",
+    description: "Theme variant for the button colors",
+  },
 ];
 
 export default function ButtonDocs() {
@@ -124,15 +140,19 @@ export default function ButtonDocs() {
           <div className="flex flex-wrap gap-4">
             <Button>Primary Button</Button>
             <Button variant="secondary">Secondary Button</Button>
-            <Button variant="outline">Outline Button</Button>
-            <Button variant="ghost">Ghost Button</Button>
+            <Button variant="outline" theme="dark">
+              Outline Button
+            </Button>
+            <Button variant="ghost" theme="dark">
+              Ghost Button
+            </Button>
           </div>
         </Card>
         <CodeBlock
           code={`<Button>Primary Button</Button>
 <Button variant="secondary">Secondary Button</Button>
-<Button variant="outline">Outline Button</Button>
-<Button variant="ghost">Ghost Button</Button>`}
+<Button variant="outline" theme="dark">Outline Button</Button>
+<Button variant="ghost" theme="dark">Ghost Button</Button>`}
           language="tsx"
         />
       </section>
@@ -166,7 +186,7 @@ export default function ButtonDocs() {
           <div className="flex flex-wrap gap-4">
             <Button leftIcon={FiMail}>Send Email</Button>
             <Button rightIcon={DownloadIcon}>Download</Button>
-            <Button leftIcon={AddIcon} variant="outline">
+            <Button leftIcon={AddIcon} variant="outline" theme="dark">
               Add New
             </Button>
           </div>
@@ -197,6 +217,112 @@ export default function ButtonDocs() {
           code={`<Button isLoading>Loading</Button>
 <Button disabled>Disabled</Button>
 <Button variant="outline" disabled>Disabled Outline</Button>`}
+          language="tsx"
+        />
+      </section>
+
+      {/* Custom Colors */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          Custom Colors
+        </h2>
+        <Card>
+          <div className="flex flex-wrap gap-4">
+            <Button
+              colors={{
+                base: "bg-gradient-to-r from-purple-500 to-pink-500",
+                hover: "hover:from-purple-600 hover:to-pink-600",
+                focus: "purple-400",
+                text: "text-white",
+              }}
+            >
+              Gradient Button
+            </Button>
+            <Button
+              colors={{
+                base: "bg-emerald-500",
+                hover: "hover:bg-emerald-600",
+                focus: "emerald-400",
+                text: "text-white",
+              }}
+            >
+              Custom Green
+            </Button>
+            <Button
+              colors={{
+                base: "bg-amber-500",
+                hover: "hover:bg-amber-600",
+                focus: "amber-400",
+                text: "text-white",
+              }}
+              leftIcon={AddIcon}
+            >
+              Custom Amber
+            </Button>
+          </div>
+        </Card>
+        <CodeBlock
+          code={`<Button 
+  colors={{
+    base: "bg-gradient-to-r from-purple-500 to-pink-500",
+    hover: "hover:from-purple-600 hover:to-pink-600",
+    focus: "purple-400",
+    text: "text-white"
+  }}
+>
+  Gradient Button
+</Button>
+
+<Button 
+  colors={{
+    base: "bg-emerald-500",
+    hover: "hover:bg-emerald-600",
+    focus: "emerald-400",
+    text: "text-white"
+  }}
+>
+  Custom Green
+</Button>
+
+<Button 
+  colors={{
+    base: "bg-amber-500",
+    hover: "hover:bg-amber-600",
+    focus: "amber-400",
+    text: "text-white"
+  }}
+  leftIcon={AddIcon}
+>
+  Custom Amber
+</Button>`}
+          language="tsx"
+        />
+      </section>
+
+      {/* Dark Theme */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          Dark Theme
+        </h2>
+        <Card>
+          <div className="flex flex-wrap gap-4">
+            <Button theme="dark">Dark Primary</Button>
+            <Button theme="dark" variant="secondary">
+              Dark Secondary
+            </Button>
+            <Button theme="dark" variant="outline">
+              Dark Outline
+            </Button>
+            <Button theme="dark" variant="ghost">
+              Dark Ghost
+            </Button>
+          </div>
+        </Card>
+        <CodeBlock
+          code={`<Button theme="dark">Dark Primary</Button>
+<Button theme="dark" variant="secondary">Dark Secondary</Button>
+<Button theme="dark" variant="outline">Dark Outline</Button>
+<Button theme="dark" variant="ghost">Dark Ghost</Button>`}
           language="tsx"
         />
       </section>

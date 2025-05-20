@@ -167,6 +167,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     iconClassName?: string;
     spinnerClassName?: string;
     theme?: "light" | "dark";
+    /** Custom color classes to override default variant colors */
+    colors?: {
+        base?: string;
+        hover?: string;
+        focus?: string;
+        text?: string;
+    };
 }
 declare const Button: React.FC<ButtonProps>;
 

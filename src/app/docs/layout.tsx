@@ -25,6 +25,7 @@ const navigation = [
       { name: "Card", href: "/docs/card" },
       { name: "Carousel", href: "/docs/carousel" },
       { name: "Collapse", href: "/docs/collapse" },
+      { name: "Dropdown", href: "/docs/dropdown" },
       { name: "Input", href: "/docs/input" },
       { name: "List", href: "/docs/list" },
       { name: "Modal", href: "/docs/modal" },

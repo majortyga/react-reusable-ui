@@ -225,7 +225,7 @@ export default function CalendarDocs() {
             value={selectedDate}
             onChange={setSelectedDate}
             className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700"
-            calendarButtonClassName="hover:bg-blue-100 dark:hover:bg-blue-900"
+            calendarButtonClassName="hover:bg-blue-100 dark:hover:bg-blue-900 bg-blue-50 dark:bg-blue-900"
             textColor="text-gray-900 dark:text-white"
           />
         </Card>

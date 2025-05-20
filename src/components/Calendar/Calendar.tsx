@@ -182,8 +182,21 @@ const Calendar: React.FC<CalendarProps> = ({
             label: y.toString(),
           }))}
           className={`w-20 sm:w-24`}
-          wrapperClassName={`${calendarButtonClassName}`}
-          optionClassName={`${calendarButtonClassName}`}
+          wrapperClassName={`${
+            calendarButtonClassName.length > 0
+              ? calendarButtonClassName
+              : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+          }`}
+          optionClassName={`${
+            calendarButtonClassName.length > 0
+              ? calendarButtonClassName
+              : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+          }`}
+          optionsContainerClassName={`${
+            calendarButtonClassName.length > 0
+              ? calendarButtonClassName
+              : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+          }`}
           labelClassName={`${textColor}`}
           selectClassName={`${textColor}`}
         />
@@ -274,8 +287,21 @@ const Calendar: React.FC<CalendarProps> = ({
                 label: (hour12 ? i + 1 : i).toString().padStart(2, "0"),
               }))}
               className={`w-16 sm:w-20`}
-              wrapperClassName={`${calendarButtonClassName}`}
-              optionClassName={`${calendarButtonClassName}`}
+              wrapperClassName={`${
+                calendarButtonClassName.length > 0
+                  ? calendarButtonClassName
+                  : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`}
+              optionClassName={`${
+                calendarButtonClassName.length > 0
+                  ? calendarButtonClassName
+                  : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`}
+              optionsContainerClassName={`${
+                calendarButtonClassName.length > 0
+                  ? calendarButtonClassName
+                  : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`}
             />
             <span className="text-gray-500 font-medium">:</span>
             {/* Minute */}
@@ -293,8 +319,21 @@ const Calendar: React.FC<CalendarProps> = ({
                 label: m.toString().padStart(2, "0"),
               }))}
               className={`w-16 sm:w-20`}
-              wrapperClassName={`${calendarButtonClassName}`}
-              optionClassName={`${calendarButtonClassName}`}
+              wrapperClassName={`${
+                calendarButtonClassName.length > 0
+                  ? calendarButtonClassName
+                  : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`}
+              optionClassName={`${
+                calendarButtonClassName.length > 0
+                  ? calendarButtonClassName
+                  : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`}
+              optionsContainerClassName={`${
+                calendarButtonClassName.length > 0
+                  ? calendarButtonClassName
+                  : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`}
             />
             {showSeconds && (
               <>
@@ -318,8 +357,21 @@ const Calendar: React.FC<CalendarProps> = ({
                     label: s.toString().padStart(2, "0"),
                   }))}
                   className={`w-16 sm:w-20`}
-                  wrapperClassName={`${calendarButtonClassName}`}
-                  optionClassName={`${calendarButtonClassName}`}
+                  wrapperClassName={`${
+                    calendarButtonClassName.length > 0
+                      ? calendarButtonClassName
+                      : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  }`}
+                  optionClassName={`${
+                    calendarButtonClassName.length > 0
+                      ? calendarButtonClassName
+                      : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  }`}
+                  optionsContainerClassName={`${
+                    calendarButtonClassName.length > 0
+                      ? calendarButtonClassName
+                      : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  }`}
                 />
               </>
             )}
@@ -340,8 +392,21 @@ const Calendar: React.FC<CalendarProps> = ({
                   { value: "PM", label: "PM" },
                 ]}
                 className={`w-16 sm:w-20`}
-                wrapperClassName={`${calendarButtonClassName}`}
-                optionClassName={`${calendarButtonClassName}`}
+                wrapperClassName={`${
+                  calendarButtonClassName.length > 0
+                    ? calendarButtonClassName
+                    : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+                }`}
+                optionClassName={`${
+                  calendarButtonClassName.length > 0
+                    ? calendarButtonClassName
+                    : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+                }`}
+                optionsContainerClassName={`${
+                  calendarButtonClassName.length > 0
+                    ? calendarButtonClassName
+                    : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
+                }`}
               />
             )}
           </div>

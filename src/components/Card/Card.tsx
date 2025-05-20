@@ -207,7 +207,7 @@ const Card: React.FC<CardProps> = ({
     const aspectRatioClasses = {
       square: "aspect-square",
       video: "aspect-video",
-      auto: "aspect-auto",
+      auto: "",
     };
 
     const positionClasses = {
@@ -217,11 +217,11 @@ const Card: React.FC<CardProps> = ({
       right: "w-full md:w-1/3 order-last",
     };
 
-    return `
-      ${aspectRatioClasses[image.aspectRatio || "auto"]}
-      ${positionClasses[image.position || "top"]}
-      ${image.overlay ? "relative" : ""}
-    `;
+    return [
+      aspectRatioClasses[image.aspectRatio || "auto"],
+      positionClasses[image.position || "top"],
+      "relative overflow-hidden flex-shrink-0",
+    ].join(" ");
   };
 
   const renderImage = () => {
@@ -235,19 +235,17 @@ const Card: React.FC<CardProps> = ({
         <img
           src={image.src}
           alt={image.alt || ""}
-          className={`
-            w-full h-full object-cover
-            ${image.overlay ? "absolute inset-0 z-50" : ""}
-          `}
+          className="w-full h-full object-cover block"
           loading="lazy"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%239ca3af'%3EImage not found%3C/text%3E%3C/svg%3E`;
           }}
+          style={{ display: "block" }}
         />
         {image.overlay && (
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 pointer-events-none"
             style={{ backgroundColor: overlayColor }}
           />
         )}

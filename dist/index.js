@@ -660,7 +660,8 @@ var Button = (_a) => {
     iconContainerClassName = "",
     iconClassName = "",
     spinnerClassName = "",
-    theme = "light"
+    theme = "light",
+    colors
   } = _b, props = __objRest(_b, [
     "children",
     "variant",
@@ -674,14 +675,21 @@ var Button = (_a) => {
     "iconContainerClassName",
     "iconClassName",
     "spinnerClassName",
-    "theme"
+    "theme",
+    "colors"
   ]);
   const baseClasses = "inline-flex items-center justify-center font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2";
-  const variantClasses = {
-    primary: theme === "dark" ? "bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-400" : "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500",
-    secondary: theme === "dark" ? "bg-gray-700 text-white hover:bg-gray-600 focus:ring-gray-500" : "bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500",
-    outline: theme === "dark" ? "border-2 border-gray-600 text-gray-300 hover:bg-gray-700 focus:ring-gray-500" : "border-2 border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500",
-    ghost: theme === "dark" ? "text-gray-300 hover:bg-gray-700 focus:ring-gray-500" : "text-gray-700 hover:bg-gray-100 focus:ring-gray-500"
+  const getVariantClasses = () => {
+    if (colors) {
+      return `${colors.base || ""} ${colors.text || ""} ${colors.hover || ""} ${colors.focus ? `focus:ring-${colors.focus}` : ""}`;
+    }
+    const variantClasses = {
+      primary: theme === "dark" ? "bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-400" : "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500",
+      secondary: theme === "dark" ? "bg-gray-700 text-white hover:bg-gray-600 focus:ring-gray-500" : "bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500",
+      outline: theme === "dark" ? "border-2 border-gray-600 text-gray-300 hover:bg-gray-700 focus:ring-gray-500" : "border-2 border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500",
+      ghost: theme === "dark" ? "text-gray-300 hover:bg-gray-700 focus:ring-gray-500" : "text-gray-700 hover:bg-gray-100 focus:ring-gray-500"
+    };
+    return variantClasses[variant];
   };
   const sizeClasses = {
     sm: "px-3 py-1.5 text-sm",
@@ -693,7 +701,7 @@ var Button = (_a) => {
   return /* @__PURE__ */ import_react3.default.createElement(
     "button",
     __spreadValues({
-      className: `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${widthClass} ${disabledClass} ${className}`,
+      className: `${baseClasses} ${getVariantClasses()} ${sizeClasses[size]} ${widthClass} ${disabledClass} ${className}`,
       disabled: disabled || isLoading
     }, props),
     isLoading && /* @__PURE__ */ import_react3.default.createElement(
@@ -1177,7 +1185,7 @@ var Card = ({
     const aspectRatioClasses = {
       square: "aspect-square",
       video: "aspect-video",
-      auto: "aspect-auto"
+      auto: ""
     };
     const positionClasses = {
       top: "w-full",
@@ -1185,11 +1193,11 @@ var Card = ({
       left: "w-full md:w-1/3",
       right: "w-full md:w-1/3 order-last"
     };
-    return `
-      ${aspectRatioClasses[image.aspectRatio || "auto"]}
-      ${positionClasses[image.position || "top"]}
-      ${image.overlay ? "relative" : ""}
-    `;
+    return [
+      aspectRatioClasses[image.aspectRatio || "auto"],
+      positionClasses[image.position || "top"],
+      "relative overflow-hidden flex-shrink-0"
+    ].join(" ");
   };
   const renderImage = () => {
     if (!image) return null;
@@ -1199,20 +1207,18 @@ var Card = ({
       {
         src: image.src,
         alt: image.alt || "",
-        className: `
-            w-full h-full object-cover
-            ${image.overlay ? "absolute inset-0 z-50" : ""}
-          `,
+        className: "w-full h-full object-cover block",
         loading: "lazy",
         onError: (e) => {
           const target = e.target;
           target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%239ca3af'%3EImage not found%3C/text%3E%3C/svg%3E`;
-        }
+        },
+        style: { display: "block" }
       }
     ), image.overlay && /* @__PURE__ */ import_react6.default.createElement(
       "div",
       {
-        className: "absolute inset-0",
+        className: "absolute inset-0 pointer-events-none",
         style: { backgroundColor: overlayColor }
       }
     ));
@@ -2343,8 +2349,9 @@ var Calendar = ({
           label: y.toString()
         })),
         className: `w-20 sm:w-24`,
-        wrapperClassName: `${calendarButtonClassName}`,
-        optionClassName: `${calendarButtonClassName}`,
+        wrapperClassName: `${calendarButtonClassName.length > 0 ? calendarButtonClassName : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`,
+        optionClassName: `${calendarButtonClassName.length > 0 ? calendarButtonClassName : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`,
+        optionsContainerClassName: `${calendarButtonClassName.length > 0 ? calendarButtonClassName : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`,
         labelClassName: `${textColor}`,
         selectClassName: `${textColor}`
       }
@@ -2401,8 +2408,9 @@ var Calendar = ({
           label: (hour12 ? i + 1 : i).toString().padStart(2, "0")
         })),
         className: `w-16 sm:w-20`,
-        wrapperClassName: `${calendarButtonClassName}`,
-        optionClassName: `${calendarButtonClassName}`
+        wrapperClassName: `${calendarButtonClassName.length > 0 ? calendarButtonClassName : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`,
+        optionClassName: `${calendarButtonClassName.length > 0 ? calendarButtonClassName : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`,
+        optionsContainerClassName: `${calendarButtonClassName.length > 0 ? calendarButtonClassName : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`
       }
     ), /* @__PURE__ */ import_react13.default.createElement("span", { className: "text-gray-500 font-medium" }, ":"), /* @__PURE__ */ import_react13.default.createElement(
       Select_default,
@@ -2418,8 +2426,9 @@ var Calendar = ({
           label: m.toString().padStart(2, "0")
         })),
         className: `w-16 sm:w-20`,
-        wrapperClassName: `${calendarButtonClassName}`,
-        optionClassName: `${calendarButtonClassName}`
+        wrapperClassName: `${calendarButtonClassName.length > 0 ? calendarButtonClassName : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`,
+        optionClassName: `${calendarButtonClassName.length > 0 ? calendarButtonClassName : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`,
+        optionsContainerClassName: `${calendarButtonClassName.length > 0 ? calendarButtonClassName : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`
       }
     ), showSeconds && /* @__PURE__ */ import_react13.default.createElement(import_react13.default.Fragment, null, /* @__PURE__ */ import_react13.default.createElement("span", { className: "text-gray-500 font-medium" }, ":"), /* @__PURE__ */ import_react13.default.createElement(
       Select_default,
@@ -2440,8 +2449,9 @@ var Calendar = ({
           label: s.toString().padStart(2, "0")
         })),
         className: `w-16 sm:w-20`,
-        wrapperClassName: `${calendarButtonClassName}`,
-        optionClassName: `${calendarButtonClassName}`
+        wrapperClassName: `${calendarButtonClassName.length > 0 ? calendarButtonClassName : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`,
+        optionClassName: `${calendarButtonClassName.length > 0 ? calendarButtonClassName : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`,
+        optionsContainerClassName: `${calendarButtonClassName.length > 0 ? calendarButtonClassName : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`
       }
     )), hour12 && /* @__PURE__ */ import_react13.default.createElement(
       Select_default,
@@ -2459,8 +2469,9 @@ var Calendar = ({
           { value: "PM", label: "PM" }
         ],
         className: `w-16 sm:w-20`,
-        wrapperClassName: `${calendarButtonClassName}`,
-        optionClassName: `${calendarButtonClassName}`
+        wrapperClassName: `${calendarButtonClassName.length > 0 ? calendarButtonClassName : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`,
+        optionClassName: `${calendarButtonClassName.length > 0 ? calendarButtonClassName : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`,
+        optionsContainerClassName: `${calendarButtonClassName.length > 0 ? calendarButtonClassName : "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"}`
       }
     ))),
     showTimePicker && !timePickerInline && /* @__PURE__ */ import_react13.default.createElement(
