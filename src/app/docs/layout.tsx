@@ -1,8 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
+import logo from "@/images/gci.svg";
+import { useRouter } from "next/navigation";
 const navigation = [
   {
     name: "Getting Started",
@@ -58,6 +60,10 @@ const navigation = [
       { name: "useMediaQuery", href: "/docs/hooks/use-media-query" },
     ],
   },
+  {
+    name: "Others",
+    items: [{ name: "Templates", href: "/templates" }],
+  },
 ];
 
 export default function DocsLayout({
@@ -67,7 +73,7 @@ export default function DocsLayout({
 }) {
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+  const router = useRouter();
   return (
     <div className="flex min-h-screen flex-col">
       <div className="flex flex-1">
@@ -75,17 +81,25 @@ export default function DocsLayout({
         <div
           className={`fixed lg:sticky top-0 inset-y-0 left-0 transform ${
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } lg:translate-x-0 transition duration-200 ease-in-out z-40 w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 h-screen overflow-y-auto`}
+          } lg:translate-x-0 transition duration-200 ease-in-out z-40 w-64 h-screen overflow-y-auto border-r border-gray-200 dark:border-gray-700 bg-gradient-to-b from-[#0a1836] via-[#11235a] to-[#1e293b] dark:from-[#0a1836] dark:via-[#11235a] dark:to-[#1e293b] custom-sidebar-scrollbar`}
         >
-          <div className="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-700 sticky top-0 bg-white dark:bg-gray-800 z-10">
-            <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <div className="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-700 sticky top-0 bg-gradient-to-r from-[#0a1836] via-[#11235a] to-[#1e293b] dark:from-[#0a1836] dark:via-[#11235a] dark:to-[#1e293b] z-10">
+            <div className="flex gap-3 items-center text-xl font-semibold text-gray-100 dark:text-white">
+              <img
+                src={logo.src}
+                alt="Logo"
+                width={logo.width / 4}
+                height={logo.height / 4}
+                className="h-8 w-8 mr-3 cursor-pointer"
+                onClick={() => router.push("/")}
+              />
               Reusable UI
-            </h1>
+            </div>
           </div>
           <nav className="p-4 space-y-6">
             {navigation.map((section) => (
               <div key={section.name}>
-                <h2 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <h2 className="text-xs font-semibold text-gray-300 dark:text-gray-400 uppercase tracking-wider">
                   {section.name}
                 </h2>
                 <div className="mt-2 space-y-1">
@@ -98,8 +112,8 @@ export default function DocsLayout({
                         onClick={() => setIsSidebarOpen(false)}
                         className={`flex items-center px-3 py-2 text-sm font-medium rounded-md ${
                           isActive
-                            ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
-                            : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                            ? "bg-white/10 dark:bg-white/10 text-white"
+                            : "text-gray-200 dark:text-gray-300 hover:bg-white/5 dark:hover:bg-white/5"
                         }`}
                       >
                         {item.name}
@@ -124,14 +138,20 @@ export default function DocsLayout({
         )}
 
         {/* Main content */}
-        <div className="flex-1 flex flex-col">
+        <div
+          className="flex-1 flex flex-col min-h-screen"
+          style={{
+            background:
+              "radial-gradient(circle at 60% 40%, #0a1836 0%, #11235a 60%, #1e293b 100%)",
+          }}
+        >
           {/* Header */}
-          <header className="sticky top-0 z-[1000000] bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+          <header className="sticky top-0 z-[1000000] bg-gradient-to-r from-[#0a1836] via-[#11235a] to-[#1e293b] dark:from-[#0a1836] dark:via-[#11235a] dark:to-[#1e293b] border-b border-gray-200 dark:border-gray-700">
             <div className="h-16 flex items-center justify-between px-4 lg:px-8">
               <div className="flex items-center space-x-4">
                 <button
                   onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                  className="lg:hidden p-2 rounded-md text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline-none"
+                  className="lg:hidden p-2 rounded-md text-gray-300 hover:text-white dark:text-gray-400 dark:hover:text-white focus:outline-none"
                 >
                   <svg
                     className="h-6 w-6"
@@ -150,11 +170,19 @@ export default function DocsLayout({
                   </svg>
                 </button>
                 <div className="flex items-center space-x-2">
-                  <span className="text-lg font-medium text-gray-900 dark:text-white">
+                  <div className="flex gap-3 items-center text-lg font-medium text-gray-100 dark:text-white">
+                    <img
+                      src={logo.src}
+                      alt="Logo"
+                      width={logo.width / 4}
+                      height={logo.height / 4}
+                      className="h-8 w-8 mr-3 md:hidden cursor-pointer"
+                      onClick={() => router.push("/")}
+                    />
                     Reusable UI
-                  </span>
-                  <span className="text-gray-500 dark:text-gray-400">/</span>
-                  <h2 className="text-lg font-medium text-gray-900 dark:text-white">
+                  </div>
+                  <span className="text-gray-400 dark:text-gray-400">/</span>
+                  <h2 className="text-lg font-medium text-gray-100 dark:text-white">
                     {navigation
                       .flatMap((section) => section.items)
                       .find((item) => item.href === pathname)?.name ||
@@ -167,7 +195,7 @@ export default function DocsLayout({
                   href="https://github.com/majortyga/react-reusable-ui"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                  className="text-gray-300 hover:text-white dark:text-gray-400 dark:hover:text-white"
                 >
                   <svg
                     className="h-6 w-6"
@@ -185,10 +213,18 @@ export default function DocsLayout({
             </div>
           </header>
 
-          <main className=" p-4 lg:p-8 max-w-4xl mx-auto">{children}</main>
+          <main
+            className="p-4 lg:p-8 max-w-4xl mx-auto w-full min-h-[calc(100vh-4rem-120px)]"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(10,24,54,0.95) 0%, rgba(17,35,90,0.85) 60%, rgba(30,41,59,0.8) 100%)",
+            }}
+          >
+            {children}
+          </main>
 
           {/* Footer */}
-          <footer className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+          <footer className="border-t border-gray-200 dark:border-gray-700 bg-gradient-to-r from-[#0a1836] via-[#11235a] to-[#1e293b] dark:from-[#0a1836] dark:via-[#11235a] dark:to-[#1e293b]">
             <div className="max-w-7xl mx-auto px-4 lg:px-8 py-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
@@ -198,7 +234,9 @@ export default function DocsLayout({
                   <ul className="mt-4 space-y-4">
                     <li>
                       <a
-                        href="https://github.com/yourusername/reusable"
+                        href="https://github.com/majortyga/react-reusable-ui"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="text-base text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                       >
                         GitHub
@@ -229,7 +267,7 @@ export default function DocsLayout({
                   <ul className="mt-4 space-y-4">
                     <li>
                       <a
-                        href="https://github.com/yourusername/reusable/discussions"
+                        href="https://github.com/majortyga/react-reusable-ui/discussions"
                         className="text-base text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                       >
                         GitHub Discussions
@@ -237,7 +275,7 @@ export default function DocsLayout({
                     </li>
                     <li>
                       <a
-                        href="https://github.com/yourusername/reusable/issues"
+                        href="https://github.com/majortyga/react-reusable-ui/issues"
                         className="text-base text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                       >
                         Issues
@@ -245,7 +283,7 @@ export default function DocsLayout({
                     </li>
                     <li>
                       <a
-                        href="https://github.com/yourusername/reusable/pulls"
+                        href="https://github.com/majortyga/react-reusable-ui/pulls"
                         className="text-base text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                       >
                         Pull Requests
@@ -287,13 +325,53 @@ export default function DocsLayout({
               </div>
               <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
                 <p className="text-base text-gray-400 text-center">
-                  © {new Date().getFullYear()} Reusable UI. All rights reserved.
+                  © {new Date().getFullYear()} GCI. All rights reserved.
                 </p>
               </div>
             </div>
           </footer>
         </div>
       </div>
+      {/* Dark mode main and main-content gradients */}
+      <style jsx global>{`
+        @media (prefers-color-scheme: dark) {
+          .flex-1.flex.flex-col.min-h-screen {
+            background: radial-gradient(
+              circle at 60% 40%,
+              #0a1836 0%,
+              #11235a 80%,
+              #1e293b 100%
+            ) !important;
+          }
+          main[style] {
+            background: linear-gradient(
+              135deg,
+              rgba(10, 24, 54, 0.95) 0%,
+              rgba(17, 35, 90, 0.85) 60%,
+              rgba(30, 41, 59, 0.8) 100%
+            ) !important;
+          }
+        }
+        .custom-sidebar-scrollbar::-webkit-scrollbar {
+          width: 10px;
+        }
+        .custom-sidebar-scrollbar::-webkit-scrollbar-thumb {
+          background: linear-gradient(135deg, #11235a 0%, #1e3a8a 100%);
+          border-radius: 8px;
+          border: 2px solid #0a1836;
+        }
+        .custom-sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        }
+        .custom-sidebar-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        /* Firefox */
+        .custom-sidebar-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: #1e3a8a #0a1836;
+        }
+      `}</style>
     </div>
   );
 }

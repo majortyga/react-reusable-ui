@@ -55,8 +55,7 @@ function App() {
 - Card
 - Carousel
 - Collapse
-- CodeBlock
-- CodeEditor
+- Dropdown
 - Input
 - List
 - Modal

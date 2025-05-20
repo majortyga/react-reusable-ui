@@ -61,12 +61,37 @@ export default function InstallationDocs() {
                 1. Install the package
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-2">
-                Run the following command in your terminal:
+                Run one of the following commands in your terminal:
               </p>
-              <CodeBlock
-                code="npm install @majordev/react-reusable-ui"
-                language="bash"
-              />
+              <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+                <div>
+                  <div className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-1">
+                    npm
+                  </div>
+                  <CodeBlock
+                    code="npm install @majordev/react-reusable-ui"
+                    language="bash"
+                  />
+                </div>
+                <div>
+                  <div className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-1">
+                    yarn
+                  </div>
+                  <CodeBlock
+                    code="yarn add @majordev/react-reusable-ui"
+                    language="bash"
+                  />
+                </div>
+                <div>
+                  <div className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-1">
+                    pnpm
+                  </div>
+                  <CodeBlock
+                    code="pnpm add @majordev/react-reusable-ui"
+                    language="bash"
+                  />
+                </div>
+              </div>
             </div>
 
             <div>
@@ -128,7 +153,7 @@ function App() {
           <ul className="grid grid-cols-2 md:grid-cols-3 gap-2 text-gray-600 dark:text-gray-400">
             <li>
               <Link
-                href="/docs/components/alert"
+                href="/docs/alert"
                 className="text-blue-500 hover:underline"
               >
                 Alert
@@ -136,7 +161,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/avatar"
+                href="/docs/avatar"
                 className="text-blue-500 hover:underline"
               >
                 Avatar
@@ -144,7 +169,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/badge"
+                href="/docs/badge"
                 className="text-blue-500 hover:underline"
               >
                 Badge
@@ -152,7 +177,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/breadcrumbs"
+                href="/docs/breadcrumbs"
                 className="text-blue-500 hover:underline"
               >
                 Breadcrumbs
@@ -160,7 +185,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/button"
+                href="/docs/button"
                 className="text-blue-500 hover:underline"
               >
                 Button
@@ -168,23 +193,20 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/calendar"
+                href="/docs/calendar"
                 className="text-blue-500 hover:underline"
               >
                 Calendar
               </Link>
             </li>
             <li>
-              <Link
-                href="/docs/components/card"
-                className="text-blue-500 hover:underline"
-              >
+              <Link href="/docs/card" className="text-blue-500 hover:underline">
                 Card
               </Link>
             </li>
             <li>
               <Link
-                href="/docs/components/carousel"
+                href="/docs/carousel"
                 className="text-blue-500 hover:underline"
               >
                 Carousel
@@ -192,7 +214,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/collapse"
+                href="/docs/collapse"
                 className="text-blue-500 hover:underline"
               >
                 Collapse
@@ -200,39 +222,28 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/codeblock"
+                href="/docs/dropdown"
                 className="text-blue-500 hover:underline"
               >
-                CodeBlock
+                Dropdown
               </Link>
             </li>
             <li>
               <Link
-                href="/docs/components/codeeditor"
-                className="text-blue-500 hover:underline"
-              >
-                CodeEditor
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/docs/components/input"
+                href="/docs/input"
                 className="text-blue-500 hover:underline"
               >
                 Input
               </Link>
             </li>
             <li>
-              <Link
-                href="/docs/components/list"
-                className="text-blue-500 hover:underline"
-              >
+              <Link href="/docs/list" className="text-blue-500 hover:underline">
                 List
               </Link>
             </li>
             <li>
               <Link
-                href="/docs/components/modal"
+                href="/docs/modal"
                 className="text-blue-500 hover:underline"
               >
                 Modal
@@ -240,7 +251,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/pagination"
+                href="/docs/pagination"
                 className="text-blue-500 hover:underline"
               >
                 Pagination
@@ -248,7 +259,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/popover"
+                href="/docs/popover"
                 className="text-blue-500 hover:underline"
               >
                 Popover
@@ -256,7 +267,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/progress"
+                href="/docs/progress"
                 className="text-blue-500 hover:underline"
               >
                 Progress
@@ -264,7 +275,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/rating"
+                href="/docs/rating"
                 className="text-blue-500 hover:underline"
               >
                 Rating
@@ -272,7 +283,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/select"
+                href="/docs/select"
                 className="text-blue-500 hover:underline"
               >
                 Select
@@ -280,7 +291,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/skeleton"
+                href="/docs/skeleton"
                 className="text-blue-500 hover:underline"
               >
                 Skeleton
@@ -288,7 +299,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/slider"
+                href="/docs/slider"
                 className="text-blue-500 hover:underline"
               >
                 Slider
@@ -296,7 +307,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/spinner"
+                href="/docs/spinner"
                 className="text-blue-500 hover:underline"
               >
                 Spinner
@@ -304,7 +315,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/statcard"
+                href="/docs/statcard"
                 className="text-blue-500 hover:underline"
               >
                 StatCard
@@ -312,7 +323,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/stepper"
+                href="/docs/stepper"
                 className="text-blue-500 hover:underline"
               >
                 Stepper
@@ -320,23 +331,20 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/table"
+                href="/docs/table"
                 className="text-blue-500 hover:underline"
               >
                 Table
               </Link>
             </li>
             <li>
-              <Link
-                href="/docs/components/tabs"
-                className="text-blue-500 hover:underline"
-              >
+              <Link href="/docs/tabs" className="text-blue-500 hover:underline">
                 Tabs
               </Link>
             </li>
             <li>
               <Link
-                href="/docs/components/taginput"
+                href="/docs/taginput"
                 className="text-blue-500 hover:underline"
               >
                 TagInput
@@ -344,7 +352,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/timeline"
+                href="/docs/timeline"
                 className="text-blue-500 hover:underline"
               >
                 Timeline
@@ -352,7 +360,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/toast"
+                href="/docs/toast"
                 className="text-blue-500 hover:underline"
               >
                 Toast
@@ -360,7 +368,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/tooltip"
+                href="/docs/tooltip"
                 className="text-blue-500 hover:underline"
               >
                 Tooltip
@@ -368,7 +376,7 @@ function App() {
             </li>
             <li>
               <Link
-                href="/docs/components/upload"
+                href="/docs/upload"
                 className="text-blue-500 hover:underline"
               >
                 Upload

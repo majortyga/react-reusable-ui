@@ -1044,7 +1044,7 @@ export default function DropdownDocs() {
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
           API Reference
         </h2>
-        <Card className="overflow-auto max-w-[90vw]">
+        <Card className="overflow-auto max-w-[80vw]">
           <div className="space-y-4">
             <h3 className="text-lg font-medium text-gray-900 dark:text-white">
               Props
@@ -1062,69 +1062,139 @@ export default function DropdownDocs() {
 
       {/* Display Options Reference */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+        <h2 className="text-2xl font-semibold text-blue-900 dark:text-blue-200 mb-4 drop-shadow">
           Display Options Reference
         </h2>
-        <Card>
+        <Card className="bg-gradient-to-br from-[#1e293b] via-[#11235a] to-[#0a1836] border border-blue-900/40 dark:border-blue-800/60 rounded-xl shadow-lg p-6">
           <div className="prose dark:prose-invert max-w-none">
             <p>
-              The <code>display</code> prop allows you to control the visibility
-              of various UI elements in the dropdown:
+              The{" "}
+              <code className="bg-blue-900/80 text-blue-100 px-1.5 py-0.5 rounded font-mono">
+                display
+              </code>{" "}
+              prop allows you to control the visibility of various UI elements
+              in the dropdown:
             </p>
-            <ul>
-              <li>
-                <code>triggerIcon</code>: Show/hide the icon in the trigger
-                button
+            <ul className="space-y-2 pl-4">
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  triggerIcon
+                </code>
+                <span className="text-blue-100">
+                  Show/hide the icon in the trigger button
+                </span>
               </li>
-              <li>
-                <code>triggerDescription</code>: Show/hide the description in
-                the trigger button
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  triggerDescription
+                </code>
+                <span className="text-blue-100">
+                  Show/hide the description in the trigger button
+                </span>
               </li>
-              <li>
-                <code>optionIcons</code>: Show/hide icons in the main options
-                list
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  optionIcons
+                </code>
+                <span className="text-blue-100">
+                  Show/hide icons in the main options list
+                </span>
               </li>
-              <li>
-                <code>optionDescriptions</code>: Show/hide descriptions in the
-                main options list
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  optionDescriptions
+                </code>
+                <span className="text-blue-100">
+                  Show/hide descriptions in the main options list
+                </span>
               </li>
-              <li>
-                <code>submenuIcons</code>: Show/hide icons in submenus
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  submenuIcons
+                </code>
+                <span className="text-blue-100">
+                  Show/hide icons in submenus
+                </span>
               </li>
-              <li>
-                <code>submenuDescriptions</code>: Show/hide descriptions in
-                submenus
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  submenuDescriptions
+                </code>
+                <span className="text-blue-100">
+                  Show/hide descriptions in submenus
+                </span>
               </li>
-              <li>
-                <code>searchIcon</code>: Show/hide the search icon in the search
-                input
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  searchIcon
+                </code>
+                <span className="text-blue-100">
+                  Show/hide the search icon in the search input
+                </span>
               </li>
-              <li>
-                <code>submenuArrow</code>: Show/hide the arrow indicating
-                submenus
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  submenuArrow
+                </code>
+                <span className="text-blue-100">
+                  Show/hide the arrow indicating submenus
+                </span>
               </li>
-              <li>
-                <code>dropdownArrow</code>: Show/hide the main dropdown arrow
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  dropdownArrow
+                </code>
+                <span className="text-blue-100">
+                  Show/hide the main dropdown arrow
+                </span>
               </li>
-              <li>
-                <code>loadingSpinner</code>: Show/hide the loading spinner
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  loadingSpinner
+                </code>
+                <span className="text-blue-100">
+                  Show/hide the loading spinner
+                </span>
               </li>
-              <li>
-                <code>checkmark</code>: Show/hide the checkmark for selected
-                items
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  checkmark
+                </code>
+                <span className="text-blue-100">
+                  Show/hide the checkmark for selected items
+                </span>
               </li>
-              <li>
-                <code>groupDivider</code>: Show/hide dividers between groups
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  groupDivider
+                </code>
+                <span className="text-blue-100">
+                  Show/hide dividers between groups
+                </span>
               </li>
-              <li>
-                <code>tooltips</code>: Show/hide tooltips for options
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  tooltips
+                </code>
+                <span className="text-blue-100">
+                  Show/hide tooltips for options
+                </span>
               </li>
-              <li>
-                <code>badges</code>: Show/hide badges for options
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  badges
+                </code>
+                <span className="text-blue-100">
+                  Show/hide badges for options
+                </span>
               </li>
-              <li>
-                <code>arrow</code>: Show/hide all arrows (overrides individual
-                arrow settings)
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  arrow
+                </code>
+                <span className="text-blue-100">
+                  Show/hide all arrows (overrides individual arrow settings)
+                </span>
               </li>
             </ul>
           </div>
@@ -1133,31 +1203,46 @@ export default function DropdownDocs() {
 
       {/* Grouping Reference */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+        <h2 className="text-2xl font-semibold text-blue-900 dark:text-blue-200 mb-4 drop-shadow">
           Grouping Reference
         </h2>
-        <Card>
+        <Card className="bg-gradient-to-br from-[#1e293b] via-[#11235a] to-[#0a1836] border border-blue-900/40 dark:border-blue-800/60 rounded-xl shadow-lg p-6">
           <div className="prose dark:prose-invert max-w-none">
             <p>
               The dropdown supports grouping options using the{" "}
-              <code>group</code> property in options. You can customize the
-              appearance of groups using:
+              <code className="bg-blue-900/80 text-blue-100 px-1.5 py-0.5 rounded font-mono">
+                group
+              </code>{" "}
+              property in options. You can customize the appearance of groups
+              using:
             </p>
-            <ul>
-              <li>
-                <code>renderGroup</code>: Custom render function for group
-                headers
+            <ul className="space-y-2 pl-4">
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  renderGroup
+                </code>
+                <span className="text-blue-100">
+                  Custom render function for group headers
+                </span>
               </li>
-              <li>
-                <code>groupDivider</code>: Custom component for dividers between
-                groups
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  groupDivider
+                </code>
+                <span className="text-blue-100">
+                  Custom component for dividers between groups
+                </span>
               </li>
-              <li>
-                <code>display.groupDivider</code>: Toggle visibility of group
-                dividers
+              <li className="flex items-start gap-2">
+                <code className="bg-blue-800/80 text-blue-100 px-1 py-0.5 rounded font-mono">
+                  display.groupDivider
+                </code>
+                <span className="text-blue-100">
+                  Toggle visibility of group dividers
+                </span>
               </li>
             </ul>
-            <p>
+            <p className="mt-4 text-blue-100">
               Options without a group will be placed in a default group. Groups
               are rendered in the order they appear in the options array.
             </p>
