@@ -1531,4 +1531,267 @@ interface TabsProps {
 }
 declare const Tabs: React.FC<TabsProps>;
 
-export { Alert, type AlertProps, Avatar, type AvatarProps, Badge, type BadgeProps, type BreadcrumbItem, Breadcrumbs, type BreadcrumbsProps, Button, type ButtonProps, Calendar, type CalendarProps, Card, type CardProps, Collapse, type CollapseProps, type Column, Dropdown, type DropdownOption, type DropdownProps, Input, type InputProps, List, type ListItem, type ListProps, Modal, type ModalProps, Pagination, type PaginationProps, Popover, type PopoverProps, Progress, type ProgressProps, Rating, type RatingProps, Select, type SelectOption, type SelectProps, Skeleton, type SkeletonProps, Slider, type SliderProps, Spinner, type SpinnerProps, StatCard, type StatCardProps, Stepper, type StepperProps, Table, type TableProps, Tabs, type TabsProps, TagInput, type TagInputProps, Timeline, type TimelineProps, Toast, ToastContainer, type ToastContainerProps, type ToastProps, Tooltip, type TooltipProps, Upload, type UploadProps };
+/**
+ * Grid Component
+ *
+ * A flexible and responsive grid system that supports various layouts including:
+ * - Responsive column layouts
+ * - Masonry layouts
+ * - Auto-fit layouts
+ * - Custom gaps and spacing
+ * - Column and row spanning
+ *
+ * @example
+ * ```tsx
+ * // Basic responsive grid
+ * <Grid
+ *   columns={{
+ *     xs: 1,
+ *     sm: 2,
+ *     md: 3,
+ *     lg: 4,
+ *   }}
+ *   gap={{ x: "1rem", y: "1rem" }}
+ * >
+ *   <div>Item 1</div>
+ *   <div>Item 2</div>
+ * </Grid>
+ * ```
+ *
+ * @example
+ * // Masonry layout with row spanning
+ * <Grid
+ *   masonry
+ *   columns={{ xs: 1, sm: 2, md: 3 }}
+ *   gap={{ x: "1.5rem", y: "1.5rem" }}
+ * >
+ *   <Col rowSpan={2}>
+ *     <div>Tall Item</div>
+ *   </Col>
+ *   <Col>
+ *     <div>Regular Item</div>
+ *   </Col>
+ * </Grid>
+ * ```
+ *
+ * @example
+ * // Auto-fit layout with custom styling
+ * <Grid
+ *   autoFit
+ *   containerClassName="bg-gray-100"
+ *   itemClassName="hover:scale-105"
+ *   className="gap-6"
+ * >
+ *   <div>Auto Item 1</div>
+ *   <div>Auto Item 2</div>
+ * </Grid>
+ * ```
+ */
+/**
+ * Props for the Grid component.
+ */
+type GridProps = {
+    /** Child elements to be rendered in the grid */
+    children: React.ReactNode;
+    /**
+     * Number of columns at different breakpoints.
+     * @property {number} [xs] - Number of columns on extra small screens (default: 1)
+     * @property {number} [sm] - Number of columns on small screens (default: 2)
+     * @property {number} [md] - Number of columns on medium screens (default: 3)
+     * @property {number} [lg] - Number of columns on large screens (default: 4)
+     * @property {number} [xl] - Number of columns on extra large screens (default: 5)
+     * @property {number} [2xl] - Number of columns on 2xl screens (default: 6)
+     */
+    columns?: {
+        xs?: number;
+        sm?: number;
+        md?: number;
+        lg?: number;
+        xl?: number;
+        "2xl"?: number;
+    };
+    /**
+     * Gap between grid items.
+     * @property {string} [x] - Horizontal gap (default: '1rem')
+     * @property {string} [y] - Vertical gap (default: '1rem')
+     */
+    gap?: {
+        x?: string;
+        y?: string;
+    };
+    /** Whether to automatically fit items based on container width */
+    autoFit?: boolean;
+    /** Height of automatically generated rows (default: 'auto') */
+    autoRows?: string;
+    /** Whether to use masonry layout */
+    masonry?: boolean;
+    /** Additional classes for the grid container */
+    className?: string;
+    /** Additional classes for grid items */
+    itemClassName?: string;
+    /** Additional classes for the outer container */
+    containerClassName?: string;
+    /** Callback fired when grid layout is complete */
+    onLayoutComplete?: () => void;
+};
+/**
+ * Props for the Col component.
+ */
+type ColProps = {
+    /** Child elements to be rendered in the column */
+    children: React.ReactNode;
+    /**
+     * Column span at different breakpoints.
+     * @property {number} [xs] - Column span on extra small screens
+     * @property {number} [sm] - Column span on small screens
+     * @property {number} [md] - Column span on medium screens
+     * @property {number} [lg] - Column span on large screens
+     * @property {number} [xl] - Column span on extra large screens
+     * @property {number} [2xl] - Column span on 2xl screens
+     */
+    span?: {
+        xs?: number;
+        sm?: number;
+        md?: number;
+        lg?: number;
+        xl?: number;
+        "2xl"?: number;
+    };
+    /** Number of rows to span */
+    rowSpan?: number;
+    /** Additional classes for the column */
+    className?: string;
+};
+declare const Col: React.FC<ColProps>;
+/**
+ * Grid Component
+ *
+ * A flexible grid component that supports:
+ * - Responsive column layouts
+ * - Masonry layout
+ * - Auto-fit layouts
+ * - Custom gaps
+ * - Column spanning
+ *
+ * @example
+ * // Basic usage with responsive columns
+ * <Grid
+ *   columns={{
+ *     xs: 1,
+ *     sm: 2,
+ *     md: 3,
+ *     lg: 4,
+ *   }}
+ *   gap={{ x: "1rem", y: "1rem" }}
+ * >
+ *   <div className="col-span-1">Item 1</div>
+ *   <div className="col-span-2">Item 2</div>
+ * </Grid>
+ *
+ * @example
+ * // Masonry layout
+ * <Grid
+ *   masonry
+ *   columns={{
+ *     xs: 1,
+ *     sm: 2,
+ *     md: 3,
+ *   }}
+ * >
+ *   {items.map(item => (
+ *     <div key={item.id}>{item.content}</div>
+ *   ))}
+ * </Grid>
+ *
+ * @example
+ * // Auto-fit layout
+ * <Grid
+ *   autoFit
+ *   gap={{ x: "1rem", y: "1rem" }}
+ * >
+ *   {items.map(item => (
+ *     <div key={item.id}>{item.content}</div>
+ *   ))}
+ * </Grid>
+ */
+declare const Grid: React.FC<GridProps>;
+
+interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+    /**
+     * The content to be rendered inside the container
+     */
+    children: React.ReactNode;
+    /**
+     * Maximum width of the container
+     * @default "7xl"
+     */
+    maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full" | "none";
+    /**
+     * Padding configuration for different breakpoints
+     * @default { x: "1rem", y: "1rem" }
+     */
+    padding?: {
+        x?: string;
+        y?: string;
+        top?: string;
+        right?: string;
+        bottom?: string;
+        left?: string;
+    };
+    /**
+     * Whether to center the container horizontally
+     * @default true
+     */
+    center?: boolean;
+    /**
+     * Whether to add a background color
+     * @default false
+     */
+    withBackground?: boolean;
+    /**
+     * Background color opacity (0-100)
+     * @default 50
+     */
+    backgroundOpacity?: number;
+    /**
+     * Whether to add a border
+     * @default false
+     */
+    withBorder?: boolean;
+    /**
+     * Border color opacity (0-100)
+     * @default 50
+     */
+    borderOpacity?: number;
+    /**
+     * Whether to add backdrop blur effect
+     * @default false
+     */
+    withBlur?: boolean;
+    /**
+     * Blur intensity (sm, md, lg, xl, 2xl, 3xl)
+     * @default "sm"
+     */
+    blurIntensity?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
+    /**
+     * Whether to add rounded corners
+     * @default true
+     */
+    rounded?: boolean;
+    /**
+     * Border radius size (sm, md, lg, xl, 2xl, 3xl, full)
+     * @default "xl"
+     */
+    roundedSize?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "full";
+    /**
+     * Additional classes for the container
+     */
+    className?: string;
+    /**
+     * Additional classes for the inner wrapper
+     */
+    wrapperClassName?: string;
+}
+declare const Container: React.FC<ContainerProps>;
+
+export { Alert, type AlertProps, Avatar, type AvatarProps, Badge, type BadgeProps, type BreadcrumbItem, Breadcrumbs, type BreadcrumbsProps, Button, type ButtonProps, Calendar, type CalendarProps, Card, type CardProps, Col, type ColProps, Collapse, type CollapseProps, type Column, Container, type ContainerProps, Dropdown, type DropdownOption, type DropdownProps, Grid, type GridProps, Input, type InputProps, List, type ListItem, type ListProps, Modal, type ModalProps, Pagination, type PaginationProps, Popover, type PopoverProps, Progress, type ProgressProps, Rating, type RatingProps, Select, type SelectOption, type SelectProps, Skeleton, type SkeletonProps, Slider, type SliderProps, Spinner, type SpinnerProps, StatCard, type StatCardProps, Stepper, type StepperProps, Table, type TableProps, Tabs, type TabsProps, TagInput, type TagInputProps, Timeline, type TimelineProps, Toast, ToastContainer, type ToastContainerProps, type ToastProps, Tooltip, type TooltipProps, Upload, type UploadProps };
