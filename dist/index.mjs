@@ -3512,6 +3512,34 @@ var Popover_default = Popover;
 
 // src/components/Progress/Progress.tsx
 import React19 from "react";
+var strokeColors = {
+  default: "#4B5563",
+  // gray-600
+  primary: "#2563EB",
+  // blue-600
+  success: "#16A34A",
+  // green-600
+  warning: "#F59E42",
+  // yellow-500
+  error: "#DC2626",
+  // red-600
+  info: "#6366F1"
+  // indigo-500
+};
+var trackStrokeColors = {
+  default: "#E5E7EB",
+  // gray-200
+  primary: "#DBEAFE",
+  // blue-200
+  success: "#BBF7D0",
+  // green-200
+  warning: "#FEF3C7",
+  // yellow-200
+  error: "#FECACA",
+  // red-200
+  info: "#E0E7FF"
+  // indigo-200
+};
 var Progress = ({
   value,
   max = 100,
@@ -3528,12 +3556,23 @@ var Progress = ({
   valueClassName = "",
   label,
   labelPosition = "top",
-  labelClassName = ""
+  labelClassName = "",
+  type = "bar",
+  thickness = 8,
+  valueDisplayPosition = "center",
+  edgeValueBg = "#22c55e",
+  // Tailwind green-500
+  edgeValueShadow = "0 2px 8px 0 rgba(34,197,94,0.3)"
 }) => {
   const sizeClasses = {
-    sm: "h-1",
-    md: "h-2",
-    lg: "h-4"
+    sm: type === "bar" ? "h-1" : "w-24 h-24",
+    md: type === "bar" ? "h-2" : "w-32 h-32",
+    lg: type === "bar" ? "h-4" : "w-48 h-48"
+  };
+  const sizeValues = {
+    sm: 96,
+    md: 128,
+    lg: 192
   };
   const variantClasses = {
     default: "bg-gray-200 dark:bg-gray-700",
@@ -3564,7 +3603,7 @@ var Progress = ({
     return /* @__PURE__ */ React19.createElement(
       "span",
       {
-        className: `text-xs font-medium ${valuePosition === "inside" ? "text-white" : "text-gray-700 dark:text-gray-300"} ${valueClassName}`
+        className: `text-xs font-medium ${valuePosition === "inside" && type === "bar" ? "text-white" : "text-gray-700 dark:text-gray-300"} ${valueClassName}`
       },
       Math.round(percentage),
       "%"
@@ -3575,12 +3614,94 @@ var Progress = ({
     return /* @__PURE__ */ React19.createElement(
       "div",
       {
-        className: `text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 ${labelPosition === "bottom" ? "mt-1" : "mb-1"} ${labelClassName}`
+        className: `text-sm font-medium text-gray-700 dark:text-gray-300 ${labelPosition === "bottom" ? "mt-1" : "mb-1"} ${labelClassName}`
       },
       label
     );
   };
-  return /* @__PURE__ */ React19.createElement("div", { className: `w-full ${className}` }, labelPosition === "top" && renderLabel(), /* @__PURE__ */ React19.createElement(
+  const renderCircularProgress = () => {
+    const circleSize = sizeValues[size];
+    const padding = circleSize * 0.12;
+    const svgSize = circleSize + 2 * padding;
+    const radius = (circleSize - thickness) / 2;
+    const center = padding + circleSize / 2;
+    const circumference = 2 * Math.PI * radius;
+    const strokeDashoffset = circumference - percentage / 100 * circumference;
+    let edgeValue = null;
+    if (showValue && valueDisplayPosition === "edge") {
+      const angle = percentage / 100 * 2 * Math.PI - Math.PI / 2;
+      const x = center + radius * Math.cos(angle);
+      const y = center + radius * Math.sin(angle);
+      const edgeCircleSize = circleSize * 0.22;
+      edgeValue = /* @__PURE__ */ React19.createElement(
+        "foreignObject",
+        {
+          x: x - edgeCircleSize / 2,
+          y: y - edgeCircleSize / 2,
+          width: edgeCircleSize,
+          height: edgeCircleSize,
+          style: { overflow: "visible" }
+        },
+        /* @__PURE__ */ React19.createElement(
+          "div",
+          {
+            className: `rounded-full flex items-center justify-center text-white font-semibold select-none pointer-events-none ${barVariantClasses[variant]} ${edgeValueShadow === "0 2px 8px 0 rgba(34,197,94,0.3)" ? "shadow-lg" : edgeValueShadow} ${valueClassName}`,
+            style: {
+              width: edgeCircleSize,
+              height: edgeCircleSize,
+              background: barVariantClasses[variant],
+              boxShadow: edgeValueShadow !== "0 2px 8px 0 rgba(34,197,94,0.3)" ? edgeValueShadow : void 0,
+              fontSize: circleSize * 0.08
+            }
+          },
+          Math.round(percentage),
+          "%"
+        )
+      );
+    }
+    return /* @__PURE__ */ React19.createElement("div", { className: "relative inline-flex items-center justify-center" }, /* @__PURE__ */ React19.createElement(
+      "svg",
+      {
+        className: sizeClasses[size],
+        width: svgSize,
+        height: svgSize,
+        viewBox: `0 0 ${svgSize} ${svgSize}`
+      },
+      /* @__PURE__ */ React19.createElement(
+        "circle",
+        {
+          stroke: trackStrokeColors[variant],
+          strokeWidth: thickness,
+          fill: "transparent",
+          r: radius,
+          cx: center,
+          cy: center
+        }
+      ),
+      /* @__PURE__ */ React19.createElement(
+        "circle",
+        {
+          stroke: strokeColors[variant],
+          strokeWidth: thickness,
+          strokeDasharray: circumference,
+          strokeDashoffset,
+          strokeLinecap: "round",
+          fill: "transparent",
+          r: radius,
+          cx: center,
+          cy: center,
+          style: {
+            transformOrigin: "center",
+            transform: `rotate(-90deg)`,
+            // Only the arc is rotated
+            transition: "stroke-dashoffset 0.3s"
+          }
+        }
+      ),
+      edgeValue
+    ), showValue && valueDisplayPosition !== "edge" && /* @__PURE__ */ React19.createElement("div", { className: "absolute inset-0 flex items-center justify-center" }, renderValue()));
+  };
+  const renderBarProgress = () => /* @__PURE__ */ React19.createElement("div", { className: `w-full ${className} relative` }, labelPosition === "top" && renderLabel(), /* @__PURE__ */ React19.createElement(
     "div",
     {
       className: `relative w-full overflow-hidden ${sizeClasses[size]} ${roundedClasses[rounded]} ${variantClasses[variant]} ${trackClassName}`
@@ -3591,9 +3712,11 @@ var Progress = ({
         className: `h-full transition-all duration-300 ${barVariantClasses[variant]} ${roundedClasses[rounded]} ${striped ? "bg-stripes" : ""} ${animated ? "animate-progress" : ""} ${barClassName}`,
         style: { width: `${percentage}%` }
       },
-      valuePosition === "inside" && renderValue()
-    )
+      valuePosition !== "inside" && valuePosition !== "outside" && renderValue()
+    ),
+    showValue && valuePosition === "inside" && /* @__PURE__ */ React19.createElement("div", { className: "absolute inset-0 flex items-center justify-center pointer-events-none select-none" }, renderValue())
   ), valuePosition === "outside" && /* @__PURE__ */ React19.createElement("div", { className: "mt-1 flex justify-end" }, renderValue()), labelPosition === "bottom" && renderLabel());
+  return type === "circular" ? renderCircularProgress() : renderBarProgress();
 };
 var Progress_default = Progress;
 
@@ -4185,7 +4308,7 @@ var Toast = ({
   return /* @__PURE__ */ React26.createElement(
     "div",
     {
-      className: `fixed ${positionClasses[position]} z-50 max-w-md w-full shadow-lg rounded-lg border ${config.bgColor} ${config.borderColor} ${animationClasses[animation]} ${durationClasses[animationDuration]} transform transition-all ${className}`,
+      className: `fixed ${positionClasses[position]} z-[10000000] max-w-md w-full shadow-lg rounded-lg border ${config.bgColor} ${config.borderColor} ${animationClasses[animation]} ${durationClasses[animationDuration]} transform transition-all ${className}`,
       onMouseEnter: () => setIsPaused(true),
       onMouseLeave: () => setIsPaused(false)
     },
@@ -4729,6 +4852,223 @@ var Container = (_a) => {
   return /* @__PURE__ */ React32.createElement("div", __spreadValues({ className: containerClasses }, props), /* @__PURE__ */ React32.createElement("div", { className: wrapperClasses }, children));
 };
 var Container_default = Container;
+
+// src/components/PinInput/PinInput.tsx
+import React33, { useState as useState10, useRef as useRef9, useEffect as useEffect9, forwardRef } from "react";
+var PinInput = forwardRef(
+  ({
+    length = 4,
+    disabled = false,
+    mask = false,
+    autoFocus = true,
+    onComplete,
+    onChange,
+    wrapperClassName = "",
+    inputClassName = "",
+    theme,
+    error,
+    hasError,
+    placeholder = "\u2022",
+    allowPaste = true,
+    allowClear = true,
+    allowBackspace = true,
+    numbersOnly = true,
+    lettersOnly = false,
+    alphanumeric = false,
+    allowSpecial = false,
+    showCharacterCount = false,
+    maxLength = 1,
+    showPin = false,
+    autoSubmit = false,
+    focusNextOnChange = true,
+    focusPrevOnBackspace = true,
+    clearOnComplete = false,
+    resetOnComplete = false,
+    validateOnComplete = false,
+    validation,
+    variant = "outline",
+    size = "md"
+  }, ref) => {
+    const [values, setValues] = useState10(Array(length).fill(""));
+    const [focusedIndex, setFocusedIndex] = useState10(0);
+    const inputRefs = useRef9([]);
+    useEffect9(() => {
+      inputRefs.current = Array(length).fill(null);
+    }, [length]);
+    useEffect9(() => {
+      if (autoFocus && inputRefs.current[0]) {
+        inputRefs.current[0].focus();
+      }
+    }, [autoFocus]);
+    const validateInput = (value) => {
+      if (numbersOnly && !/^\d*$/.test(value)) return false;
+      if (lettersOnly && !/^[a-zA-Z]*$/.test(value)) return false;
+      if (alphanumeric && !/^[a-zA-Z0-9]*$/.test(value)) return false;
+      if (!allowSpecial && /[^a-zA-Z0-9]/.test(value)) return false;
+      return true;
+    };
+    const updateValues = (newValues) => {
+      setValues(newValues);
+      const pin = newValues.join("");
+      onChange == null ? void 0 : onChange(pin);
+      if (autoSubmit && pin.length === length) {
+        onComplete == null ? void 0 : onComplete(pin);
+        if (clearOnComplete) {
+          setValues(Array(length).fill(""));
+        }
+        if (resetOnComplete) {
+          setValues(Array(length).fill(""));
+          if (inputRefs.current[0]) {
+            inputRefs.current[0].focus();
+          }
+        }
+      }
+      if (validateOnComplete && pin.length === length && (validation == null ? void 0 : validation.pattern)) {
+        if (!validation.pattern.test(pin)) {
+          console.error(validation.message || "Invalid PIN");
+        }
+      }
+    };
+    const handleInputChange = (index, e) => {
+      const value = e.target.value;
+      if (!validateInput(value)) return;
+      const lastChar = value.slice(-1);
+      const newValues = [...values];
+      newValues[index] = lastChar;
+      updateValues(newValues);
+      if (lastChar && index < length - 1 && focusNextOnChange) {
+        requestAnimationFrame(() => {
+          const nextInput = inputRefs.current[index + 1];
+          if (nextInput) {
+            nextInput.focus();
+            nextInput.setSelectionRange(0, 0);
+          }
+        });
+      }
+    };
+    const handleKeyDown = (index, e) => {
+      if (e.key === "Backspace" && allowBackspace) {
+        const currentValue = values[index];
+        if (currentValue) {
+          const newValues = [...values];
+          newValues[index] = "";
+          updateValues(newValues);
+        } else if (index > 0 && focusPrevOnBackspace) {
+          const prevInput = inputRefs.current[index - 1];
+          if (prevInput) {
+            prevInput.focus();
+            prevInput.setSelectionRange(0, 0);
+          }
+        }
+      } else if (e.key === "Delete" && allowClear) {
+        setValues(Array(length).fill(""));
+        if (inputRefs.current[0]) {
+          inputRefs.current[0].focus();
+        }
+      } else if (e.key === "ArrowLeft" && index > 0) {
+        const prevInput = inputRefs.current[index - 1];
+        if (prevInput) {
+          prevInput.focus();
+          prevInput.setSelectionRange(0, 0);
+        }
+      } else if (e.key === "ArrowRight" && index < length - 1) {
+        const nextInput = inputRefs.current[index + 1];
+        if (nextInput) {
+          nextInput.focus();
+          nextInput.setSelectionRange(0, 0);
+        }
+      }
+    };
+    const handlePaste = (e) => {
+      if (!allowPaste) return;
+      e.preventDefault();
+      const pastedData = e.clipboardData.getData("text").slice(0, length);
+      if (!validateInput(pastedData)) return;
+      const newValues = [...values];
+      for (let i = 0; i < pastedData.length; i++) {
+        if (i < length) {
+          newValues[i] = pastedData[i];
+        }
+      }
+      updateValues(newValues);
+      const nextEmptyIndex = newValues.findIndex((v) => !v);
+      const targetIndex = nextEmptyIndex !== -1 ? nextEmptyIndex : length - 1;
+      requestAnimationFrame(() => {
+        const targetInput = inputRefs.current[targetIndex];
+        if (targetInput) {
+          targetInput.focus();
+          targetInput.setSelectionRange(0, 0);
+        }
+      });
+    };
+    const handleFocus = (index) => {
+      setFocusedIndex(index);
+    };
+    const handleBlur = () => {
+      setFocusedIndex(-1);
+    };
+    const getSizeClasses = () => {
+      switch (size) {
+        case "xs":
+          return "w-8 h-8 text-xs";
+        case "sm":
+          return "w-10 h-10 text-sm";
+        case "md":
+          return "w-12 h-12 text-base";
+        case "lg":
+          return "w-14 h-14 text-lg";
+        case "xl":
+          return "w-16 h-16 text-xl";
+        default:
+          return "w-12 h-12 text-base";
+      }
+    };
+    const getVariantClasses = () => {
+      const baseClasses = "text-center rounded-md outline-none transition-all";
+      switch (variant) {
+        case "outline":
+          return `${baseClasses} border bg-transparent`;
+        case "filled":
+          return `${baseClasses} border-transparent`;
+        case "flushed":
+          return `${baseClasses} border-b border-x-0 border-t-0 rounded-none bg-transparent`;
+        case "unstyled":
+          return `${baseClasses} border-0 bg-transparent p-0`;
+        default:
+          return `${baseClasses} border bg-transparent`;
+      }
+    };
+    const getInputClasses = () => {
+      const sizeClasses = getSizeClasses();
+      const variantClasses = getVariantClasses();
+      const themeClasses = theme === "dark" ? "bg-gray-800 text-white border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20" : theme === "light" ? "bg-white text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20" : "bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20";
+      const errorClasses = hasError ? "border-red-500 focus:border-red-500 focus:ring-red-500/20" : "";
+      const disabledClasses = disabled ? "opacity-50 cursor-not-allowed" : "";
+      return `${sizeClasses} ${variantClasses} ${themeClasses} ${errorClasses} ${disabledClasses} ${inputClassName}`;
+    };
+    return /* @__PURE__ */ React33.createElement("div", { ref, className: `flex flex-col gap-2 ${wrapperClassName}` }, /* @__PURE__ */ React33.createElement("div", { className: "flex gap-2" }, Array.from({ length }).map((_, index) => /* @__PURE__ */ React33.createElement("div", { key: index, className: "relative" }, /* @__PURE__ */ React33.createElement(
+      "input",
+      {
+        ref: (el) => {
+          inputRefs.current[index] = el;
+        },
+        type: mask && !showPin ? "password" : "text",
+        value: values[index],
+        onChange: (e) => handleInputChange(index, e),
+        onKeyDown: (e) => handleKeyDown(index, e),
+        onPaste: handlePaste,
+        onFocus: () => handleFocus(index),
+        onBlur: handleBlur,
+        disabled,
+        maxLength,
+        placeholder,
+        className: getInputClasses()
+      }
+    ), showCharacterCount && /* @__PURE__ */ React33.createElement("div", { className: "absolute -bottom-5 left-1/2 transform -translate-x-1/2 text-xs text-gray-500" }, values[index].length, "/", maxLength)))), error && /* @__PURE__ */ React33.createElement("div", { className: "text-red-500 text-sm mt-1" }, error));
+  }
+);
+PinInput.displayName = "PinInput";
+var PinInput_default = PinInput;
 export {
   Alert_default as Alert,
   Avatar_default as Avatar,
@@ -4746,6 +5086,7 @@ export {
   List_default as List,
   Modal_default as Modal,
   Pagination_default as Pagination,
+  PinInput_default as PinInput,
   Popover_default as Popover,
   Progress_default as Progress,
   Rating_default as Rating,

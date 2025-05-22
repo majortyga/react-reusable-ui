@@ -35,6 +35,7 @@ const navigation = [
       { name: "Modal", href: "/docs/modal" },
       { name: "Navigation", href: "/docs/navigation" },
       { name: "Pagination", href: "/docs/pagination" },
+      { name: "PinInput", href: "/docs/pininput" },
       { name: "Popover", href: "/docs/popover" },
       { name: "Progress", href: "/docs/progress" },
       { name: "Rating", href: "/docs/rating" },
@@ -81,7 +82,7 @@ export default function DocsLayout({
       <div className="flex flex-1">
         {/* Sidebar */}
         <div
-          className={`fixed lg:sticky top-0 inset-y-0 left-0 transform ${
+          className={`fixed lg:sticky z-[10000] top-0 inset-y-0 left-0 transform ${
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           } lg:translate-x-0 transition duration-200 ease-in-out z-40 w-64 h-screen overflow-y-auto border-r border-gray-200 dark:border-gray-700 bg-gradient-to-b from-[#0a1836] via-[#11235a] to-[#1e293b] dark:from-[#0a1836] dark:via-[#11235a] dark:to-[#1e293b] custom-sidebar-scrollbar`}
         >

@@ -31,6 +31,7 @@ export { default as Tabs } from "./components/Tabs/Tabs";
 export { default as Grid } from "./components/Grid/Grid";
 export { Col } from "./components/Grid/Grid";
 export { default as Container } from "./components/Container/Container";
+export { default as PinInput } from "./components/PinInput/PinInput";
 
 export type { InputProps } from "./components/Input/Input";
 export type { SelectProps, SelectOption } from "./components/Select/Select";
@@ -71,3 +72,4 @@ export type { TabsProps } from "./components/Tabs/Tabs";
 export type { GridProps } from "./components/Grid/Grid";
 export type { ColProps } from "./components/Grid/Grid";
 export type { ContainerProps } from "./components/Container/Container";
+export type { PinInputProps } from "./components/PinInput/PinInput";

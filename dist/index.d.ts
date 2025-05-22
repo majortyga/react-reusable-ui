@@ -1235,24 +1235,135 @@ interface PopoverProps {
 }
 declare const Popover: React.FC<PopoverProps>;
 
+/**
+ * Progress Component
+ *
+ * A versatile and customizable progress indicator for React, supporting both linear (bar) and circular types.
+ * Features include:
+ * - Linear and circular progress types
+ * - Multiple color variants
+ * - Size options
+ * - Striped and animated styles
+ * - Value display (center, outside, or at the arc tip for circular)
+ * - Customizable edge value circle (color, shadow)
+ * - Labels and accessibility
+ * - Full dark mode support
+ *
+ * @module Progress
+ */
+
+/**
+ * Props for the Progress component.
+ */
 interface ProgressProps {
+    /**
+     * Current progress value (between 0 and max).
+     */
     value: number;
+    /**
+     * Maximum value for the progress (default: 100).
+     */
     max?: number;
+    /**
+     * Size of the progress indicator.
+     * - 'sm': Small
+     * - 'md': Medium (default)
+     * - 'lg': Large
+     */
     size?: "sm" | "md" | "lg";
+    /**
+     * Color variant of the progress indicator.
+     * - 'default', 'primary', 'success', 'warning', 'error', 'info'
+     */
     variant?: "default" | "primary" | "success" | "warning" | "error" | "info";
+    /**
+     * Border radius for the bar progress (not used for circular).
+     * - 'none', 'sm', 'md', 'lg', 'full' (default: 'full')
+     */
     rounded?: "none" | "sm" | "md" | "lg" | "full";
+    /**
+     * Whether to show the progress value as a label.
+     */
     showValue?: boolean;
+    /**
+     * Where to display the value for bar progress.
+     * - 'inside': Centered inside the bar
+     * - 'outside': Below the bar, right-aligned
+     * (default: 'inside')
+     */
     valuePosition?: "inside" | "outside";
+    /**
+     * Whether to show a striped pattern on the bar/circular arc.
+     */
     striped?: boolean;
+    /**
+     * Whether to animate the stripes (if striped is true).
+     */
     animated?: boolean;
+    /**
+     * Custom class for the outer container.
+     */
     className?: string;
+    /**
+     * Custom class for the track (background) element.
+     */
     trackClassName?: string;
+    /**
+     * Custom class for the progress bar/arc element.
+     */
     barClassName?: string;
+    /**
+     * Custom class for the value label.
+     */
     valueClassName?: string;
+    /**
+     * Optional label for the progress indicator.
+     */
     label?: string;
+    /**
+     * Where to display the label (bar only).
+     * - 'top': Above the bar (default)
+     * - 'bottom': Below the bar
+     */
     labelPosition?: "top" | "bottom";
+    /**
+     * Custom class for the label.
+     */
     labelClassName?: string;
+    /**
+     * Type of progress indicator.
+     * - 'bar': Linear progress bar (default)
+     * - 'circular': Circular progress indicator
+     */
+    type?: "bar" | "circular";
+    /**
+     * Thickness of the bar or arc (circular only).
+     * (default: 8)
+     */
+    thickness?: number;
+    /**
+     * Where to display the value for circular progress.
+     * - 'center': Centered in the circle (default)
+     * - 'edge': At the tip of the arc
+     */
+    valueDisplayPosition?: "center" | "edge";
+    /**
+     * Background color for the edge value circle (circular, edge only).
+     * (default: uses variant color)
+     */
+    edgeValueBg?: string;
+    /**
+     * Box shadow for the edge value circle (circular, edge only).
+     * (default: shadow-lg)
+     */
+    edgeValueShadow?: string;
 }
+/**
+ * Progress component for displaying linear or circular progress indicators.
+ *
+ * @param props ProgressProps
+ * @returns JSX.Element
+ */
 declare const Progress: React.FC<ProgressProps>;
 
 interface RatingProps {
@@ -1794,4 +1905,77 @@ interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 declare const Container: React.FC<ContainerProps>;
 
-export { Alert, type AlertProps, Avatar, type AvatarProps, Badge, type BadgeProps, type BreadcrumbItem, Breadcrumbs, type BreadcrumbsProps, Button, type ButtonProps, Calendar, type CalendarProps, Card, type CardProps, Col, type ColProps, Collapse, type CollapseProps, type Column, Container, type ContainerProps, Dropdown, type DropdownOption, type DropdownProps, Grid, type GridProps, Input, type InputProps, List, type ListItem, type ListProps, Modal, type ModalProps, Pagination, type PaginationProps, Popover, type PopoverProps, Progress, type ProgressProps, Rating, type RatingProps, Select, type SelectOption, type SelectProps, Skeleton, type SkeletonProps, Slider, type SliderProps, Spinner, type SpinnerProps, StatCard, type StatCardProps, Stepper, type StepperProps, Table, type TableProps, Tabs, type TabsProps, TagInput, type TagInputProps, Timeline, type TimelineProps, Toast, ToastContainer, type ToastContainerProps, type ToastProps, Tooltip, type TooltipProps, Upload, type UploadProps };
+type PinInputVariant = "outline" | "filled" | "flushed" | "unstyled";
+type PinInputSize = "xs" | "sm" | "md" | "lg" | "xl";
+interface PinInputProps {
+    /** Length of the PIN */
+    length?: number;
+    /** Whether the PIN input is disabled */
+    disabled?: boolean;
+    /** Whether to mask the PIN input */
+    mask?: boolean;
+    /** Whether to auto-focus the first input */
+    autoFocus?: boolean;
+    /** Callback when PIN is complete */
+    onComplete?: (value: string) => void;
+    /** Callback when PIN changes */
+    onChange?: (value: string) => void;
+    /** Custom class names */
+    wrapperClassName?: string;
+    inputClassName?: string;
+    /** Custom theme */
+    theme?: "light" | "dark";
+    /** Custom icons */
+    leftIcon?: IconType;
+    rightIcon?: IconType;
+    /** Error message */
+    error?: string;
+    /** Whether to show error state */
+    hasError?: boolean;
+    /** Placeholder character */
+    placeholder?: string;
+    /** Whether to allow paste */
+    allowPaste?: boolean;
+    /** Whether to allow clear */
+    allowClear?: boolean;
+    /** Whether to allow backspace */
+    allowBackspace?: boolean;
+    /** Whether to allow numbers only */
+    numbersOnly?: boolean;
+    /** Whether to allow letters only */
+    lettersOnly?: boolean;
+    /** Whether to allow alphanumeric */
+    alphanumeric?: boolean;
+    /** Whether to allow special characters */
+    allowSpecial?: boolean;
+    /** Whether to show character count */
+    showCharacterCount?: boolean;
+    /** Maximum length of each input */
+    maxLength?: number;
+    /** Whether to show the PIN */
+    showPin?: boolean;
+    /** Whether to auto-submit on complete */
+    autoSubmit?: boolean;
+    /** Whether to focus next input on change */
+    focusNextOnChange?: boolean;
+    /** Whether to focus previous input on backspace */
+    focusPrevOnBackspace?: boolean;
+    /** Whether to clear all inputs on complete */
+    clearOnComplete?: boolean;
+    /** Whether to reset on complete */
+    resetOnComplete?: boolean;
+    /** Whether to validate on complete */
+    validateOnComplete?: boolean;
+    /** Validation pattern */
+    validation?: {
+        pattern?: RegExp;
+        message?: string;
+    };
+    /** Input variant */
+    variant?: PinInputVariant;
+    /** Input size */
+    size?: PinInputSize;
+}
+declare const PinInput: React.ForwardRefExoticComponent<PinInputProps & React.RefAttributes<HTMLDivElement>>;
+
+export { Alert, type AlertProps, Avatar, type AvatarProps, Badge, type BadgeProps, type BreadcrumbItem, Breadcrumbs, type BreadcrumbsProps, Button, type ButtonProps, Calendar, type CalendarProps, Card, type CardProps, Col, type ColProps, Collapse, type CollapseProps, type Column, Container, type ContainerProps, Dropdown, type DropdownOption, type DropdownProps, Grid, type GridProps, Input, type InputProps, List, type ListItem, type ListProps, Modal, type ModalProps, Pagination, type PaginationProps, PinInput, type PinInputProps, Popover, type PopoverProps, Progress, type ProgressProps, Rating, type RatingProps, Select, type SelectOption, type SelectProps, Skeleton, type SkeletonProps, Slider, type SliderProps, Spinner, type SpinnerProps, StatCard, type StatCardProps, Stepper, type StepperProps, Table, type TableProps, Tabs, type TabsProps, TagInput, type TagInputProps, Timeline, type TimelineProps, Toast, ToastContainer, type ToastContainerProps, type ToastProps, Tooltip, type TooltipProps, Upload, type UploadProps };

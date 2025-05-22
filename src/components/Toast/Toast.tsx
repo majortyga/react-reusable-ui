@@ -210,7 +210,7 @@ const Toast: React.FC<ToastProps> = ({
 
   return (
     <div
-      className={`fixed ${positionClasses[position]} z-50 max-w-md w-full shadow-lg rounded-lg border ${config.bgColor} ${config.borderColor} ${animationClasses[animation]} ${durationClasses[animationDuration]} transform transition-all ${className}`}
+      className={`fixed ${positionClasses[position]} z-[10000000] max-w-md w-full shadow-lg rounded-lg border ${config.bgColor} ${config.borderColor} ${animationClasses[animation]} ${durationClasses[animationDuration]} transform transition-all ${className}`}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >

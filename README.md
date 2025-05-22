@@ -55,11 +55,14 @@ function App() {
 - Card
 - Carousel
 - Collapse
+- Container
 - Dropdown
+- Grid
 - Input
 - List
 - Modal
 - Pagination
+- Pin Input
 - Popover
 - Progress
 - Rating

@@ -222,10 +222,23 @@ function App() {
             </li>
             <li>
               <Link
+                href="/docs/container"
+                className="text-blue-500 hover:underline"
+              >
+                Container
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/docs/dropdown"
                 className="text-blue-500 hover:underline"
               >
                 Dropdown
+              </Link>
+            </li>
+            <li>
+              <Link href="/docs/grid" className="text-blue-500 hover:underline">
+                Grid
               </Link>
             </li>
             <li>
@@ -255,6 +268,14 @@ function App() {
                 className="text-blue-500 hover:underline"
               >
                 Pagination
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/docs/pininput"
+                className="text-blue-500 hover:underline"
+              >
+                Pin Input
               </Link>
             </li>
             <li>
