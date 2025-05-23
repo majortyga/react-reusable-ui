@@ -209,24 +209,55 @@ const PinInputDocs = () => {
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold text-white">Alphanumeric PIN</h2>
         <p className="text-gray-300">
-          PIN input that accepts both letters and numbers
+          PIN input that accepts both letters and numbers. Try entering both
+          letters and numbers in the example below.
         </p>
-        <div className="bg-[#11235a]/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50">
-          <PinInput
-            length={5}
-            alphanumeric={true}
-            placeholder="*"
-            onChange={(value) => console.log(value)}
-          />
+        <div className="bg-[#11235a]/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 space-y-4">
+          <div>
+            <h3 className="text-lg font-medium text-white mb-2">
+              Alphanumeric Input
+            </h3>
+            <PinInput
+              length={5}
+              alphanumeric={true}
+              numbersOnly={false}
+              placeholder="*"
+              mask={false}
+              onChange={(value) => console.log("Current value:", value)}
+              onComplete={(value) => console.log("Complete value:", value)}
+            />
+          </div>
+          <div>
+            <h3 className="text-lg font-medium text-white mb-2">
+              Letters Only
+            </h3>
+            <PinInput
+              length={4}
+              lettersOnly={true}
+              numbersOnly={false}
+              placeholder="*"
+              mask={false}
+            />
+          </div>
         </div>
         <CodeBlock
           code={`import { PinInput } from "@majordev/react-reusable-ui";
 
+// Alphanumeric input (letters and numbers)
 <PinInput
   length={5}
   alphanumeric={true}
+  numbersOnly={false}
   placeholder="*"
   onChange={(value) => console.log(value)}
+/>
+
+// Letters only input
+<PinInput
+  length={4}
+  lettersOnly={true}
+  numbersOnly={false}
+  placeholder="*"
 />`}
           language="tsx"
         />
@@ -288,7 +319,7 @@ const PinInputDocs = () => {
       {/* Props Documentation */}
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold text-white">Props</h2>
-        <div className="bg-[#11235a]/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50">
+        <div className="bg-[#11235a]/50 backdrop-blur-sm rounded-xl border border-gray-700/50">
           <Card className="bg-[#0a1836] p-6 rounded-lg border border-gray-700/50 overflow-x-auto max-w-[80vw]">
             <table className="min-w-full">
               <thead>
@@ -311,11 +342,47 @@ const PinInputDocs = () => {
                   </td>
                 </tr>
                 <tr className="border-b border-gray-700/50">
+                  <td className="py-3 px-4 text-white">disabled</td>
+                  <td className="py-3 px-4 text-gray-300">boolean</td>
+                  <td className="py-3 px-4 text-gray-300">false</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    Whether the input is disabled
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-700/50">
                   <td className="py-3 px-4 text-white">mask</td>
                   <td className="py-3 px-4 text-gray-300">boolean</td>
                   <td className="py-3 px-4 text-gray-300">false</td>
                   <td className="py-3 px-4 text-gray-300">
                     Whether to mask the input
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-700/50">
+                  <td className="py-3 px-4 text-white">autoFocus</td>
+                  <td className="py-3 px-4 text-gray-300">boolean</td>
+                  <td className="py-3 px-4 text-gray-300">true</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    Whether to auto-focus the first input
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-700/50">
+                  <td className="py-3 px-4 text-white">onComplete</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    (value: string) =&gt; void
+                  </td>
+                  <td className="py-3 px-4 text-gray-300">-</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    Callback when PIN is complete
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-700/50">
+                  <td className="py-3 px-4 text-white">onChange</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    (value: string) =&gt; void
+                  </td>
+                  <td className="py-3 px-4 text-gray-300">-</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    Callback when PIN changes
                   </td>
                 </tr>
                 <tr className="border-b border-gray-700/50">
@@ -357,11 +424,27 @@ const PinInputDocs = () => {
                   </td>
                 </tr>
                 <tr className="border-b border-gray-700/50">
+                  <td className="py-3 px-4 text-white">lettersOnly</td>
+                  <td className="py-3 px-4 text-gray-300">boolean</td>
+                  <td className="py-3 px-4 text-gray-300">false</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    Restrict to letters only
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-700/50">
                   <td className="py-3 px-4 text-white">alphanumeric</td>
                   <td className="py-3 px-4 text-gray-300">boolean</td>
                   <td className="py-3 px-4 text-gray-300">false</td>
                   <td className="py-3 px-4 text-gray-300">
                     Allow both letters and numbers
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-700/50">
+                  <td className="py-3 px-4 text-white">allowSpecial</td>
+                  <td className="py-3 px-4 text-gray-300">boolean</td>
+                  <td className="py-3 px-4 text-gray-300">false</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    Allow special characters
                   </td>
                 </tr>
                 <tr className="border-b border-gray-700/50">
@@ -373,11 +456,83 @@ const PinInputDocs = () => {
                   </td>
                 </tr>
                 <tr className="border-b border-gray-700/50">
+                  <td className="py-3 px-4 text-white">allowClear</td>
+                  <td className="py-3 px-4 text-gray-300">boolean</td>
+                  <td className="py-3 px-4 text-gray-300">true</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    Whether to allow clearing the input
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-700/50">
+                  <td className="py-3 px-4 text-white">allowBackspace</td>
+                  <td className="py-3 px-4 text-gray-300">boolean</td>
+                  <td className="py-3 px-4 text-gray-300">true</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    Whether to allow backspace navigation
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-700/50">
                   <td className="py-3 px-4 text-white">autoSubmit</td>
                   <td className="py-3 px-4 text-gray-300">boolean</td>
                   <td className="py-3 px-4 text-gray-300">false</td>
                   <td className="py-3 px-4 text-gray-300">
                     Auto-submit when complete
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-700/50">
+                  <td className="py-3 px-4 text-white">focusNextOnChange</td>
+                  <td className="py-3 px-4 text-gray-300">boolean</td>
+                  <td className="py-3 px-4 text-gray-300">true</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    Whether to focus next input on change
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-700/50">
+                  <td className="py-3 px-4 text-white">focusPrevOnBackspace</td>
+                  <td className="py-3 px-4 text-gray-300">boolean</td>
+                  <td className="py-3 px-4 text-gray-300">true</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    Whether to focus previous input on backspace
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-700/50">
+                  <td className="py-3 px-4 text-white">clearOnComplete</td>
+                  <td className="py-3 px-4 text-gray-300">boolean</td>
+                  <td className="py-3 px-4 text-gray-300">false</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    Whether to clear all inputs on complete
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-700/50">
+                  <td className="py-3 px-4 text-white">resetOnComplete</td>
+                  <td className="py-3 px-4 text-gray-300">boolean</td>
+                  <td className="py-3 px-4 text-gray-300">false</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    Whether to reset and focus first input on complete
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-700/50">
+                  <td className="py-3 px-4 text-white">validateOnComplete</td>
+                  <td className="py-3 px-4 text-gray-300">boolean</td>
+                  <td className="py-3 px-4 text-gray-300">false</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    Whether to validate on complete
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-700/50">
+                  <td className="py-3 px-4 text-white">showCharacterCount</td>
+                  <td className="py-3 px-4 text-gray-300">boolean</td>
+                  <td className="py-3 px-4 text-gray-300">false</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    Whether to show character count below each input
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-700/50">
+                  <td className="py-3 px-4 text-white">showPin</td>
+                  <td className="py-3 px-4 text-gray-300">boolean</td>
+                  <td className="py-3 px-4 text-gray-300">false</td>
+                  <td className="py-3 px-4 text-gray-300">
+                    Whether to show the PIN when masked
                   </td>
                 </tr>
                 <tr className="border-b border-gray-700/50">
@@ -436,65 +591,10 @@ const PinInputDocs = () => {
                     Custom class for each input
                   </td>
                 </tr>
-                <tr className="border-b border-gray-700/50">
-                  <td className="py-3 px-4 text-white">allowClear</td>
-                  <td className="py-3 px-4 text-gray-300">boolean</td>
-                  <td className="py-3 px-4 text-gray-300">true</td>
-                  <td className="py-3 px-4 text-gray-300">
-                    Whether to allow clearing the input
-                  </td>
-                </tr>
-                <tr className="border-b border-gray-700/50">
-                  <td className="py-3 px-4 text-white">allowBackspace</td>
-                  <td className="py-3 px-4 text-gray-300">boolean</td>
-                  <td className="py-3 px-4 text-gray-300">true</td>
-                  <td className="py-3 px-4 text-gray-300">
-                    Whether to allow backspace navigation
-                  </td>
-                </tr>
               </tbody>
             </table>
           </Card>
         </div>
-      </section>
-
-      {/* Input Control Examples */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold text-white">
-          Input Control Examples
-        </h2>
-        <p className="text-gray-300">
-          Examples of different input control configurations
-        </p>
-        <div className="bg-[#11235a]/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 space-y-6">
-          <div>
-            <h3 className="text-lg font-medium text-white mb-2">
-              No Backspace
-            </h3>
-            <PinInput allowBackspace={false} />
-          </div>
-          <div>
-            <h3 className="text-lg font-medium text-white mb-2">No Clear</h3>
-            <PinInput allowClear={false} />
-          </div>
-          <div>
-            <h3 className="text-lg font-medium text-white mb-2">No Paste</h3>
-            <PinInput allowPaste={false} />
-          </div>
-        </div>
-        <CodeBlock
-          code={`import { PinInput } from "@majordev/react-reusable-ui";
-
-// Disable backspace navigation
-<PinInput allowBackspace={false} />
-
-// Disable input clearing
-<PinInput allowClear={false} />
-
-// Disable paste functionality
-<PinInput allowPaste={false} />`}
-          language="tsx"
-        />
       </section>
     </div>
   );

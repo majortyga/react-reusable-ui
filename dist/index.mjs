@@ -4901,10 +4901,10 @@ var PinInput = forwardRef(
       }
     }, [autoFocus]);
     const validateInput = (value) => {
-      if (numbersOnly && !/^\d*$/.test(value)) return false;
-      if (lettersOnly && !/^[a-zA-Z]*$/.test(value)) return false;
-      if (alphanumeric && !/^[a-zA-Z0-9]*$/.test(value)) return false;
-      if (!allowSpecial && /[^a-zA-Z0-9]/.test(value)) return false;
+      if (numbersOnly) return /^\d*$/.test(value);
+      if (lettersOnly) return /^[a-zA-Z]*$/.test(value);
+      if (alphanumeric) return /^[a-zA-Z0-9]*$/.test(value);
+      if (!allowSpecial) return /^[a-zA-Z0-9]*$/.test(value);
       return true;
     };
     const updateValues = (newValues) => {
@@ -4941,13 +4941,16 @@ var PinInput = forwardRef(
           const nextInput = inputRefs.current[index + 1];
           if (nextInput) {
             nextInput.focus();
-            nextInput.setSelectionRange(0, 0);
+            if (nextInput.type !== "number") {
+              nextInput.setSelectionRange(0, 0);
+            }
           }
         });
       }
     };
     const handleKeyDown = (index, e) => {
       if (e.key === "Backspace" && allowBackspace) {
+        e.preventDefault();
         const currentValue = values[index];
         if (currentValue) {
           const newValues = [...values];
@@ -4956,8 +4959,13 @@ var PinInput = forwardRef(
         } else if (index > 0 && focusPrevOnBackspace) {
           const prevInput = inputRefs.current[index - 1];
           if (prevInput) {
+            const newValues = [...values];
+            newValues[index - 1] = "";
+            updateValues(newValues);
             prevInput.focus();
-            prevInput.setSelectionRange(0, 0);
+            if (prevInput.type !== "number") {
+              prevInput.setSelectionRange(0, 0);
+            }
           }
         }
       } else if (e.key === "Delete" && allowClear) {
@@ -4969,13 +4977,17 @@ var PinInput = forwardRef(
         const prevInput = inputRefs.current[index - 1];
         if (prevInput) {
           prevInput.focus();
-          prevInput.setSelectionRange(0, 0);
+          if (prevInput.type !== "number") {
+            prevInput.setSelectionRange(0, 0);
+          }
         }
       } else if (e.key === "ArrowRight" && index < length - 1) {
         const nextInput = inputRefs.current[index + 1];
         if (nextInput) {
           nextInput.focus();
-          nextInput.setSelectionRange(0, 0);
+          if (nextInput.type !== "number") {
+            nextInput.setSelectionRange(0, 0);
+          }
         }
       }
     };
@@ -5044,7 +5056,8 @@ var PinInput = forwardRef(
       const themeClasses = theme === "dark" ? "bg-gray-800 text-white border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20" : theme === "light" ? "bg-white text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20" : "bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20";
       const errorClasses = hasError ? "border-red-500 focus:border-red-500 focus:ring-red-500/20" : "";
       const disabledClasses = disabled ? "opacity-50 cursor-not-allowed" : "";
-      return `${sizeClasses} ${variantClasses} ${themeClasses} ${errorClasses} ${disabledClasses} ${inputClassName}`;
+      const numberInputClasses = !alphanumeric && !lettersOnly ? "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" : "";
+      return `${sizeClasses} ${variantClasses} ${themeClasses} ${errorClasses} ${disabledClasses} ${numberInputClasses} ${inputClassName}`;
     };
     return /* @__PURE__ */ React33.createElement("div", { ref, className: `flex flex-col gap-2 ${wrapperClassName}` }, /* @__PURE__ */ React33.createElement("div", { className: "flex gap-2" }, Array.from({ length }).map((_, index) => /* @__PURE__ */ React33.createElement("div", { key: index, className: "relative" }, /* @__PURE__ */ React33.createElement(
       "input",
@@ -5052,7 +5065,8 @@ var PinInput = forwardRef(
         ref: (el) => {
           inputRefs.current[index] = el;
         },
-        type: mask && !showPin ? "password" : "text",
+        type: mask && !showPin ? "password" : alphanumeric || lettersOnly ? "text" : "number",
+        inputMode: mask && !showPin ? "text" : alphanumeric || lettersOnly ? "text" : "numeric",
         value: values[index],
         onChange: (e) => handleInputChange(index, e),
         onKeyDown: (e) => handleKeyDown(index, e),
@@ -5069,6 +5083,475 @@ var PinInput = forwardRef(
 );
 PinInput.displayName = "PinInput";
 var PinInput_default = PinInput;
+
+// src/components/Carousel/Carousel.tsx
+import React34, { useState as useState11, useEffect as useEffect10, useCallback as useCallback4, useRef as useRef10 } from "react";
+var isSlideWithProps = (slide) => {
+  return React34.isValidElement(slide) && "props" in slide;
+};
+var DEFAULT_CAROUSEL_HEIGHT = 400;
+var Carousel = ({
+  children,
+  autoPlay = true,
+  interval = 5e3,
+  showArrows = true,
+  showDots = true,
+  infinite = true,
+  className = "",
+  slideClassName = "",
+  arrowClassName = "",
+  dotClassName = "",
+  onSlideChange,
+  animation = "slide",
+  showCaption = false,
+  captionPosition = "bottom",
+  showThumbnails = false,
+  thumbnailPosition = "bottom",
+  showProgress = false,
+  pauseOnHover = true,
+  showFullscreen = false,
+  showCounter = false,
+  customControls,
+  customIndicators,
+  customArrows,
+  newsStyle = false,
+  background,
+  overlay = false,
+  overlayOpacity = 0.5,
+  overlayColor = "black",
+  transitionSpeed = 500,
+  easing = "ease-in-out"
+}) => {
+  const [currentIndex, setCurrentIndex] = useState11(0);
+  const [isPaused, setIsPaused] = useState11(false);
+  const [isFullscreen, setIsFullscreen] = useState11(false);
+  const [touchStart, setTouchStart] = useState11(null);
+  const [touchEnd, setTouchEnd] = useState11(null);
+  const carouselRef = useRef10(null);
+  const thumbnailContainerRef = useRef10(null);
+  const slides = React34.Children.toArray(children);
+  const minSwipeDistance = 50;
+  const getAnimationClasses = () => {
+    switch (animation) {
+      case "fade":
+        return "transition-all duration-500 will-change-opacity";
+      case "zoom":
+        return "transition-all duration-500 will-change-transform transform-gpu scale-100 hover:scale-105";
+      case "flip":
+        return "transition-all duration-500 will-change-transform transform-gpu perspective-1000";
+      case "cube":
+        return "transition-all duration-500 will-change-transform transform-gpu preserve-3d";
+      default:
+        return "transition-all duration-500 will-change-transform transform-gpu";
+    }
+  };
+  const getCaptionClasses = () => {
+    const baseClasses = "absolute p-4 text-white z-10";
+    switch (captionPosition) {
+      case "top":
+        return `${baseClasses} top-0 left-0 right-0`;
+      case "bottom":
+        return `${baseClasses} bottom-0 left-0 right-0`;
+      case "left":
+        return `${baseClasses} left-0 top-1/2 -translate-y-1/2`;
+      case "right":
+        return `${baseClasses} right-0 top-1/2 -translate-y-1/2`;
+      case "center":
+        return `${baseClasses} top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center`;
+      case "overlay":
+        return `${baseClasses} inset-0 flex items-center justify-center bg-black/50`;
+      default:
+        return baseClasses;
+    }
+  };
+  const getThumbnailClasses = () => {
+    const baseClasses = "flex gap-2 p-2 overflow-hidden max-w-[80vw] md:max-w-auto justify-center items-center";
+    switch (thumbnailPosition) {
+      case "top":
+        return `${baseClasses} flex-row mb-2`;
+      case "bottom":
+        return `${baseClasses} flex-row mt-2`;
+      case "left":
+        return `${baseClasses} flex-col mr-2`;
+      case "right":
+        return `${baseClasses} flex-col ml-2`;
+      default:
+        return baseClasses;
+    }
+  };
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    if (isLeftSwipe) {
+      nextSlide();
+    }
+    if (isRightSwipe) {
+      prevSlide();
+    }
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+  const nextSlide = useCallback4(() => {
+    setCurrentIndex((prevIndex) => {
+      const nextIndex = prevIndex + 1;
+      if (nextIndex >= slides.length) {
+        return infinite ? 0 : prevIndex;
+      }
+      return nextIndex;
+    });
+  }, [slides.length, infinite]);
+  const prevSlide = useCallback4(() => {
+    setCurrentIndex((prevIndex) => {
+      const prevIndexNew = prevIndex - 1;
+      if (prevIndexNew < 0) {
+        return infinite ? slides.length - 1 : prevIndex;
+      }
+      return prevIndexNew;
+    });
+  }, [slides.length, infinite]);
+  const goToSlide = (index) => {
+    setCurrentIndex(index);
+  };
+  const toggleFullscreen = () => {
+    var _a;
+    if (!document.fullscreenElement) {
+      (_a = carouselRef.current) == null ? void 0 : _a.requestFullscreen();
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen();
+      setIsFullscreen(false);
+    }
+  };
+  useEffect10(() => {
+    if (!autoPlay || isPaused) return;
+    const timer = setInterval(() => {
+      nextSlide();
+    }, interval);
+    return () => clearInterval(timer);
+  }, [autoPlay, interval, isPaused, nextSlide]);
+  useEffect10(() => {
+    onSlideChange == null ? void 0 : onSlideChange(currentIndex);
+  }, [currentIndex, onSlideChange]);
+  const handleKeyDown = (e) => {
+    if (e.key === "ArrowLeft") {
+      prevSlide();
+    } else if (e.key === "ArrowRight") {
+      nextSlide();
+    } else if (e.key === "Escape" && isFullscreen) {
+      document.exitFullscreen();
+      setIsFullscreen(false);
+    }
+  };
+  const renderCustomArrow = (direction) => {
+    if (customArrows == null ? void 0 : customArrows[direction]) {
+      return customArrows[direction];
+    }
+    return /* @__PURE__ */ React34.createElement(
+      "button",
+      {
+        onClick: direction === "prev" ? prevSlide : nextSlide,
+        className: `absolute ${direction === "prev" ? "left-2" : "right-2"} top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors ${arrowClassName}`,
+        "aria-label": `${direction === "prev" ? "Previous" : "Next"} slide`
+      },
+      /* @__PURE__ */ React34.createElement(
+        "svg",
+        {
+          xmlns: "http://www.w3.org/2000/svg",
+          width: "24",
+          height: "24",
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          strokeWidth: "2",
+          strokeLinecap: "round",
+          strokeLinejoin: "round"
+        },
+        direction === "prev" ? /* @__PURE__ */ React34.createElement("path", { d: "m15 18-6-6 6-6" }) : /* @__PURE__ */ React34.createElement("path", { d: "m9 18 6-6-6-6" })
+      )
+    );
+  };
+  const renderCustomIndicator = () => {
+    if (customIndicators) {
+      return customIndicators;
+    }
+    return /* @__PURE__ */ React34.createElement("div", { className: "absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2" }, slides.map((_, index) => /* @__PURE__ */ React34.createElement(
+      "button",
+      {
+        key: index,
+        onClick: () => goToSlide(index),
+        className: `w-2 h-2 rounded-full transition-colors ${index === currentIndex ? "bg-white" : "bg-white/50"} ${dotClassName}`,
+        "aria-label": `Go to slide ${index + 1}`,
+        "aria-current": index === currentIndex
+      }
+    )));
+  };
+  const extractImageFromSlide = (slide) => {
+    if (React34.isValidElement(slide)) {
+      if (slide.type === "img") {
+        const imgProps = slide.props;
+        return React34.cloneElement(slide, {
+          width: "100%",
+          height: "100%",
+          style: __spreadProps(__spreadValues({}, imgProps.style || {}), { objectFit: "cover" }),
+          className: "w-full h-full object-cover"
+        });
+      }
+      const props = slide.props;
+      const children2 = props.children;
+      if (children2) {
+        if (Array.isArray(children2)) {
+          for (const child of children2) {
+            const found = extractImageFromSlide(child);
+            if (found) return found;
+          }
+        } else {
+          const found = extractImageFromSlide(children2);
+          if (found) return found;
+        }
+      }
+    }
+    return null;
+  };
+  useEffect10(() => {
+    if (showThumbnails && thumbnailContainerRef.current) {
+      const container = thumbnailContainerRef.current;
+      const thumbnails = container.children;
+      const currentThumb = thumbnails[currentIndex];
+      if (currentThumb) {
+        const containerRect = container.getBoundingClientRect();
+        const thumbRect = currentThumb.getBoundingClientRect();
+        let scrollLeft = 0;
+        if (thumbnailPosition === "left" || thumbnailPosition === "right") {
+          scrollLeft = currentThumb.offsetTop - container.offsetHeight / 2 + currentThumb.offsetHeight / 2;
+          container.scrollTo({
+            top: scrollLeft,
+            behavior: "smooth"
+          });
+        } else {
+          scrollLeft = currentThumb.offsetLeft - container.offsetWidth / 2 + currentThumb.offsetWidth / 2;
+          container.scrollTo({
+            left: scrollLeft,
+            behavior: "smooth"
+          });
+        }
+      }
+    }
+  }, [currentIndex, showThumbnails, thumbnailPosition]);
+  const renderThumbnails = () => {
+    if (!showThumbnails) return null;
+    return /* @__PURE__ */ React34.createElement("div", { ref: thumbnailContainerRef, className: getThumbnailClasses() }, slides.map((slide, index) => {
+      const image = extractImageFromSlide(slide);
+      return /* @__PURE__ */ React34.createElement(
+        "button",
+        {
+          key: index,
+          onClick: () => goToSlide(index),
+          className: `w-20 h-20 rounded overflow-hidden flex-shrink-0 ${index === currentIndex ? "ring-2 ring-blue-500" : "opacity-70 hover:opacity-100"} transition-all duration-200`,
+          "aria-label": `Go to slide ${index + 1}`
+        },
+        /* @__PURE__ */ React34.createElement("div", { className: "w-full h-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center" }, image ? image : /* @__PURE__ */ React34.createElement("span", { className: "text-gray-400 text-xs" }, "No Image"))
+      );
+    }));
+  };
+  const renderProgress = () => {
+    if (!showProgress) return null;
+    return /* @__PURE__ */ React34.createElement("div", { className: "absolute top-0 left-0 w-full h-1 bg-gray-200" }, /* @__PURE__ */ React34.createElement(
+      "div",
+      {
+        className: "h-full bg-blue-500 transition-all duration-100",
+        style: {
+          width: `${(currentIndex + 1) / slides.length * 100}%`
+        }
+      }
+    ));
+  };
+  const renderCounter = () => {
+    if (!showCounter) return null;
+    return /* @__PURE__ */ React34.createElement("div", { className: "absolute top-4 right-4 bg-black/50 text-white px-2 py-1 rounded text-sm" }, currentIndex + 1, " / ", slides.length);
+  };
+  const renderFullscreenButton = () => {
+    if (!showFullscreen) return null;
+    return /* @__PURE__ */ React34.createElement(
+      "button",
+      {
+        onClick: toggleFullscreen,
+        className: "absolute top-4 right-4 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors",
+        "aria-label": isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
+      },
+      /* @__PURE__ */ React34.createElement(
+        "svg",
+        {
+          xmlns: "http://www.w3.org/2000/svg",
+          width: "24",
+          height: "24",
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          strokeWidth: "2",
+          strokeLinecap: "round",
+          strokeLinejoin: "round"
+        },
+        isFullscreen ? /* @__PURE__ */ React34.createElement(React34.Fragment, null, /* @__PURE__ */ React34.createElement("path", { d: "M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" })) : /* @__PURE__ */ React34.createElement(React34.Fragment, null, /* @__PURE__ */ React34.createElement("path", { d: "M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" }))
+      )
+    );
+  };
+  const renderSlide = (slide, index) => {
+    const isActive = index === currentIndex;
+    let style = {};
+    let slideClass = `w-full h-full min-h-[${DEFAULT_CAROUSEL_HEIGHT}px] ${slideClassName}`;
+    if (animation === "slide") {
+      slideClass += " flex-shrink-0";
+      style = { minWidth: "100%" };
+    } else if (animation === "fade" && isSlideWithProps(slide)) {
+      style = __spreadProps(__spreadValues({}, slide.props.style || {}), {
+        opacity: isActive ? 1 : 0,
+        transition: `opacity ${transitionSpeed}ms ${easing}`,
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        minHeight: DEFAULT_CAROUSEL_HEIGHT,
+        zIndex: 1,
+        objectFit: "cover"
+      });
+      slide = React34.cloneElement(slide, { style });
+      style = {
+        zIndex: isActive ? 10 : 0,
+        position: "relative",
+        minHeight: DEFAULT_CAROUSEL_HEIGHT
+      };
+    } else if (["cube", "flip", "zoom"].includes(animation)) {
+      style = __spreadValues(__spreadValues(__spreadValues({
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        minHeight: DEFAULT_CAROUSEL_HEIGHT,
+        opacity: isActive ? 1 : 0,
+        zIndex: isActive ? 10 : 0,
+        pointerEvents: isActive ? "auto" : "none",
+        transition: `all ${transitionSpeed}ms ${easing}`
+      }, animation === "cube" && {
+        transform: isActive ? "rotateY(0deg) translateZ(0)" : "rotateY(90deg) translateZ(-100px)",
+        backfaceVisibility: "hidden"
+      }), animation === "flip" && {
+        transform: isActive ? "rotateY(0deg)" : "rotateY(180deg)",
+        backfaceVisibility: "hidden"
+      }), animation === "zoom" && {
+        transform: isActive ? "scale(1)" : "scale(0.95)"
+      });
+    }
+    if (animation === "fade") {
+      return /* @__PURE__ */ React34.createElement(
+        "div",
+        {
+          key: index,
+          className: `absolute top-0 left-0 w-full h-full min-h-[400px]`,
+          style: {
+            opacity: isActive ? 1 : 0,
+            zIndex: isActive ? 2 : 1,
+            pointerEvents: isActive ? "auto" : "none",
+            transition: `opacity ${transitionSpeed}ms ${easing}`
+          },
+          role: "group",
+          "aria-roledescription": "slide",
+          "aria-label": `Slide ${index + 1} of ${slides.length}`
+        },
+        /* @__PURE__ */ React34.createElement("div", { className: "w-full h-full" }, slide),
+        showCaption && /* @__PURE__ */ React34.createElement(
+          "div",
+          {
+            className: getCaptionClasses(),
+            style: { zIndex: 3, position: "relative" }
+          },
+          isSlideWithProps(slide) && slide.props.caption
+        )
+      );
+    }
+    return /* @__PURE__ */ React34.createElement(
+      "div",
+      {
+        key: index,
+        className: slideClass + (animation !== "slide" ? " absolute" : ""),
+        style,
+        role: "group",
+        "aria-roledescription": "slide",
+        "aria-label": `Slide ${index + 1} of ${slides.length}`
+      },
+      slide,
+      showCaption && /* @__PURE__ */ React34.createElement("div", { className: getCaptionClasses(), style: {} }, isSlideWithProps(slide) && slide.props.caption)
+    );
+  };
+  return /* @__PURE__ */ React34.createElement(
+    "div",
+    {
+      ref: carouselRef,
+      className: `
+        relative w-full overflow-hidden min-h-[${DEFAULT_CAROUSEL_HEIGHT}px]
+        ${newsStyle ? "rounded-lg shadow-lg" : ""}
+        ${background ? `bg-${background}` : ""}
+        ${className}
+      `,
+      style: { minHeight: DEFAULT_CAROUSEL_HEIGHT },
+      onMouseEnter: () => pauseOnHover && setIsPaused(true),
+      onMouseLeave: () => pauseOnHover && setIsPaused(false),
+      onTouchStart: handleTouchStart,
+      onTouchMove: handleTouchMove,
+      onTouchEnd: handleTouchEnd,
+      onKeyDown: handleKeyDown,
+      role: "region",
+      "aria-label": "Image carousel",
+      tabIndex: 0
+    },
+    renderProgress(),
+    renderCounter(),
+    renderFullscreenButton(),
+    /* @__PURE__ */ React34.createElement(
+      "div",
+      {
+        className: `
+          w-full h-full min-h-[${DEFAULT_CAROUSEL_HEIGHT}px]
+          ${animation === "slide" ? "flex" : "relative"}
+          ${getAnimationClasses()}
+        `,
+        style: {
+          height: animation !== "slide" ? "100%" : void 0,
+          minHeight: DEFAULT_CAROUSEL_HEIGHT,
+          perspective: animation === "cube" || animation === "flip" ? "1000px" : void 0,
+          transformStyle: animation === "cube" ? "preserve-3d" : void 0,
+          transform: animation === "slide" ? `translateX(-${currentIndex * 100}%)` : void 0,
+          transition: animation === "slide" ? `transform ${transitionSpeed}ms ${easing}` : void 0
+        }
+      },
+      slides.map((slide, index) => renderSlide(slide, index))
+    ),
+    overlay && /* @__PURE__ */ React34.createElement(
+      "div",
+      {
+        className: "absolute inset-0 pointer-events-none",
+        style: {
+          backgroundColor: overlayColor,
+          opacity: overlayOpacity
+        }
+      }
+    ),
+    showArrows && /* @__PURE__ */ React34.createElement(React34.Fragment, null, renderCustomArrow("prev"), renderCustomArrow("next")),
+    showDots && renderCustomIndicator(),
+    renderThumbnails(),
+    customControls
+  );
+};
+var Carousel_default = Carousel;
 export {
   Alert_default as Alert,
   Avatar_default as Avatar,
@@ -5077,6 +5560,7 @@ export {
   Button_default as Button,
   Calendar_default as Calendar,
   Card_default as Card,
+  Carousel_default as Carousel,
   Col,
   Collapse_default as Collapse,
   Container_default as Container,

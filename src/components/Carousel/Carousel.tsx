@@ -115,7 +115,7 @@ const isSlideWithProps = (
 // Add a default minHeight for the carousel container and slides
 const DEFAULT_CAROUSEL_HEIGHT = 400;
 
-export const Carousel: React.FC<CarouselProps> = ({
+const Carousel: React.FC<CarouselProps> = ({
   children,
   autoPlay = true,
   interval = 5000,
@@ -153,6 +153,7 @@ export const Carousel: React.FC<CarouselProps> = ({
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const thumbnailContainerRef = useRef<HTMLDivElement>(null);
   const slides = React.Children.toArray(children);
 
   const minSwipeDistance = 50;
@@ -193,7 +194,8 @@ export const Carousel: React.FC<CarouselProps> = ({
   };
 
   const getThumbnailClasses = () => {
-    const baseClasses = "flex gap-2 p-2 overflow-x-auto";
+    const baseClasses =
+      "flex gap-2 p-2 overflow-hidden max-w-[80vw] md:max-w-auto justify-center items-center";
     switch (thumbnailPosition) {
       case "top":
         return `${baseClasses} flex-row mb-2`;
@@ -380,11 +382,49 @@ export const Carousel: React.FC<CarouselProps> = ({
     return null;
   };
 
+  // Add useEffect to handle thumbnail scrolling
+  useEffect(() => {
+    if (showThumbnails && thumbnailContainerRef.current) {
+      const container = thumbnailContainerRef.current;
+      const thumbnails = container.children;
+      const currentThumb = thumbnails[currentIndex] as HTMLElement;
+
+      if (currentThumb) {
+        const containerRect = container.getBoundingClientRect();
+        const thumbRect = currentThumb.getBoundingClientRect();
+
+        // Calculate scroll position
+        let scrollLeft = 0;
+        if (thumbnailPosition === "left" || thumbnailPosition === "right") {
+          // Vertical scrolling
+          scrollLeft =
+            currentThumb.offsetTop -
+            container.offsetHeight / 2 +
+            currentThumb.offsetHeight / 2;
+          container.scrollTo({
+            top: scrollLeft,
+            behavior: "smooth",
+          });
+        } else {
+          // Horizontal scrolling
+          scrollLeft =
+            currentThumb.offsetLeft -
+            container.offsetWidth / 2 +
+            currentThumb.offsetWidth / 2;
+          container.scrollTo({
+            left: scrollLeft,
+            behavior: "smooth",
+          });
+        }
+      }
+    }
+  }, [currentIndex, showThumbnails, thumbnailPosition]);
+
   const renderThumbnails = () => {
     if (!showThumbnails) return null;
 
     return (
-      <div className={getThumbnailClasses()}>
+      <div ref={thumbnailContainerRef} className={getThumbnailClasses()}>
         {slides.map((slide, index) => {
           const image = extractImageFromSlide(slide);
           return (
@@ -646,3 +686,5 @@ export const Carousel: React.FC<CarouselProps> = ({
     </div>
   );
 };
+
+export default Carousel;

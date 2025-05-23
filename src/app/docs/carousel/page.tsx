@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import React from "react";
-import { Carousel } from "@/components/Carousel";
+import Carousel from "@/components/Carousel/Carousel";
 import Table, { Column } from "@/components/Table/Table";
 import CodeBlock from "@/components/CodeBlock/CodeBlock";
 
@@ -167,6 +167,18 @@ export default function CarouselPage() {
   ];
 
   const slides = [
+    {
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+      caption: "Beautiful Mountain Landscape",
+    },
+    {
+      image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e",
+      caption: "Serene Forest Scene",
+    },
+    {
+      image: "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d",
+      caption: "Peaceful Lake View",
+    },
     {
       image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
       caption: "Beautiful Mountain Landscape",

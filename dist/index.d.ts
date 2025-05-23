@@ -1978,4 +1978,88 @@ interface PinInputProps {
 }
 declare const PinInput: React.ForwardRefExoticComponent<PinInputProps & React.RefAttributes<HTMLDivElement>>;
 
-export { Alert, type AlertProps, Avatar, type AvatarProps, Badge, type BadgeProps, type BreadcrumbItem, Breadcrumbs, type BreadcrumbsProps, Button, type ButtonProps, Calendar, type CalendarProps, Card, type CardProps, Col, type ColProps, Collapse, type CollapseProps, type Column, Container, type ContainerProps, Dropdown, type DropdownOption, type DropdownProps, Grid, type GridProps, Input, type InputProps, List, type ListItem, type ListProps, Modal, type ModalProps, Pagination, type PaginationProps, PinInput, type PinInputProps, Popover, type PopoverProps, Progress, type ProgressProps, Rating, type RatingProps, Select, type SelectOption, type SelectProps, Skeleton, type SkeletonProps, Slider, type SliderProps, Spinner, type SpinnerProps, StatCard, type StatCardProps, Stepper, type StepperProps, Table, type TableProps, Tabs, type TabsProps, TagInput, type TagInputProps, Timeline, type TimelineProps, Toast, ToastContainer, type ToastContainerProps, type ToastProps, Tooltip, type TooltipProps, Upload, type UploadProps };
+/**
+ * The type of animation used for carousel transitions.
+ * - 'slide': Horizontal sliding animation.
+ * - 'fade': Cross-fade between slides.
+ * - 'zoom': Zoom in/out effect.
+ * - 'flip': 3D flip animation.
+ * - 'cube': 3D cube rotation.
+ */
+type AnimationType = "slide" | "fade" | "zoom" | "flip" | "cube";
+/**
+ * The position of the caption overlay on the slide.
+ * - 'top', 'bottom', 'left', 'right', 'center', 'overlay'
+ */
+type CaptionPosition = "top" | "bottom" | "left" | "right" | "center" | "overlay";
+/**
+ * Props for the Carousel component.
+ */
+interface CarouselProps {
+    /** Array of slides to display */
+    children: React.ReactNode[];
+    /** Enable automatic slide transition */
+    autoPlay?: boolean;
+    /** Time between automatic transitions in milliseconds */
+    interval?: number;
+    /** Show navigation arrows */
+    showArrows?: boolean;
+    /** Show navigation dots */
+    showDots?: boolean;
+    /** Enable infinite loop */
+    infinite?: boolean;
+    /** Additional class for the carousel container */
+    className?: string;
+    /** Additional class for each slide */
+    slideClassName?: string;
+    /** Additional class for arrow buttons */
+    arrowClassName?: string;
+    /** Additional class for dot indicators */
+    dotClassName?: string;
+    /** Callback when the slide changes */
+    onSlideChange?: (index: number) => void;
+    /** Animation type for transitions */
+    animation?: AnimationType;
+    /** Show slide captions */
+    showCaption?: boolean;
+    /** Position of slide captions */
+    captionPosition?: CaptionPosition;
+    /** Show thumbnail navigation */
+    showThumbnails?: boolean;
+    /** Position of thumbnails */
+    thumbnailPosition?: "top" | "bottom" | "left" | "right";
+    /** Show progress bar */
+    showProgress?: boolean;
+    /** Pause autoplay on hover */
+    pauseOnHover?: boolean;
+    /** Show fullscreen toggle button */
+    showFullscreen?: boolean;
+    /** Show slide counter */
+    showCounter?: boolean;
+    /** Custom controls to render */
+    customControls?: React.ReactNode;
+    /** Custom indicators to render */
+    customIndicators?: React.ReactNode;
+    /** Custom arrow components */
+    customArrows?: {
+        prev?: React.ReactNode;
+        next?: React.ReactNode;
+    };
+    /** Enable news-style layout */
+    newsStyle?: boolean;
+    /** Background color or class */
+    background?: string;
+    /** Show overlay on slides */
+    overlay?: boolean;
+    /** Opacity of the overlay */
+    overlayOpacity?: number;
+    /** Overlay color */
+    overlayColor?: string;
+    /** Transition speed in milliseconds */
+    transitionSpeed?: number;
+    /** Easing function for transitions */
+    easing?: string;
+}
+declare const Carousel: React.FC<CarouselProps>;
+
+export { Alert, type AlertProps, type AnimationType, Avatar, type AvatarProps, Badge, type BadgeProps, type BreadcrumbItem, Breadcrumbs, type BreadcrumbsProps, Button, type ButtonProps, Calendar, type CalendarProps, type CaptionPosition, Card, type CardProps, Carousel, type CarouselProps, Col, type ColProps, Collapse, type CollapseProps, type Column, Container, type ContainerProps, Dropdown, type DropdownOption, type DropdownProps, Grid, type GridProps, Input, type InputProps, List, type ListItem, type ListProps, Modal, type ModalProps, Pagination, type PaginationProps, PinInput, type PinInputProps, Popover, type PopoverProps, Progress, type ProgressProps, Rating, type RatingProps, Select, type SelectOption, type SelectProps, Skeleton, type SkeletonProps, Slider, type SliderProps, Spinner, type SpinnerProps, StatCard, type StatCardProps, Stepper, type StepperProps, Table, type TableProps, Tabs, type TabsProps, TagInput, type TagInputProps, Timeline, type TimelineProps, Toast, ToastContainer, type ToastContainerProps, type ToastProps, Tooltip, type TooltipProps, Upload, type UploadProps };

@@ -128,10 +128,19 @@ const PinInput = forwardRef<HTMLDivElement, PinInputProps>(
     }, [autoFocus]);
 
     const validateInput = (value: string): boolean => {
-      if (numbersOnly && !/^\d*$/.test(value)) return false;
-      if (lettersOnly && !/^[a-zA-Z]*$/.test(value)) return false;
-      if (alphanumeric && !/^[a-zA-Z0-9]*$/.test(value)) return false;
-      if (!allowSpecial && /[^a-zA-Z0-9]/.test(value)) return false;
+      // If numbersOnly is true, only allow digits
+      if (numbersOnly) return /^\d*$/.test(value);
+
+      // If lettersOnly is true, only allow letters
+      if (lettersOnly) return /^[a-zA-Z]*$/.test(value);
+
+      // If alphanumeric is true, allow both letters and numbers
+      if (alphanumeric) return /^[a-zA-Z0-9]*$/.test(value);
+
+      // If allowSpecial is false, don't allow special characters
+      if (!allowSpecial) return /^[a-zA-Z0-9]*$/.test(value);
+
+      // By default, allow any character
       return true;
     };
 
@@ -181,7 +190,10 @@ const PinInput = forwardRef<HTMLDivElement, PinInputProps>(
           const nextInput = inputRefs.current[index + 1];
           if (nextInput) {
             nextInput.focus();
-            nextInput.setSelectionRange(0, 0);
+            // Only set selection range for text/password inputs
+            if (nextInput.type !== "number") {
+              nextInput.setSelectionRange(0, 0);
+            }
           }
         });
       }
@@ -192,6 +204,7 @@ const PinInput = forwardRef<HTMLDivElement, PinInputProps>(
       e: React.KeyboardEvent<HTMLInputElement>
     ) => {
       if (e.key === "Backspace" && allowBackspace) {
+        e.preventDefault(); // Prevent default to handle backspace ourselves
         const currentValue = values[index];
 
         if (currentValue) {
@@ -200,11 +213,17 @@ const PinInput = forwardRef<HTMLDivElement, PinInputProps>(
           newValues[index] = "";
           updateValues(newValues);
         } else if (index > 0 && focusPrevOnBackspace) {
-          // Move to previous input
+          // Move to previous input and clear it
           const prevInput = inputRefs.current[index - 1];
           if (prevInput) {
+            const newValues = [...values];
+            newValues[index - 1] = "";
+            updateValues(newValues);
             prevInput.focus();
-            prevInput.setSelectionRange(0, 0);
+            // Only set selection range for text/password inputs
+            if (prevInput.type !== "number") {
+              prevInput.setSelectionRange(0, 0);
+            }
           }
         }
       } else if (e.key === "Delete" && allowClear) {
@@ -217,13 +236,19 @@ const PinInput = forwardRef<HTMLDivElement, PinInputProps>(
         const prevInput = inputRefs.current[index - 1];
         if (prevInput) {
           prevInput.focus();
-          prevInput.setSelectionRange(0, 0);
+          // Only set selection range for text/password inputs
+          if (prevInput.type !== "number") {
+            prevInput.setSelectionRange(0, 0);
+          }
         }
       } else if (e.key === "ArrowRight" && index < length - 1) {
         const nextInput = inputRefs.current[index + 1];
         if (nextInput) {
           nextInput.focus();
-          nextInput.setSelectionRange(0, 0);
+          // Only set selection range for text/password inputs
+          if (nextInput.type !== "number") {
+            nextInput.setSelectionRange(0, 0);
+          }
         }
       }
     };
@@ -311,8 +336,12 @@ const PinInput = forwardRef<HTMLDivElement, PinInputProps>(
         ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
         : "";
       const disabledClasses = disabled ? "opacity-50 cursor-not-allowed" : "";
+      const numberInputClasses =
+        !alphanumeric && !lettersOnly
+          ? "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          : "";
 
-      return `${sizeClasses} ${variantClasses} ${themeClasses} ${errorClasses} ${disabledClasses} ${inputClassName}`;
+      return `${sizeClasses} ${variantClasses} ${themeClasses} ${errorClasses} ${disabledClasses} ${numberInputClasses} ${inputClassName}`;
     };
 
     return (
@@ -324,7 +353,20 @@ const PinInput = forwardRef<HTMLDivElement, PinInputProps>(
                 ref={(el) => {
                   inputRefs.current[index] = el;
                 }}
-                type={mask && !showPin ? "password" : "text"}
+                type={
+                  mask && !showPin
+                    ? "password"
+                    : alphanumeric || lettersOnly
+                    ? "text"
+                    : "number"
+                }
+                inputMode={
+                  mask && !showPin
+                    ? "text"
+                    : alphanumeric || lettersOnly
+                    ? "text"
+                    : "numeric"
+                }
                 value={values[index]}
                 onChange={(e) => handleInputChange(index, e)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
