@@ -93,7 +93,10 @@ __export(index_exports, {
   Toast: () => Toast_default,
   ToastContainer: () => ToastContainer_default,
   Tooltip: () => Tooltip_default,
-  Upload: () => Upload_default
+  Upload: () => Upload_default,
+  breakpoints: () => breakpoints,
+  useMediaQuery: () => useMediaQuery,
+  useToast: () => useToast
 });
 module.exports = __toCommonJS(index_exports);
 
@@ -4467,8 +4470,54 @@ var ToastContainer = ({
 };
 var ToastContainer_default = ToastContainer;
 
+// src/hooks/useToast.ts
+var import_react28 = require("react");
+var useToast = () => {
+  const [toasts, setToasts] = (0, import_react28.useState)([]);
+  const showToast = (0, import_react28.useCallback)(
+    (type, message, duration = 3e3) => {
+      const id = Math.random().toString(36).substring(7);
+      const newToast = { id, type, message, duration };
+      setToasts((prevToasts) => [...prevToasts, newToast]);
+      if (duration > 0) {
+        setTimeout(() => {
+          removeToast(id);
+        }, duration);
+      }
+    },
+    []
+  );
+  const removeToast = (0, import_react28.useCallback)((id) => {
+    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
+  }, []);
+  return { toasts, showToast, removeToast };
+};
+
+// src/hooks/useMediaQuery.ts
+var import_react29 = require("react");
+var useMediaQuery = (query) => {
+  const [matches, setMatches] = (0, import_react29.useState)(false);
+  (0, import_react29.useEffect)(() => {
+    const mediaQuery = window.matchMedia(query);
+    setMatches(mediaQuery.matches);
+    const handleChange = (event) => {
+      setMatches(event.matches);
+    };
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, [query]);
+  return matches;
+};
+var breakpoints = {
+  sm: "(min-width: 640px)",
+  md: "(min-width: 768px)",
+  lg: "(min-width: 1024px)",
+  xl: "(min-width: 1280px)",
+  "2xl": "(min-width: 1536px)"
+};
+
 // src/components/Tooltip/Tooltip.tsx
-var import_react28 = __toESM(require("react"));
+var import_react30 = __toESM(require("react"));
 var Tooltip = ({
   content,
   children,
@@ -4482,11 +4531,11 @@ var Tooltip = ({
   maxWidth = "200px",
   interactive = false
 }) => {
-  const [isVisible, setIsVisible] = (0, import_react28.useState)(false);
-  const [coords, setCoords] = (0, import_react28.useState)({ x: 0, y: 0 });
-  const triggerRef = (0, import_react28.useRef)(null);
-  const tooltipRef = (0, import_react28.useRef)(null);
-  const timeoutRef = (0, import_react28.useRef)(
+  const [isVisible, setIsVisible] = (0, import_react30.useState)(false);
+  const [coords, setCoords] = (0, import_react30.useState)({ x: 0, y: 0 });
+  const triggerRef = (0, import_react30.useRef)(null);
+  const tooltipRef = (0, import_react30.useRef)(null);
+  const timeoutRef = (0, import_react30.useRef)(
     void 0
   );
   const positionClasses = {
@@ -4512,7 +4561,7 @@ var Tooltip = ({
     normal: "duration-300",
     slow: "duration-500"
   };
-  const updatePosition = (0, import_react28.useCallback)(() => {
+  const updatePosition = (0, import_react30.useCallback)(() => {
     if (!triggerRef.current || !tooltipRef.current) return;
     const trigger = triggerRef.current.getBoundingClientRect();
     const scrollX = window.scrollX;
@@ -4554,7 +4603,7 @@ var Tooltip = ({
     }
     setIsVisible(false);
   };
-  (0, import_react28.useEffect)(() => {
+  (0, import_react30.useEffect)(() => {
     if (isVisible) {
       updatePosition();
       window.addEventListener("scroll", updatePosition);
@@ -4568,7 +4617,7 @@ var Tooltip = ({
       }
     };
   }, [isVisible, updatePosition]);
-  return /* @__PURE__ */ import_react28.default.createElement(
+  return /* @__PURE__ */ import_react30.default.createElement(
     "div",
     {
       ref: triggerRef,
@@ -4577,7 +4626,7 @@ var Tooltip = ({
       onMouseLeave: handleMouseLeave
     },
     children,
-    isVisible && /* @__PURE__ */ import_react28.default.createElement(
+    isVisible && /* @__PURE__ */ import_react30.default.createElement(
       "div",
       {
         ref: tooltipRef,
@@ -4591,13 +4640,13 @@ var Tooltip = ({
         onMouseEnter: interactive ? handleMouseEnter : void 0,
         onMouseLeave: interactive ? handleMouseLeave : void 0
       },
-      /* @__PURE__ */ import_react28.default.createElement(
+      /* @__PURE__ */ import_react30.default.createElement(
         "div",
         {
           className: `bg-gray-900 text-white text-sm rounded-lg py-2 px-3 shadow-lg ${contentClassName}`
         },
         content,
-        /* @__PURE__ */ import_react28.default.createElement(
+        /* @__PURE__ */ import_react30.default.createElement(
           "div",
           {
             className: `absolute w-0 h-0 border-4 border-transparent ${arrowClasses[position]} ${arrowClassName}`
@@ -4610,21 +4659,21 @@ var Tooltip = ({
 var Tooltip_default = Tooltip;
 
 // src/components/Upload/Upload.tsx
-var import_react29 = __toESM(require("react"));
+var import_react31 = __toESM(require("react"));
 var Upload = ({
   onChange,
   multiple = false,
   accept,
   className = ""
 }) => {
-  const inputRef = (0, import_react29.useRef)(null);
-  const [dragActive, setDragActive] = import_react29.default.useState(false);
-  const [files, setFiles] = import_react29.default.useState(null);
+  const inputRef = (0, import_react31.useRef)(null);
+  const [dragActive, setDragActive] = import_react31.default.useState(false);
+  const [files, setFiles] = import_react31.default.useState(null);
   const handleFiles = (fileList) => {
     setFiles(fileList);
     onChange(fileList);
   };
-  return /* @__PURE__ */ import_react29.default.createElement(
+  return /* @__PURE__ */ import_react31.default.createElement(
     "div",
     {
       className: `border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${dragActive ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30" : "border-gray-300 dark:border-gray-600"} ${className}`,
@@ -4646,7 +4695,7 @@ var Upload = ({
         if (e.dataTransfer.files) handleFiles(e.dataTransfer.files);
       }
     },
-    /* @__PURE__ */ import_react29.default.createElement(
+    /* @__PURE__ */ import_react31.default.createElement(
       "input",
       {
         ref: inputRef,
@@ -4657,14 +4706,14 @@ var Upload = ({
         onChange: (e) => e.target.files && handleFiles(e.target.files)
       }
     ),
-    /* @__PURE__ */ import_react29.default.createElement("div", { className: "text-gray-500 dark:text-gray-300 mb-2" }, "Drag & drop files here or", " ", /* @__PURE__ */ import_react29.default.createElement("span", { className: "text-blue-600 dark:text-blue-400 underline" }, "browse")),
-    files && files.length > 0 && /* @__PURE__ */ import_react29.default.createElement("ul", { className: "mt-2 text-left text-xs text-gray-700 dark:text-gray-200" }, Array.from(files).map((file, i) => /* @__PURE__ */ import_react29.default.createElement("li", { key: i }, file.name)))
+    /* @__PURE__ */ import_react31.default.createElement("div", { className: "text-gray-500 dark:text-gray-300 mb-2" }, "Drag & drop files here or", " ", /* @__PURE__ */ import_react31.default.createElement("span", { className: "text-blue-600 dark:text-blue-400 underline" }, "browse")),
+    files && files.length > 0 && /* @__PURE__ */ import_react31.default.createElement("ul", { className: "mt-2 text-left text-xs text-gray-700 dark:text-gray-200" }, Array.from(files).map((file, i) => /* @__PURE__ */ import_react31.default.createElement("li", { key: i }, file.name)))
   );
 };
 var Upload_default = Upload;
 
 // src/components/Tabs/Tabs.tsx
-var import_react30 = __toESM(require("react"));
+var import_react32 = __toESM(require("react"));
 var Tabs = ({
   items,
   defaultActiveKey,
@@ -4676,7 +4725,7 @@ var Tabs = ({
   disabledTabClassName = ""
 }) => {
   var _a;
-  const [activeKey, setActiveKey] = import_react30.default.useState(
+  const [activeKey, setActiveKey] = import_react32.default.useState(
     defaultActiveKey || ((_a = items[0]) == null ? void 0 : _a.key)
   );
   const handleTabClick = (key) => {
@@ -4687,11 +4736,11 @@ var Tabs = ({
     }
   };
   const activeTab = items.find((item) => item.key === activeKey);
-  return /* @__PURE__ */ import_react30.default.createElement("div", { className: `flex flex-col ${className}` }, /* @__PURE__ */ import_react30.default.createElement("div", { className: "flex border-b border-gray-200 dark:border-gray-700" }, items.map((item) => {
+  return /* @__PURE__ */ import_react32.default.createElement("div", { className: `flex flex-col ${className}` }, /* @__PURE__ */ import_react32.default.createElement("div", { className: "flex border-b border-gray-200 dark:border-gray-700" }, items.map((item) => {
     const Icon = item.icon;
     const isActive = item.key === activeKey;
     const isDisabled = item.disabled;
-    return /* @__PURE__ */ import_react30.default.createElement(
+    return /* @__PURE__ */ import_react32.default.createElement(
       "button",
       {
         key: item.key,
@@ -4706,18 +4755,18 @@ var Tabs = ({
                 ${isDisabled ? disabledTabClassName : ""}
               `
       },
-      Icon && /* @__PURE__ */ import_react30.default.createElement(Icon, { className: "w-4 h-4" }),
+      Icon && /* @__PURE__ */ import_react32.default.createElement(Icon, { className: "w-4 h-4" }),
       item.label
     );
-  })), /* @__PURE__ */ import_react30.default.createElement("div", { className: `p-4 ${contentClassName}` }, activeTab == null ? void 0 : activeTab.content));
+  })), /* @__PURE__ */ import_react32.default.createElement("div", { className: `p-4 ${contentClassName}` }, activeTab == null ? void 0 : activeTab.content));
 };
 var Tabs_default = Tabs;
 
 // src/components/Grid/Grid.tsx
-var import_react31 = __toESM(require("react"));
+var import_react33 = __toESM(require("react"));
 var import_tailwind_merge = require("tailwind-merge");
 var Col = ({ children, span, rowSpan, className }) => {
-  const colStyles = (0, import_react31.useMemo)(() => {
+  const colStyles = (0, import_react33.useMemo)(() => {
     const spanStyles = `
       ${(span == null ? void 0 : span.xs) ? `col-span-${span.xs}` : "col-span-1"}
       ${(span == null ? void 0 : span.sm) ? `sm:col-span-${span.sm}` : ""}
@@ -4729,7 +4778,7 @@ var Col = ({ children, span, rowSpan, className }) => {
     `.replace(/\s+/g, " ").trim();
     return (0, import_tailwind_merge.twMerge)(spanStyles, className);
   }, [span, rowSpan, className]);
-  return /* @__PURE__ */ import_react31.default.createElement("div", { className: colStyles }, children);
+  return /* @__PURE__ */ import_react33.default.createElement("div", { className: colStyles }, children);
 };
 var Grid = ({
   children,
@@ -4753,7 +4802,7 @@ var Grid = ({
   containerClassName,
   onLayoutComplete
 }) => {
-  const gridStyles = (0, import_react31.useMemo)(() => {
+  const gridStyles = (0, import_react33.useMemo)(() => {
     const baseStyles = "grid w-full";
     const gapStyles = `gap-x-[${gap.x}] gap-y-[${gap.y}]`;
     const autoFitStyles = autoFit ? "grid-cols-[repeat(auto-fit,minmax(250px,1fr))]" : "";
@@ -4775,13 +4824,13 @@ var Grid = ({
       className
     );
   }, [columns, gap, autoFit, masonry, className]);
-  const containerStyles = (0, import_react31.useMemo)(() => {
+  const containerStyles = (0, import_react33.useMemo)(() => {
     return (0, import_tailwind_merge.twMerge)("w-full", containerClassName);
   }, [containerClassName]);
-  const itemStyles = (0, import_react31.useMemo)(() => {
+  const itemStyles = (0, import_react33.useMemo)(() => {
     return (0, import_tailwind_merge.twMerge)("w-full", itemClassName);
   }, [itemClassName]);
-  import_react31.default.useEffect(() => {
+  import_react33.default.useEffect(() => {
     if (onLayoutComplete) {
       const resizeObserver = new ResizeObserver(() => {
         onLayoutComplete();
@@ -4797,13 +4846,13 @@ var Grid = ({
       };
     }
   }, [onLayoutComplete, containerStyles]);
-  return /* @__PURE__ */ import_react31.default.createElement("div", { className: containerStyles }, /* @__PURE__ */ import_react31.default.createElement("div", { className: gridStyles, style: { gridAutoRows: autoRows } }, import_react31.default.Children.map(children, (child) => {
-    if (!import_react31.default.isValidElement(child)) return null;
+  return /* @__PURE__ */ import_react33.default.createElement("div", { className: containerStyles }, /* @__PURE__ */ import_react33.default.createElement("div", { className: gridStyles, style: { gridAutoRows: autoRows } }, import_react33.default.Children.map(children, (child) => {
+    if (!import_react33.default.isValidElement(child)) return null;
     const element = child;
     if (element.type === Col) {
       return element;
     }
-    return /* @__PURE__ */ import_react31.default.createElement("div", { className: itemStyles }, import_react31.default.cloneElement(element, __spreadProps(__spreadValues({}, element.props), {
+    return /* @__PURE__ */ import_react33.default.createElement("div", { className: itemStyles }, import_react33.default.cloneElement(element, __spreadProps(__spreadValues({}, element.props), {
       className: (0, import_tailwind_merge.twMerge)(element.props.className, "h-full")
     })));
   })));
@@ -4811,7 +4860,7 @@ var Grid = ({
 var Grid_default = Grid;
 
 // src/components/Container/Container.tsx
-var import_react32 = __toESM(require("react"));
+var import_react34 = __toESM(require("react"));
 var import_tailwind_merge2 = require("tailwind-merge");
 var maxWidthMap = {
   sm: "max-w-sm",
@@ -4902,13 +4951,13 @@ var Container = (_a) => {
     className
   );
   const wrapperClasses = (0, import_tailwind_merge2.twMerge)("w-full", wrapperClassName);
-  return /* @__PURE__ */ import_react32.default.createElement("div", __spreadValues({ className: containerClasses }, props), /* @__PURE__ */ import_react32.default.createElement("div", { className: wrapperClasses }, children));
+  return /* @__PURE__ */ import_react34.default.createElement("div", __spreadValues({ className: containerClasses }, props), /* @__PURE__ */ import_react34.default.createElement("div", { className: wrapperClasses }, children));
 };
 var Container_default = Container;
 
 // src/components/PinInput/PinInput.tsx
-var import_react33 = __toESM(require("react"));
-var PinInput = (0, import_react33.forwardRef)(
+var import_react35 = __toESM(require("react"));
+var PinInput = (0, import_react35.forwardRef)(
   ({
     length = 4,
     disabled = false,
@@ -4942,13 +4991,13 @@ var PinInput = (0, import_react33.forwardRef)(
     variant = "outline",
     size = "md"
   }, ref) => {
-    const [values, setValues] = (0, import_react33.useState)(Array(length).fill(""));
-    const [focusedIndex, setFocusedIndex] = (0, import_react33.useState)(0);
-    const inputRefs = (0, import_react33.useRef)([]);
-    (0, import_react33.useEffect)(() => {
+    const [values, setValues] = (0, import_react35.useState)(Array(length).fill(""));
+    const [focusedIndex, setFocusedIndex] = (0, import_react35.useState)(0);
+    const inputRefs = (0, import_react35.useRef)([]);
+    (0, import_react35.useEffect)(() => {
       inputRefs.current = Array(length).fill(null);
     }, [length]);
-    (0, import_react33.useEffect)(() => {
+    (0, import_react35.useEffect)(() => {
       if (autoFocus && inputRefs.current[0]) {
         inputRefs.current[0].focus();
       }
@@ -5112,7 +5161,7 @@ var PinInput = (0, import_react33.forwardRef)(
       const numberInputClasses = !alphanumeric && !lettersOnly ? "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" : "";
       return `${sizeClasses} ${variantClasses} ${themeClasses} ${errorClasses} ${disabledClasses} ${numberInputClasses} ${inputClassName}`;
     };
-    return /* @__PURE__ */ import_react33.default.createElement("div", { ref, className: `flex flex-col gap-2 ${wrapperClassName}` }, /* @__PURE__ */ import_react33.default.createElement("div", { className: "flex gap-2" }, Array.from({ length }).map((_, index) => /* @__PURE__ */ import_react33.default.createElement("div", { key: index, className: "relative" }, /* @__PURE__ */ import_react33.default.createElement(
+    return /* @__PURE__ */ import_react35.default.createElement("div", { ref, className: `flex flex-col gap-2 ${wrapperClassName}` }, /* @__PURE__ */ import_react35.default.createElement("div", { className: "flex gap-2" }, Array.from({ length }).map((_, index) => /* @__PURE__ */ import_react35.default.createElement("div", { key: index, className: "relative" }, /* @__PURE__ */ import_react35.default.createElement(
       "input",
       {
         ref: (el) => {
@@ -5131,16 +5180,16 @@ var PinInput = (0, import_react33.forwardRef)(
         placeholder,
         className: getInputClasses()
       }
-    ), showCharacterCount && /* @__PURE__ */ import_react33.default.createElement("div", { className: "absolute -bottom-5 left-1/2 transform -translate-x-1/2 text-xs text-gray-500" }, values[index].length, "/", maxLength)))), error && /* @__PURE__ */ import_react33.default.createElement("div", { className: "text-red-500 text-sm mt-1" }, error));
+    ), showCharacterCount && /* @__PURE__ */ import_react35.default.createElement("div", { className: "absolute -bottom-5 left-1/2 transform -translate-x-1/2 text-xs text-gray-500" }, values[index].length, "/", maxLength)))), error && /* @__PURE__ */ import_react35.default.createElement("div", { className: "text-red-500 text-sm mt-1" }, error));
   }
 );
 PinInput.displayName = "PinInput";
 var PinInput_default = PinInput;
 
 // src/components/Carousel/Carousel.tsx
-var import_react34 = __toESM(require("react"));
+var import_react36 = __toESM(require("react"));
 var isSlideWithProps = (slide) => {
-  return import_react34.default.isValidElement(slide) && "props" in slide;
+  return import_react36.default.isValidElement(slide) && "props" in slide;
 };
 var DEFAULT_CAROUSEL_HEIGHT = 400;
 var Carousel = ({
@@ -5175,14 +5224,14 @@ var Carousel = ({
   transitionSpeed = 500,
   easing = "ease-in-out"
 }) => {
-  const [currentIndex, setCurrentIndex] = (0, import_react34.useState)(0);
-  const [isPaused, setIsPaused] = (0, import_react34.useState)(false);
-  const [isFullscreen, setIsFullscreen] = (0, import_react34.useState)(false);
-  const [touchStart, setTouchStart] = (0, import_react34.useState)(null);
-  const [touchEnd, setTouchEnd] = (0, import_react34.useState)(null);
-  const carouselRef = (0, import_react34.useRef)(null);
-  const thumbnailContainerRef = (0, import_react34.useRef)(null);
-  const slides = import_react34.default.Children.toArray(children);
+  const [currentIndex, setCurrentIndex] = (0, import_react36.useState)(0);
+  const [isPaused, setIsPaused] = (0, import_react36.useState)(false);
+  const [isFullscreen, setIsFullscreen] = (0, import_react36.useState)(false);
+  const [touchStart, setTouchStart] = (0, import_react36.useState)(null);
+  const [touchEnd, setTouchEnd] = (0, import_react36.useState)(null);
+  const carouselRef = (0, import_react36.useRef)(null);
+  const thumbnailContainerRef = (0, import_react36.useRef)(null);
+  const slides = import_react36.default.Children.toArray(children);
   const minSwipeDistance = 50;
   const getAnimationClasses = () => {
     switch (animation) {
@@ -5218,7 +5267,7 @@ var Carousel = ({
     }
   };
   const getThumbnailClasses = () => {
-    const baseClasses = "flex gap-2 p-2 overflow-hidden max-w-[80vw] md:max-w-auto justify-center items-center";
+    const baseClasses = "flex gap-2 p-2 overflow-hidden max-w-[84vw] md:max-w-auto";
     switch (thumbnailPosition) {
       case "top":
         return `${baseClasses} flex-row mb-2`;
@@ -5252,7 +5301,7 @@ var Carousel = ({
     setTouchStart(null);
     setTouchEnd(null);
   };
-  const nextSlide = (0, import_react34.useCallback)(() => {
+  const nextSlide = (0, import_react36.useCallback)(() => {
     setCurrentIndex((prevIndex) => {
       const nextIndex = prevIndex + 1;
       if (nextIndex >= slides.length) {
@@ -5261,7 +5310,7 @@ var Carousel = ({
       return nextIndex;
     });
   }, [slides.length, infinite]);
-  const prevSlide = (0, import_react34.useCallback)(() => {
+  const prevSlide = (0, import_react36.useCallback)(() => {
     setCurrentIndex((prevIndex) => {
       const prevIndexNew = prevIndex - 1;
       if (prevIndexNew < 0) {
@@ -5283,14 +5332,14 @@ var Carousel = ({
       setIsFullscreen(false);
     }
   };
-  (0, import_react34.useEffect)(() => {
+  (0, import_react36.useEffect)(() => {
     if (!autoPlay || isPaused) return;
     const timer = setInterval(() => {
       nextSlide();
     }, interval);
     return () => clearInterval(timer);
   }, [autoPlay, interval, isPaused, nextSlide]);
-  (0, import_react34.useEffect)(() => {
+  (0, import_react36.useEffect)(() => {
     onSlideChange == null ? void 0 : onSlideChange(currentIndex);
   }, [currentIndex, onSlideChange]);
   const handleKeyDown = (e) => {
@@ -5307,14 +5356,14 @@ var Carousel = ({
     if (customArrows == null ? void 0 : customArrows[direction]) {
       return customArrows[direction];
     }
-    return /* @__PURE__ */ import_react34.default.createElement(
+    return /* @__PURE__ */ import_react36.default.createElement(
       "button",
       {
         onClick: direction === "prev" ? prevSlide : nextSlide,
         className: `absolute ${direction === "prev" ? "left-2" : "right-2"} top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors ${arrowClassName}`,
         "aria-label": `${direction === "prev" ? "Previous" : "Next"} slide`
       },
-      /* @__PURE__ */ import_react34.default.createElement(
+      /* @__PURE__ */ import_react36.default.createElement(
         "svg",
         {
           xmlns: "http://www.w3.org/2000/svg",
@@ -5327,7 +5376,7 @@ var Carousel = ({
           strokeLinecap: "round",
           strokeLinejoin: "round"
         },
-        direction === "prev" ? /* @__PURE__ */ import_react34.default.createElement("path", { d: "m15 18-6-6 6-6" }) : /* @__PURE__ */ import_react34.default.createElement("path", { d: "m9 18 6-6-6-6" })
+        direction === "prev" ? /* @__PURE__ */ import_react36.default.createElement("path", { d: "m15 18-6-6 6-6" }) : /* @__PURE__ */ import_react36.default.createElement("path", { d: "m9 18 6-6-6-6" })
       )
     );
   };
@@ -5335,7 +5384,7 @@ var Carousel = ({
     if (customIndicators) {
       return customIndicators;
     }
-    return /* @__PURE__ */ import_react34.default.createElement("div", { className: "absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2" }, slides.map((_, index) => /* @__PURE__ */ import_react34.default.createElement(
+    return /* @__PURE__ */ import_react36.default.createElement("div", { className: "absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2" }, slides.map((_, index) => /* @__PURE__ */ import_react36.default.createElement(
       "button",
       {
         key: index,
@@ -5347,10 +5396,10 @@ var Carousel = ({
     )));
   };
   const extractImageFromSlide = (slide) => {
-    if (import_react34.default.isValidElement(slide)) {
+    if (import_react36.default.isValidElement(slide)) {
       if (slide.type === "img") {
         const imgProps = slide.props;
-        return import_react34.default.cloneElement(slide, {
+        return import_react36.default.cloneElement(slide, {
           width: "100%",
           height: "100%",
           style: __spreadProps(__spreadValues({}, imgProps.style || {}), { objectFit: "cover" }),
@@ -5373,7 +5422,7 @@ var Carousel = ({
     }
     return null;
   };
-  (0, import_react34.useEffect)(() => {
+  (0, import_react36.useEffect)(() => {
     if (showThumbnails && thumbnailContainerRef.current) {
       const container = thumbnailContainerRef.current;
       const thumbnails = container.children;
@@ -5400,9 +5449,9 @@ var Carousel = ({
   }, [currentIndex, showThumbnails, thumbnailPosition]);
   const renderThumbnails = () => {
     if (!showThumbnails) return null;
-    return /* @__PURE__ */ import_react34.default.createElement("div", { ref: thumbnailContainerRef, className: getThumbnailClasses() }, slides.map((slide, index) => {
+    return /* @__PURE__ */ import_react36.default.createElement("div", { ref: thumbnailContainerRef, className: getThumbnailClasses() }, slides.map((slide, index) => {
       const image = extractImageFromSlide(slide);
-      return /* @__PURE__ */ import_react34.default.createElement(
+      return /* @__PURE__ */ import_react36.default.createElement(
         "button",
         {
           key: index,
@@ -5410,13 +5459,13 @@ var Carousel = ({
           className: `w-20 h-20 rounded overflow-hidden flex-shrink-0 ${index === currentIndex ? "ring-2 ring-blue-500" : "opacity-70 hover:opacity-100"} transition-all duration-200`,
           "aria-label": `Go to slide ${index + 1}`
         },
-        /* @__PURE__ */ import_react34.default.createElement("div", { className: "w-full h-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center" }, image ? image : /* @__PURE__ */ import_react34.default.createElement("span", { className: "text-gray-400 text-xs" }, "No Image"))
+        /* @__PURE__ */ import_react36.default.createElement("div", { className: "w-full h-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center" }, image ? image : /* @__PURE__ */ import_react36.default.createElement("span", { className: "text-gray-400 text-xs" }, "No Image"))
       );
     }));
   };
   const renderProgress = () => {
     if (!showProgress) return null;
-    return /* @__PURE__ */ import_react34.default.createElement("div", { className: "absolute top-0 left-0 w-full h-1 bg-gray-200" }, /* @__PURE__ */ import_react34.default.createElement(
+    return /* @__PURE__ */ import_react36.default.createElement("div", { className: "absolute top-0 left-0 w-full h-1 bg-gray-200" }, /* @__PURE__ */ import_react36.default.createElement(
       "div",
       {
         className: "h-full bg-blue-500 transition-all duration-100",
@@ -5428,18 +5477,18 @@ var Carousel = ({
   };
   const renderCounter = () => {
     if (!showCounter) return null;
-    return /* @__PURE__ */ import_react34.default.createElement("div", { className: "absolute top-4 right-4 bg-black/50 text-white px-2 py-1 rounded text-sm" }, currentIndex + 1, " / ", slides.length);
+    return /* @__PURE__ */ import_react36.default.createElement("div", { className: "absolute top-4 right-4 bg-black/50 text-white px-2 py-1 rounded text-sm" }, currentIndex + 1, " / ", slides.length);
   };
   const renderFullscreenButton = () => {
     if (!showFullscreen) return null;
-    return /* @__PURE__ */ import_react34.default.createElement(
+    return /* @__PURE__ */ import_react36.default.createElement(
       "button",
       {
         onClick: toggleFullscreen,
         className: "absolute top-4 right-4 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors",
         "aria-label": isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
       },
-      /* @__PURE__ */ import_react34.default.createElement(
+      /* @__PURE__ */ import_react36.default.createElement(
         "svg",
         {
           xmlns: "http://www.w3.org/2000/svg",
@@ -5452,7 +5501,7 @@ var Carousel = ({
           strokeLinecap: "round",
           strokeLinejoin: "round"
         },
-        isFullscreen ? /* @__PURE__ */ import_react34.default.createElement(import_react34.default.Fragment, null, /* @__PURE__ */ import_react34.default.createElement("path", { d: "M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" })) : /* @__PURE__ */ import_react34.default.createElement(import_react34.default.Fragment, null, /* @__PURE__ */ import_react34.default.createElement("path", { d: "M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" }))
+        isFullscreen ? /* @__PURE__ */ import_react36.default.createElement(import_react36.default.Fragment, null, /* @__PURE__ */ import_react36.default.createElement("path", { d: "M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" })) : /* @__PURE__ */ import_react36.default.createElement(import_react36.default.Fragment, null, /* @__PURE__ */ import_react36.default.createElement("path", { d: "M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" }))
       )
     );
   };
@@ -5476,7 +5525,7 @@ var Carousel = ({
         zIndex: 1,
         objectFit: "cover"
       });
-      slide = import_react34.default.cloneElement(slide, { style });
+      slide = import_react36.default.cloneElement(slide, { style });
       style = {
         zIndex: isActive ? 10 : 0,
         position: "relative",
@@ -5505,7 +5554,7 @@ var Carousel = ({
       });
     }
     if (animation === "fade") {
-      return /* @__PURE__ */ import_react34.default.createElement(
+      return /* @__PURE__ */ import_react36.default.createElement(
         "div",
         {
           key: index,
@@ -5520,8 +5569,8 @@ var Carousel = ({
           "aria-roledescription": "slide",
           "aria-label": `Slide ${index + 1} of ${slides.length}`
         },
-        /* @__PURE__ */ import_react34.default.createElement("div", { className: "w-full h-full" }, slide),
-        showCaption && /* @__PURE__ */ import_react34.default.createElement(
+        /* @__PURE__ */ import_react36.default.createElement("div", { className: "w-full h-full" }, slide),
+        showCaption && /* @__PURE__ */ import_react36.default.createElement(
           "div",
           {
             className: getCaptionClasses(),
@@ -5531,7 +5580,7 @@ var Carousel = ({
         )
       );
     }
-    return /* @__PURE__ */ import_react34.default.createElement(
+    return /* @__PURE__ */ import_react36.default.createElement(
       "div",
       {
         key: index,
@@ -5542,10 +5591,10 @@ var Carousel = ({
         "aria-label": `Slide ${index + 1} of ${slides.length}`
       },
       slide,
-      showCaption && /* @__PURE__ */ import_react34.default.createElement("div", { className: getCaptionClasses(), style: {} }, isSlideWithProps(slide) && slide.props.caption)
+      showCaption && /* @__PURE__ */ import_react36.default.createElement("div", { className: getCaptionClasses(), style: {} }, isSlideWithProps(slide) && slide.props.caption)
     );
   };
-  return /* @__PURE__ */ import_react34.default.createElement(
+  return /* @__PURE__ */ import_react36.default.createElement(
     "div",
     {
       ref: carouselRef,
@@ -5569,7 +5618,7 @@ var Carousel = ({
     renderProgress(),
     renderCounter(),
     renderFullscreenButton(),
-    /* @__PURE__ */ import_react34.default.createElement(
+    /* @__PURE__ */ import_react36.default.createElement(
       "div",
       {
         className: `
@@ -5588,7 +5637,7 @@ var Carousel = ({
       },
       slides.map((slide, index) => renderSlide(slide, index))
     ),
-    overlay && /* @__PURE__ */ import_react34.default.createElement(
+    overlay && /* @__PURE__ */ import_react36.default.createElement(
       "div",
       {
         className: "absolute inset-0 pointer-events-none",
@@ -5598,7 +5647,7 @@ var Carousel = ({
         }
       }
     ),
-    showArrows && /* @__PURE__ */ import_react34.default.createElement(import_react34.default.Fragment, null, renderCustomArrow("prev"), renderCustomArrow("next")),
+    showArrows && /* @__PURE__ */ import_react36.default.createElement(import_react36.default.Fragment, null, renderCustomArrow("prev"), renderCustomArrow("next")),
     showDots && renderCustomIndicator(),
     renderThumbnails(),
     customControls
@@ -5641,5 +5690,8 @@ var Carousel_default = Carousel;
   Toast,
   ToastContainer,
   Tooltip,
-  Upload
+  Upload,
+  breakpoints,
+  useMediaQuery,
+  useToast
 });

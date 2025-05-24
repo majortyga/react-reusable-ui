@@ -195,7 +195,7 @@ const Carousel: React.FC<CarouselProps> = ({
 
   const getThumbnailClasses = () => {
     const baseClasses =
-      "flex gap-2 p-2 overflow-hidden max-w-[80vw] md:max-w-auto justify-center items-center";
+      "flex gap-2 p-2 overflow-hidden max-w-[84vw] md:max-w-auto";
     switch (thumbnailPosition) {
       case "top":
         return `${baseClasses} flex-row mb-2`;

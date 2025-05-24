@@ -1550,10 +1550,10 @@ declare const Timeline: React.FC<TimelineProps>;
  * @property {'slide' | 'fade' | 'zoom' | 'bounce' | 'flip'} [animation='slide'] - Animation style for the toast
  * @property {'fast' | 'normal' | 'slow'} [animationDuration='normal'] - Duration of the animation
  */
-type ToastType = "success" | "error" | "info" | "warning";
+type ToastType$1 = "success" | "error" | "info" | "warning";
 interface ToastProps {
     id: string;
-    type: ToastType;
+    type: ToastType$1;
     message: string;
     title?: string;
     duration?: number;
@@ -1591,7 +1591,7 @@ interface ToastProps {
  * />
  * ```
  */
-declare const Toast: React.FC<ToastProps>;
+declare const Toast$1: React.FC<ToastProps>;
 
 interface ToastContainerProps {
     position?: "top-right" | "top-left" | "bottom-right" | "bottom-left" | "top-center" | "bottom-center";
@@ -1599,6 +1599,40 @@ interface ToastContainerProps {
     limit?: number;
 }
 declare const ToastContainer: React.FC<ToastContainerProps>;
+
+type ToastType = "success" | "error" | "warning" | "info";
+interface Toast {
+    id: string;
+    type: ToastType;
+    message: string;
+    duration?: number;
+}
+interface UseToastReturn {
+    toasts: Toast[];
+    showToast: (type: ToastType, message: string, duration?: number) => void;
+    removeToast: (id: string) => void;
+}
+declare const useToast: () => UseToastReturn;
+
+type BreakpointKey = keyof typeof breakpoints;
+type DeviceKey = keyof typeof devices;
+type BreakpointQuery = (typeof breakpoints)[BreakpointKey];
+type DeviceQuery = (typeof devices)[DeviceKey];
+declare const useMediaQuery: (query: string) => boolean;
+declare const breakpoints: {
+    readonly sm: "(min-width: 640px)";
+    readonly md: "(min-width: 768px)";
+    readonly lg: "(min-width: 1024px)";
+    readonly xl: "(min-width: 1280px)";
+    readonly "2xl": "(min-width: 1536px)";
+};
+declare const devices: {
+    readonly mobile: "(max-width: 639px)";
+    readonly tablet: "(min-width: 640px) and (max-width: 1023px)";
+    readonly desktop: "(min-width: 1024px)";
+    readonly touch: "(hover: none) and (pointer: coarse)";
+    readonly mouse: "(hover: hover) and (pointer: fine)";
+};
 
 interface TooltipProps {
     content: React.ReactNode;
@@ -2062,4 +2096,4 @@ interface CarouselProps {
 }
 declare const Carousel: React.FC<CarouselProps>;
 
-export { Alert, type AlertProps, type AnimationType, Avatar, type AvatarProps, Badge, type BadgeProps, type BreadcrumbItem, Breadcrumbs, type BreadcrumbsProps, Button, type ButtonProps, Calendar, type CalendarProps, type CaptionPosition, Card, type CardProps, Carousel, type CarouselProps, Col, type ColProps, Collapse, type CollapseProps, type Column, Container, type ContainerProps, Dropdown, type DropdownOption, type DropdownProps, Grid, type GridProps, Input, type InputProps, List, type ListItem, type ListProps, Modal, type ModalProps, Pagination, type PaginationProps, PinInput, type PinInputProps, Popover, type PopoverProps, Progress, type ProgressProps, Rating, type RatingProps, Select, type SelectOption, type SelectProps, Skeleton, type SkeletonProps, Slider, type SliderProps, Spinner, type SpinnerProps, StatCard, type StatCardProps, Stepper, type StepperProps, Table, type TableProps, Tabs, type TabsProps, TagInput, type TagInputProps, Timeline, type TimelineProps, Toast, ToastContainer, type ToastContainerProps, type ToastProps, Tooltip, type TooltipProps, Upload, type UploadProps };
+export { Alert, type AlertProps, type AnimationType, Avatar, type AvatarProps, Badge, type BadgeProps, type BreadcrumbItem, Breadcrumbs, type BreadcrumbsProps, type BreakpointKey, type BreakpointQuery, Button, type ButtonProps, Calendar, type CalendarProps, type CaptionPosition, Card, type CardProps, Carousel, type CarouselProps, Col, type ColProps, Collapse, type CollapseProps, type Column, Container, type ContainerProps, type DeviceKey, type DeviceQuery, Dropdown, type DropdownOption, type DropdownProps, Grid, type GridProps, Input, type InputProps, List, type ListItem, type ListProps, Modal, type ModalProps, Pagination, type PaginationProps, PinInput, type PinInputProps, Popover, type PopoverProps, Progress, type ProgressProps, Rating, type RatingProps, Select, type SelectOption, type SelectProps, Skeleton, type SkeletonProps, Slider, type SliderProps, Spinner, type SpinnerProps, StatCard, type StatCardProps, Stepper, type StepperProps, Table, type TableProps, Tabs, type TabsProps, TagInput, type TagInputProps, Timeline, type TimelineProps, Toast$1 as Toast, ToastContainer, type ToastContainerProps, type ToastProps, type ToastType, Tooltip, type TooltipProps, Upload, type UploadProps, type UseToastReturn, breakpoints, useMediaQuery, useToast };

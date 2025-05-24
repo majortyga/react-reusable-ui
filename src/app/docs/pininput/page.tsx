@@ -141,6 +141,7 @@ const PinInputDocs = () => {
           <PinInput
             mask={true}
             onChange={(value) => setMaskedPin(value)}
+            numbersOnly={true}
             onComplete={(value) => console.log("Complete:", value)}
           />
         </div>
@@ -150,6 +151,7 @@ const PinInputDocs = () => {
 <PinInput
   mask={true}
   onChange={(value) => console.log(value)}
+  numbersOnly={true}
   onComplete={(value) => console.log("Complete:", value)}
 />`}
           language="tsx"
@@ -258,59 +260,6 @@ const PinInputDocs = () => {
   lettersOnly={true}
   numbersOnly={false}
   placeholder="*"
-/>`}
-          language="tsx"
-        />
-      </section>
-
-      {/* Advanced Usage */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold text-white">Advanced Usage</h2>
-        <p className="text-gray-300">PIN input with all features enabled</p>
-        <div className="bg-[#11235a]/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50">
-          <PinInput
-            length={4}
-            mask={true}
-            theme="dark"
-            variant="filled"
-            size="lg"
-            numbersOnly={true}
-            allowPaste={true}
-            allowClear={true}
-            allowBackspace={true}
-            autoSubmit={true}
-            focusNextOnChange={true}
-            focusPrevOnBackspace={true}
-            maxLength={1}
-            placeholder="•"
-            onChange={(value) => console.log("Current:", value)}
-            onComplete={(value) => console.log("Complete:", value)}
-            wrapperClassName="pin-wrapper"
-            inputClassName="pin-digit"
-          />
-        </div>
-        <CodeBlock
-          code={`import { PinInput } from "@majordev/react-reusable-ui";
-
-<PinInput
-  length={4}
-  mask={true}
-  theme="dark"
-  variant="filled"
-  size="lg"
-  numbersOnly={true}
-  allowPaste={true}
-  allowClear={true}
-  allowBackspace={true}
-  autoSubmit={true}
-  focusNextOnChange={true}
-  focusPrevOnBackspace={true}
-  maxLength={1}
-  placeholder="•"
-  onChange={(value) => console.log("Current:", value)}
-  onComplete={(value) => console.log("Complete:", value)}
-  wrapperClassName="pin-wrapper"
-  inputClassName="pin-digit"
 />`}
           language="tsx"
         />

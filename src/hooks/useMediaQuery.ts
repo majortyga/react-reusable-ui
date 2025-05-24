@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
 
+export type BreakpointKey = keyof typeof breakpoints;
+export type DeviceKey = keyof typeof devices;
+
+export type BreakpointQuery = (typeof breakpoints)[BreakpointKey];
+export type DeviceQuery = (typeof devices)[DeviceKey];
+
 export const useMediaQuery = (query: string): boolean => {
   const [matches, setMatches] = useState<boolean>(false);
 

@@ -57,8 +57,8 @@ export default function UseToastDocs() {
           </div>
         </Card>
         <CodeBlock
-          code={`import { useToast } from "@/hooks/useToast";
-import Toast from "@/components/Toast/Toast";
+          code={`import { useToast } from "@majordev/react-reusable-ui";
+import {Toast} from "@majordev/react-reusable-ui";
 
 function MyComponent() {
   const { toasts, showToast, removeToast } = useToast();

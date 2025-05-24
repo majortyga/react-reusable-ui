@@ -4414,8 +4414,54 @@ var ToastContainer = ({
 };
 var ToastContainer_default = ToastContainer;
 
+// src/hooks/useToast.ts
+import { useState as useState9, useCallback as useCallback3 } from "react";
+var useToast = () => {
+  const [toasts, setToasts] = useState9([]);
+  const showToast = useCallback3(
+    (type, message, duration = 3e3) => {
+      const id = Math.random().toString(36).substring(7);
+      const newToast = { id, type, message, duration };
+      setToasts((prevToasts) => [...prevToasts, newToast]);
+      if (duration > 0) {
+        setTimeout(() => {
+          removeToast(id);
+        }, duration);
+      }
+    },
+    []
+  );
+  const removeToast = useCallback3((id) => {
+    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
+  }, []);
+  return { toasts, showToast, removeToast };
+};
+
+// src/hooks/useMediaQuery.ts
+import { useState as useState10, useEffect as useEffect8 } from "react";
+var useMediaQuery = (query) => {
+  const [matches, setMatches] = useState10(false);
+  useEffect8(() => {
+    const mediaQuery = window.matchMedia(query);
+    setMatches(mediaQuery.matches);
+    const handleChange = (event) => {
+      setMatches(event.matches);
+    };
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, [query]);
+  return matches;
+};
+var breakpoints = {
+  sm: "(min-width: 640px)",
+  md: "(min-width: 768px)",
+  lg: "(min-width: 1024px)",
+  xl: "(min-width: 1280px)",
+  "2xl": "(min-width: 1536px)"
+};
+
 // src/components/Tooltip/Tooltip.tsx
-import React28, { useState as useState9, useRef as useRef7, useEffect as useEffect8, useCallback as useCallback3 } from "react";
+import React28, { useState as useState11, useRef as useRef7, useEffect as useEffect9, useCallback as useCallback4 } from "react";
 var Tooltip = ({
   content,
   children,
@@ -4429,8 +4475,8 @@ var Tooltip = ({
   maxWidth = "200px",
   interactive = false
 }) => {
-  const [isVisible, setIsVisible] = useState9(false);
-  const [coords, setCoords] = useState9({ x: 0, y: 0 });
+  const [isVisible, setIsVisible] = useState11(false);
+  const [coords, setCoords] = useState11({ x: 0, y: 0 });
   const triggerRef = useRef7(null);
   const tooltipRef = useRef7(null);
   const timeoutRef = useRef7(
@@ -4459,7 +4505,7 @@ var Tooltip = ({
     normal: "duration-300",
     slow: "duration-500"
   };
-  const updatePosition = useCallback3(() => {
+  const updatePosition = useCallback4(() => {
     if (!triggerRef.current || !tooltipRef.current) return;
     const trigger = triggerRef.current.getBoundingClientRect();
     const scrollX = window.scrollX;
@@ -4501,7 +4547,7 @@ var Tooltip = ({
     }
     setIsVisible(false);
   };
-  useEffect8(() => {
+  useEffect9(() => {
     if (isVisible) {
       updatePosition();
       window.addEventListener("scroll", updatePosition);
@@ -4854,7 +4900,7 @@ var Container = (_a) => {
 var Container_default = Container;
 
 // src/components/PinInput/PinInput.tsx
-import React33, { useState as useState10, useRef as useRef9, useEffect as useEffect9, forwardRef } from "react";
+import React33, { useState as useState12, useRef as useRef9, useEffect as useEffect10, forwardRef } from "react";
 var PinInput = forwardRef(
   ({
     length = 4,
@@ -4889,13 +4935,13 @@ var PinInput = forwardRef(
     variant = "outline",
     size = "md"
   }, ref) => {
-    const [values, setValues] = useState10(Array(length).fill(""));
-    const [focusedIndex, setFocusedIndex] = useState10(0);
+    const [values, setValues] = useState12(Array(length).fill(""));
+    const [focusedIndex, setFocusedIndex] = useState12(0);
     const inputRefs = useRef9([]);
-    useEffect9(() => {
+    useEffect10(() => {
       inputRefs.current = Array(length).fill(null);
     }, [length]);
-    useEffect9(() => {
+    useEffect10(() => {
       if (autoFocus && inputRefs.current[0]) {
         inputRefs.current[0].focus();
       }
@@ -5085,7 +5131,7 @@ PinInput.displayName = "PinInput";
 var PinInput_default = PinInput;
 
 // src/components/Carousel/Carousel.tsx
-import React34, { useState as useState11, useEffect as useEffect10, useCallback as useCallback4, useRef as useRef10 } from "react";
+import React34, { useState as useState13, useEffect as useEffect11, useCallback as useCallback5, useRef as useRef10 } from "react";
 var isSlideWithProps = (slide) => {
   return React34.isValidElement(slide) && "props" in slide;
 };
@@ -5122,11 +5168,11 @@ var Carousel = ({
   transitionSpeed = 500,
   easing = "ease-in-out"
 }) => {
-  const [currentIndex, setCurrentIndex] = useState11(0);
-  const [isPaused, setIsPaused] = useState11(false);
-  const [isFullscreen, setIsFullscreen] = useState11(false);
-  const [touchStart, setTouchStart] = useState11(null);
-  const [touchEnd, setTouchEnd] = useState11(null);
+  const [currentIndex, setCurrentIndex] = useState13(0);
+  const [isPaused, setIsPaused] = useState13(false);
+  const [isFullscreen, setIsFullscreen] = useState13(false);
+  const [touchStart, setTouchStart] = useState13(null);
+  const [touchEnd, setTouchEnd] = useState13(null);
   const carouselRef = useRef10(null);
   const thumbnailContainerRef = useRef10(null);
   const slides = React34.Children.toArray(children);
@@ -5165,7 +5211,7 @@ var Carousel = ({
     }
   };
   const getThumbnailClasses = () => {
-    const baseClasses = "flex gap-2 p-2 overflow-hidden max-w-[80vw] md:max-w-auto justify-center items-center";
+    const baseClasses = "flex gap-2 p-2 overflow-hidden max-w-[84vw] md:max-w-auto";
     switch (thumbnailPosition) {
       case "top":
         return `${baseClasses} flex-row mb-2`;
@@ -5199,7 +5245,7 @@ var Carousel = ({
     setTouchStart(null);
     setTouchEnd(null);
   };
-  const nextSlide = useCallback4(() => {
+  const nextSlide = useCallback5(() => {
     setCurrentIndex((prevIndex) => {
       const nextIndex = prevIndex + 1;
       if (nextIndex >= slides.length) {
@@ -5208,7 +5254,7 @@ var Carousel = ({
       return nextIndex;
     });
   }, [slides.length, infinite]);
-  const prevSlide = useCallback4(() => {
+  const prevSlide = useCallback5(() => {
     setCurrentIndex((prevIndex) => {
       const prevIndexNew = prevIndex - 1;
       if (prevIndexNew < 0) {
@@ -5230,14 +5276,14 @@ var Carousel = ({
       setIsFullscreen(false);
     }
   };
-  useEffect10(() => {
+  useEffect11(() => {
     if (!autoPlay || isPaused) return;
     const timer = setInterval(() => {
       nextSlide();
     }, interval);
     return () => clearInterval(timer);
   }, [autoPlay, interval, isPaused, nextSlide]);
-  useEffect10(() => {
+  useEffect11(() => {
     onSlideChange == null ? void 0 : onSlideChange(currentIndex);
   }, [currentIndex, onSlideChange]);
   const handleKeyDown = (e) => {
@@ -5320,7 +5366,7 @@ var Carousel = ({
     }
     return null;
   };
-  useEffect10(() => {
+  useEffect11(() => {
     if (showThumbnails && thumbnailContainerRef.current) {
       const container = thumbnailContainerRef.current;
       const thumbnails = container.children;
@@ -5587,5 +5633,8 @@ export {
   Toast_default as Toast,
   ToastContainer_default as ToastContainer,
   Tooltip_default as Tooltip,
-  Upload_default as Upload
+  Upload_default as Upload,
+  breakpoints,
+  useMediaQuery,
+  useToast
 };

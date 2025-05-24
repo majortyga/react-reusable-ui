@@ -60,7 +60,7 @@ export default function UseMediaQueryDocs() {
           </div>
         </Card>
         <CodeBlock
-          code={`import { useMediaQuery, devices } from "@/hooks/useMediaQuery";
+          code={`import { useMediaQuery, devices } from "@majordev/react-reusable-ui";
 
 function MyComponent() {
   const isMobile = useMediaQuery(devices.mobile);
@@ -110,7 +110,7 @@ function MyComponent() {
           </div>
         </Card>
         <CodeBlock
-          code={`import { useMediaQuery, breakpoints } from "@/hooks/useMediaQuery";
+          code={`import { useMediaQuery, breakpoints } from "@majordev/react-reusable-ui";
 
 function MyComponent() {
   const isSmall = useMediaQuery(breakpoints.sm);

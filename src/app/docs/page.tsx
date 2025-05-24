@@ -67,6 +67,7 @@ const categories = [
       "list",
       "modal",
       "pagination",
+      "pininput",
       "popover",
       "progress",
       "rating",

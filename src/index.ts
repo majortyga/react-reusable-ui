@@ -25,6 +25,8 @@ export { default as TagInput } from "./components/TagInput/TagInput";
 export { default as Timeline } from "./components/Timeline/Timeline";
 export { default as Toast } from "./components/Toast/Toast";
 export { default as ToastContainer } from "./components/Toast/ToastContainer";
+export { useToast } from "./hooks/useToast";
+export { useMediaQuery, breakpoints } from "./hooks/useMediaQuery";
 export { default as Tooltip } from "./components/Tooltip/Tooltip";
 export { default as Upload } from "./components/Upload/Upload";
 export { default as Tabs } from "./components/Tabs/Tabs";
@@ -66,6 +68,13 @@ export type { StepperProps } from "./components/Stepper/Stepper";
 export type { TagInputProps } from "./components/TagInput/TagInput";
 export type { TimelineProps } from "./components/Timeline/Timeline";
 export type { ToastProps } from "./components/Toast/Toast";
+export type { UseToastReturn, ToastType } from "./hooks/useToast";
+export type {
+  BreakpointKey,
+  DeviceKey,
+  BreakpointQuery,
+  DeviceQuery,
+} from "./hooks/useMediaQuery";
 export type { ToastContainerProps } from "./components/Toast/ToastContainer";
 export type { TooltipProps } from "./components/Tooltip/Tooltip";
 export type { UploadProps } from "./components/Upload/Upload";
